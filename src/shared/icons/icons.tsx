@@ -1,214 +1,234 @@
 import type { ComponentType } from "react";
-import { HandIcon, type IconProps } from "./hand-icon";
+import { Glyph, type IconProps, Part } from "./glyph";
 
 export function SearchIcon({ className }: IconProps) {
   return (
-    <HandIcon name="search" className={className}>
-      <g data-part="lens">
-        <path d="M10.6 4.2c3.5-.2 6.3 2.6 6.2 6.1-.1 3.4-2.9 6.2-6.4 6.1-3.4-.1-6.1-2.9-6-6.3.1-3.2 2.8-5.8 6.2-5.9" />
-        <path d="M15.4 15.6c1.5 1.4 3 2.9 4.6 4.5" />
-      </g>
-    </HandIcon>
+    <Glyph name="search" className={className}>
+      <Part icon="search" part="lens">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.34-4.34" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function BookIcon({ className }: IconProps) {
   return (
-    <HandIcon name="book" className={className}>
-      <path data-part="left" d="M12 6.9C9.2 5.2 6.2 4.8 3.2 5.6v12.5c3-.8 6-.4 8.8 1.3" />
-      <path data-part="right" d="M12 6.9c2.8-1.7 5.8-2.1 8.8-1.3v12.5c-3-.8-6-.4-8.8 1.3V6.9" />
-    </HandIcon>
+    <Glyph name="book" className={className}>
+      <Part icon="book" part="left">
+        <path d="M12 5a5 5 0 0 0-4-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4a5 5 0 0 1 4 2" />
+      </Part>
+      <Part icon="book" part="right">
+        <path d="M12 5a5 5 0 0 1 4-2h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4a5 5 0 0 0-4 2" />
+      </Part>
+      <path d="M12 5v16" />
+    </Glyph>
   );
 }
 
 export function FolderIcon({ className }: IconProps) {
   return (
-    <HandIcon name="folder" className={className}>
-      <path d="M3.4 7.8v10.4c0 .9.6 1.5 1.5 1.5h14.3c.9 0 1.5-.6 1.5-1.5V9.6c0-.9-.6-1.5-1.5-1.5h-7.4L10 5.6c-.3-.4-.7-.6-1.2-.6H4.9c-.9 0-1.5.6-1.5 1.5z" />
-      <path data-part="lid" d="M3.6 10.8c5.6-.4 11.3-.3 16.9.1" />
-    </HandIcon>
+    <Glyph name="folder" className={className}>
+      <Part icon="folder" part="folder">
+        <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function ChevronIcon({ className }: IconProps) {
   return (
-    <HandIcon name="chevron" className={className}>
-      <path d="M6.2 9.4c2 1.9 3.9 3.8 5.8 5.8 2-2 3.9-3.9 5.8-5.8" />
-    </HandIcon>
+    <Glyph name="chevron" className={className}>
+      <path d="m6 9 6 6 6-6" />
+    </Glyph>
   );
 }
 
 export function HouseIcon({ className }: IconProps) {
   return (
-    <HandIcon name="house" className={className}>
-      <path data-part="roof" d="M3.4 11.2C6.3 8.8 9.1 6.4 12 4.1c2.9 2.4 5.8 4.8 8.7 7.2" />
-      <path d="M5.6 9.6v9.1c0 .6.4 1 1 1h10.9c.6 0 1-.4 1-1V9.5" />
-      <path d="M10 19.6v-4.8c0-.6.4-1 1-1h2.1c.6 0 1 .4 1 1v4.9" />
-    </HandIcon>
+    <Glyph name="house" className={className}>
+      <Part icon="house" part="house">
+        <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function DownloadIcon({ className }: IconProps) {
   return (
-    <HandIcon name="download" className={className}>
-      <g data-part="arrow">
-        <path d="M12 3.8c.1 3.7.1 7.3 0 11" />
-        <path d="M7.6 10.8c1.5 1.4 3 2.9 4.4 4.4 1.5-1.5 3-3 4.5-4.5" />
-      </g>
-      <path d="M4.2 15.6v2.8c0 .9.7 1.6 1.6 1.6h12.5c.9 0 1.6-.7 1.6-1.6v-2.9" />
-    </HandIcon>
+    <Glyph name="download" className={className}>
+      <Part icon="download" part="arrow">
+        <path d="M12 15V3" />
+        <path d="m7 10 5 5 5-5" />
+      </Part>
+      <Part icon="download" part="tray">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function RocketIcon({ className }: IconProps) {
   return (
-    <HandIcon name="rocket" className={className}>
-      <g data-part="body">
-        <path d="M12.3 15.2c-1.2-1.1-2.3-2.3-3.5-3.5 1.6-4.4 5.2-7.6 11-8 .1 5.8-3.4 9.6-7.5 11.5" />
-        <path d="M8.8 11.7H5.4l2.4-3c.4-.5 1-.7 1.6-.7h2.4" />
-        <path d="M12.3 15.2v3.4l3-2.4c.5-.4.7-1 .7-1.6v-2.4" />
-        <path d="M15.1 7.9c.7 0 1.2.5 1.2 1.2s-.5 1.2-1.2 1.2-1.2-.5-1.2-1.2.5-1.2 1.2-1.2" />
-      </g>
-      <path data-part="flame" d="M7.2 16.8c-1.3.3-2.3 1.4-2.6 3.6 2.2-.3 3.3-1.3 3.6-2.6" />
-    </HandIcon>
+    <Glyph name="rocket" className={className}>
+      <Part icon="rocket" part="ship">
+        <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" />
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" />
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+      </Part>
+      <Part icon="rocket" part="flame">
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function PageIcon({ className }: IconProps) {
   return (
-    <HandIcon name="page" className={className}>
-      <path d="M14 3.6H7.2c-.9 0-1.6.7-1.6 1.6v13.6c0 .9.7 1.6 1.6 1.6h9.6c.9 0 1.6-.7 1.6-1.6V8z" />
-      <path d="M13.8 3.7v3.7c0 .5.4.9.9.9h3.6" />
-      <path data-part="draw" pathLength={1} d="M9 12.6c2-.1 4-.1 6 .1" />
-      <path data-part="draw" pathLength={1} d="M9 16c1.5.1 2.9 0 4.4-.1" />
-    </HandIcon>
+    <Glyph name="page" className={className}>
+      <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
+      <path d="M14 2v5a1 1 0 0 0 1 1h5" />
+      <Part icon="page" part="l1">
+        <path d="M10 9H8" />
+      </Part>
+      <Part icon="page" part="l2">
+        <path d="M16 13H8" />
+      </Part>
+      <Part icon="page" part="l3">
+        <path d="M16 17H8" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function BulbIcon({ className }: IconProps) {
   return (
-    <HandIcon name="bulb" className={className}>
-      <path d="M9.2 16.6c0-1.6-1-2.4-1.8-3.6-.7-1-1.1-2.2-1-3.5.2-3 2.7-5.3 5.7-5.2 3 .1 5.3 2.6 5.2 5.6 0 1.3-.5 2.3-1.2 3.2-.8 1-1.6 1.8-1.6 3.5" />
-      <path d="M9.4 19.3c1.7.1 3.5.1 5.2 0" />
-      <path d="M10.4 21.4h3.2" />
-      <g data-part="glow">
-        <path d="M4.3 4.5l.9.8" />
-        <path d="M19.7 4.5l-.9.8" />
-        <path d="M2.6 10h1.1" />
-        <path d="M20.3 10h1.1" />
-      </g>
-    </HandIcon>
+    <Glyph name="bulb" className={className}>
+      <Part icon="bulb" part="glass">
+        <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+        <path d="M9 18h6" />
+      </Part>
+      <path d="M10 22h4" />
+    </Glyph>
   );
 }
 
 export function CompassIcon({ className }: IconProps) {
   return (
-    <HandIcon name="compass" className={className}>
-      <path d="M12 3.3c4.9-.1 8.8 3.8 8.7 8.7-.1 4.8-3.9 8.6-8.7 8.6-4.8 0-8.7-3.9-8.6-8.7.1-4.8 3.9-8.6 8.6-8.6" />
-      <path data-part="needle" d="M15.6 8.4l-1.8 5.4-5.4 1.8 1.8-5.4z" />
-    </HandIcon>
+    <Glyph name="compass" className={className}>
+      <circle cx="12" cy="12" r="10" />
+      <Part icon="compass" part="needle">
+        <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function CloudIcon({ className }: IconProps) {
   return (
-    <HandIcon name="cloud" className={className}>
-      <path
-        data-part="drift"
-        d="M7.2 18.6c-2.2 0-3.9-1.7-3.9-3.8 0-2 1.5-3.6 3.5-3.8.4-3 2.9-5.2 5.9-5.1 2.6 0 4.8 1.8 5.4 4.3 2 .2 3.6 1.9 3.5 4-.1 2.4-2 4.3-4.4 4.4-3.3.1-6.7.1-10 0"
-      />
-    </HandIcon>
+    <Glyph name="cloud" className={className}>
+      <Part icon="cloud" part="cloud">
+        <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function RouteIcon({ className }: IconProps) {
   return (
-    <HandIcon name="route" className={className}>
-      <path d="M6 15c1.2 0 2.1.9 2.1 2.1S7.2 19.2 6 19.2s-2.1-.9-2.1-2.1S4.8 15 6 15" />
-      <path d="M18 4.8c1.2 0 2.1.9 2.1 2.1S19.2 9 18 9s-2.1-.9-2.1-2.1.9-2.1 2.1-2.1" />
-      <path
-        data-part="draw"
-        pathLength={1}
-        d="M8.2 17.1h7.4c1.7 0 3-1.3 3-3s-1.3-3-3-3H8.4c-1.7 0-3-1.3-3-3s1.3-3 3-3h7.4"
-      />
-    </HandIcon>
+    <Glyph name="route" className={className}>
+      <Part icon="route" part="start">
+        <circle cx="6" cy="19" r="3" />
+      </Part>
+      <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" />
+      <Part icon="route" part="end">
+        <circle cx="18" cy="5" r="3" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function PaletteIcon({ className }: IconProps) {
   return (
-    <HandIcon name="palette" className={className}>
-      <g data-part="tilt">
-        <path d="M12 3.4c-4.8 0-8.7 3.8-8.6 8.6.1 4.6 3.8 8.4 8.4 8.6 1.3 0 2-.7 2-1.6 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.3 0-.9.7-1.6 1.6-1.6h1.9c2.7 0 4.4-1.9 4.4-4.4.3-3.9-3.5-7.1-8.7-7.1" />
-        <circle cx="7.6" cy="12" r="0.9" fill="currentColor" stroke="none" />
-        <circle cx="9.3" cy="7.9" r="0.9" fill="currentColor" stroke="none" />
-        <circle cx="14.2" cy="7.4" r="0.9" fill="currentColor" stroke="none" />
-      </g>
-    </HandIcon>
+    <Glyph name="palette" className={className}>
+      <Part icon="palette" part="palette">
+        <path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z" />
+        <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+        <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+        <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+        <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function MenuIcon({ className }: IconProps) {
   return (
-    <HandIcon name="menu" className={className}>
-      <path d="M4 7.2c5.4-.3 10.8-.2 16 0" />
-      <path data-part="middle" d="M4 12c5.4.2 10.8.1 16-.1" />
-      <path d="M4 16.8c5.4-.2 10.8-.1 16 .1" />
-    </HandIcon>
+    <Glyph name="menu" className={className}>
+      <Part icon="menu" part="m1">
+        <path d="M4 5h16" />
+      </Part>
+      <Part icon="menu" part="m2">
+        <path d="M4 12h16" />
+      </Part>
+      <Part icon="menu" part="m3">
+        <path d="M4 19h16" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function CloseIcon({ className }: IconProps) {
   return (
-    <HandIcon name="close" className={className}>
-      <g data-part="cross">
-        <path d="M6 6.2c4 3.8 8 7.8 12 11.8" />
-        <path d="M18 6c-4 4-8 8-12 12.1" />
-      </g>
-    </HandIcon>
+    <Glyph name="close" className={className}>
+      <Part icon="close" part="cross">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function SunIcon({ className }: IconProps) {
   return (
-    <HandIcon name="sun" className={className}>
-      <path d="M12 8.2c2.1 0 3.8 1.7 3.8 3.8s-1.7 3.8-3.8 3.8-3.8-1.7-3.8-3.8 1.7-3.8 3.8-3.8" />
-      <g data-part="rays">
-        <path d="M12 2.6v1.8" />
-        <path d="M12 19.6v1.8" />
-        <path d="M2.6 12h1.8" />
-        <path d="M19.6 12h1.8" />
-        <path d="M5.4 5.4l1.2 1.2" />
-        <path d="M17.4 17.4l1.2 1.2" />
-        <path d="M5.4 18.6l1.2-1.2" />
-        <path d="M17.4 6.6l1.2-1.2" />
-      </g>
-    </HandIcon>
+    <Glyph name="sun" className={className}>
+      <Part icon="sun" part="core">
+        <circle cx="12" cy="12" r="4" />
+      </Part>
+      <Part icon="sun" part="rays">
+        <path d="M12 2v2" />
+        <path d="M12 20v2" />
+        <path d="m4.93 4.93 1.41 1.41" />
+        <path d="m17.66 17.66 1.41 1.41" />
+        <path d="M2 12h2" />
+        <path d="M20 12h2" />
+        <path d="m6.34 17.66-1.41 1.41" />
+        <path d="m19.07 4.93-1.41 1.41" />
+      </Part>
+    </Glyph>
   );
 }
 
 export function MoonIcon({ className }: IconProps) {
   return (
-    <HandIcon name="moon" className={className}>
-      <path
-        data-part="crescent"
-        d="M19.6 14.6c-1 .4-2 .6-3.1.6-4.4 0-8-3.6-8-8 0-1.1.2-2.1.6-3.1-3.1 1.2-5.3 4.3-5.3 7.8 0 4.7 3.8 8.5 8.5 8.5 3.6 0 6.6-2.2 7.8-5.3"
-      />
-      <path data-part="glow" d="M18.2 3.6v2.6M16.9 4.9h2.6" />
-    </HandIcon>
+    <Glyph name="moon" className={className}>
+      <Part icon="moon" part="moon">
+        <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+      </Part>
+    </Glyph>
   );
 }
 
 /**
- * @name handIcons
- * @description Hand-drawn icons by name, used to resolve the `icon` field in
- * MDX frontmatter and `meta.json`. Names follow Lucide so content stays
- * portable.
+ * @name namedIcons
+ * @description Icons by name, used to resolve the `icon` field in MDX
+ * frontmatter and `meta.json`. Names follow Lucide so content stays portable.
  *
  * @example
- * const Icon = handIcons.Rocket
+ * const Icon = namedIcons.Rocket
  */
-export const handIcons = {
+export const namedIcons = {
   BookOpen: BookIcon,
   Cloud: CloudIcon,
   Compass: CompassIcon,
@@ -223,15 +243,15 @@ export const handIcons = {
   Search: SearchIcon,
 } satisfies Record<string, ComponentType<IconProps>>;
 
-export type HandIconName = keyof typeof handIcons;
+export type IconName = keyof typeof namedIcons;
 
 /**
- * @name isHandIconName
- * @description True when the name has a matching hand-drawn icon.
+ * @name isIconName
+ * @description True when the name has a matching icon.
  *
  * @example
- * if (isHandIconName(name)) createElement(handIcons[name])
+ * if (isIconName(name)) createElement(namedIcons[name])
  */
-export function isHandIconName(name: string): name is HandIconName {
-  return Object.hasOwn(handIcons, name);
+export function isIconName(name: string): name is IconName {
+  return Object.hasOwn(namedIcons, name);
 }

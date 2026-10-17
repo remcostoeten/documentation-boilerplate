@@ -2,30 +2,30 @@ import "server-only";
 import type { Node } from "fumadocs-core/page-tree";
 import type { LoaderPlugin } from "fumadocs-core/source";
 import { createElement } from "react";
-import { handIcons, isHandIconName } from "@/shared/icons/icons";
+import { isIconName, namedIcons } from "@/shared/icons/icons";
 
 function replaceIcon<TNode extends Node>(node: TNode) {
   if (typeof node.icon !== "string") return node;
-  if (isHandIconName(node.icon)) {
-    node.icon = createElement(handIcons[node.icon]);
+  if (isIconName(node.icon)) {
+    node.icon = createElement(namedIcons[node.icon]);
   } else {
-    console.warn(`[hand-icons] Unknown icon "${node.icon}".`);
+    console.warn(`[icons] Unknown icon "${node.icon}".`);
     node.icon = undefined;
   }
   return node;
 }
 
 /**
- * @name handIconsPlugin
- * @description Resolves the `icon` name of pages, folders and separators to a
- * hand-drawn icon from `src/shared/icons`.
+ * @name iconsPlugin
+ * @description Resolves the `icon` name of pages, folders and separators to an
+ * icon from `src/shared/icons`.
  *
  * @example
- * loader({ source, plugins: [handIconsPlugin()] })
+ * loader({ source, plugins: [iconsPlugin()] })
  */
-export function handIconsPlugin(): LoaderPlugin {
+export function iconsPlugin(): LoaderPlugin {
   return {
-    name: "hand-icons",
+    name: "icons",
     transformPageTree: {
       file: replaceIcon,
       folder: replaceIcon,

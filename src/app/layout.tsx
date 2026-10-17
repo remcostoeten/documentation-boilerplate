@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { site } from "@/shared/config/site";
+import { IconMotion } from "@/shared/icons/icon-motion";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     >
       <body className="font-sans">
         <RootProvider>{children}</RootProvider>
+        <IconMotion />
       </body>
     </html>
   );
