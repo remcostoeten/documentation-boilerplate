@@ -1,6 +1,3 @@
-import { spawn } from "node:child_process";
-import { createServer } from "node:net";
-
 type Mode = "dev" | "start";
 
 const DEFAULT_PORT = 3000;
@@ -12,17 +9,18 @@ function parseMode(value: string | undefined): Mode {
 }
 
 function isPortFree(port: number) {
-  return new Promise<boolean>((resolve) => {
-    const server = createServer();
-    server.once("error", () => resolve(false));
-    server.once("listening", () => server.close(() => resolve(true)));
-    server.listen(port);
-  });
+  try {
+    const listener = Bun.listen({ hostname: "0.0.0.0", port, socket: { data: () => {} } });
+    listener.stop(true);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-async function findFreePort(preferred: number) {
+function findFreePort(preferred: number) {
   for (let port = preferred; port < preferred + MAX_PORT_ATTEMPTS; port++) {
-    if (await isPortFree(port)) return port;
+    if (isPortFree(port)) return port;
   }
   throw new Error(
     `No free port found between ${preferred} and ${preferred + MAX_PORT_ATTEMPTS - 1}.`,
@@ -32,24 +30,28 @@ async function findFreePort(preferred: number) {
 function openInBrowser(url: string) {
   const command =
     process.platform === "darwin" ? "open" : process.platform === "win32" ? "explorer" : "xdg-open";
-  const opener = spawn(command, [url], { stdio: "ignore", detached: true });
-  opener.once("spawn", () => console.log(`  ✓ opened ${url} in the browser`));
-  opener.once("error", () => console.error(`  ✗ could not open the browser, visit ${url}`));
-  opener.unref();
+  try {
+    Bun.spawn([command, url], { stdout: "ignore", stderr: "ignore" }).unref();
+    console.log(`  ✓ opened ${url} in the browser`);
+  } catch {
+    console.error(`  ✗ could not open the browser, visit ${url}`);
+  }
 }
 
-async function main() {
+function main() {
   const mode = parseMode(process.argv[2]);
   const preferred = Number(process.env.PORT) || DEFAULT_PORT;
-  const port = await findFreePort(preferred);
+  const port = findFreePort(preferred);
   const url = `http://localhost:${port}`;
 
   if (port !== preferred) {
     console.log(`Port ${preferred} is in use, using ${port} instead.`);
   }
 
-  const child = spawn("bun", ["--bun", "next", mode, "-p", String(port)], {
-    stdio: ["ignore", "inherit", "inherit"],
+  const child = Bun.spawn(["bun", "--bun", "next", mode, "-p", String(port)], {
+    stdin: "ignore",
+    stdout: "inherit",
+    stderr: "inherit",
     env: { ...process.env, PORT: String(port) },
   });
 
@@ -58,7 +60,7 @@ async function main() {
     child.kill("SIGINT");
   }
 
-  child.on("exit", (code) => process.exit(code ?? 0));
+  void child.exited.then((code) => process.exit(code));
   process.on("SIGINT", shutdown);
   process.on("SIGTERM", shutdown);
 
@@ -74,7 +76,9 @@ async function main() {
   });
 }
 
-main().catch((error: Error) => {
-  console.error(error.message);
+try {
+  main();
+} catch (error) {
+  console.error(error instanceof Error ? error.message : error);
   process.exit(1);
-});
+}
