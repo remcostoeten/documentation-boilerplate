@@ -9,7 +9,7 @@ export function SidebarFooter() {
         href={site.repository}
         target="_blank"
         rel="noreferrer noopener"
-        className="inline-flex size-8 items-center justify-center transition-colors duration-150 ease-hover hover:bg-foreground/5 hover:text-foreground/70 focus-visible:bg-foreground/8 focus-visible:text-foreground"
+        className="inline-flex size-8 items-center justify-center pressable hover:bg-foreground/5 hover:text-foreground/70 focus-visible:bg-foreground/8 focus-visible:text-foreground"
         aria-label="GitHub"
       >
         <GitHubIcon className="size-4" />

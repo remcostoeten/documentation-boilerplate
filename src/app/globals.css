@@ -16,6 +16,63 @@
 
 @theme {
   --ease-hover: ease;
+  --ease-snappy: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --animate-fd-dialog-in: none;
+  --animate-fd-dialog-out: none;
+  --animate-fd-fade-in: none;
+  --animate-fd-fade-out: none;
+  --animate-fd-popover-in: fd-popover-in 160ms var(--ease-snappy);
+  --animate-fd-popover-out: fd-popover-out 120ms var(--ease-snappy);
+  --animate-fd-collapsible-down: fd-collapsible-down 220ms var(--ease-snappy);
+  --animate-fd-collapsible-up: fd-collapsible-up 160ms var(--ease-snappy);
+  --animate-fd-accordion-down: fd-accordion-down 240ms var(--ease-snappy);
+  --animate-fd-accordion-up: fd-accordion-up 180ms var(--ease-snappy);
+
+  @keyframes fd-popover-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  @keyframes fd-popover-out {
+    to {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+
+  @keyframes fd-accordion-down {
+    from {
+      height: 0;
+      opacity: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes fd-accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+      opacity: 0;
+    }
+  }
+}
+
+@utility pressable {
+  transition-property: color, background-color, border-color, transform;
+  transition-duration: 150ms, 150ms, 150ms, 160ms;
+  transition-timing-function:
+    var(--ease-hover), var(--ease-hover), var(--ease-hover), var(--ease-snappy);
+
+  &:active {
+    transform: scale(0.97);
+  }
 }
 
 @theme inline {
@@ -103,4 +160,41 @@ body {
 /* Unlayered so it beats duration utilities: keyboard focus shows instantly */
 :where(:focus-visible, :focus-visible *) {
   transition-duration: 0s;
+}
+
+:where(a.bg-fd-card) {
+  transition-property: color, background-color, border-color, transform;
+  transition-duration: 150ms, 150ms, 150ms, 160ms;
+  transition-timing-function:
+    var(--ease-hover), var(--ease-hover), var(--ease-hover), var(--ease-snappy);
+}
+
+:where(a.bg-fd-card):active {
+  transform: scale(0.985);
+}
+
+:where(button[data-checked]) > svg {
+  transition:
+    opacity 160ms var(--ease-snappy),
+    transform 160ms var(--ease-snappy);
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --animate-fd-popover-in: fd-fade-in 120ms ease;
+    --animate-fd-popover-out: none;
+    --animate-fd-collapsible-down: none;
+    --animate-fd-collapsible-up: none;
+    --animate-fd-accordion-down: none;
+    --animate-fd-accordion-up: none;
+  }
+
+  :where(.pressable, a.bg-fd-card):active {
+    transform: none;
+  }
 }

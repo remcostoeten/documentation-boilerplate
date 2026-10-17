@@ -108,7 +108,12 @@ function NavigationFolder({ folder, pathname, onNavigate, nested }: FolderProps)
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            exit={{
+              opacity: 0,
+              height: 0,
+              transition: { type: "spring", duration: 0.25, bounce: 0 },
+            }}
+            transition={{ type: "spring", duration: 0.35, bounce: 0 }}
             className="overflow-hidden"
           >
             <NavigationNodes nodes={children} pathname={pathname} onNavigate={onNavigate} nested />

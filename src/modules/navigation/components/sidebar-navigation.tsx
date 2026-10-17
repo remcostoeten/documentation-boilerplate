@@ -46,7 +46,7 @@ export function SidebarNavigation({ sections, pathname, mobile = false, onNaviga
                 <span className="grow">{section.name}</span>
                 <ChevronIcon
                   className={cn(
-                    "size-4 shrink-0 text-muted-foreground transition-transform duration-200",
+                    "size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-snappy",
                     open && "rotate-180",
                   )}
                 />
@@ -57,7 +57,11 @@ export function SidebarNavigation({ sections, pathname, mobile = false, onNaviga
                     id={panelId}
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
+                    exit={{
+                      opacity: 0,
+                      height: 0,
+                      transition: { type: "spring", duration: 0.25, bounce: 0 },
+                    }}
                     className="relative overflow-hidden"
                   >
                     <NavigationNodes
