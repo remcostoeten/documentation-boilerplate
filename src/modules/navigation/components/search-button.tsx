@@ -1,6 +1,6 @@
 "use client";
 
-import { SearchIcon } from "lucide-react";
+import { SearchIcon } from "@/shared/icons/icons";
 
 type Props = { onClick: () => void };
 

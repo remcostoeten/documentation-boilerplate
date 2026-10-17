@@ -1,9 +1,9 @@
 "use client";
 
-import { ChevronDownIcon, FolderIcon } from "lucide-react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { useId, useState } from "react";
 import { cn } from "@/shared/helpers/cn";
+import { ChevronIcon, FolderIcon } from "@/shared/icons/icons";
 import type { NavigationSection } from "../types/navigation";
 import { getDefaultOpen } from "../utils/navigation-sections";
 import { NavigationNodes } from "./navigation-nodes";
@@ -44,7 +44,7 @@ export function SidebarNavigation({ sections, pathname, mobile = false, onNaviga
                   {section.icon ?? <FolderIcon />}
                 </span>
                 <span className="grow">{section.name}</span>
-                <ChevronDownIcon
+                <ChevronIcon
                   className={cn(
                     "size-4 shrink-0 text-muted-foreground transition-transform duration-200",
                     open && "rotate-180",

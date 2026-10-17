@@ -1,0 +1,119 @@
+.hand-icon {
+  --icon-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: visible;
+}
+
+.hand-icon [data-part] {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 220ms var(--icon-ease),
+    opacity 220ms var(--icon-ease);
+}
+
+.hand-icon [data-part="glow"] {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.hand-icon [data-part="left"] {
+  transform-origin: right center;
+}
+
+.hand-icon [data-part="right"] {
+  transform-origin: left center;
+}
+
+.hand-icon [data-part="lid"],
+.hand-icon [data-part="roof"] {
+  transform-origin: center bottom;
+}
+
+.hand-icon[data-icon="search"] [data-part="lens"] {
+  transform-origin: 70% 70%;
+}
+
+.hand-icon [data-part="flame"] {
+  transform-origin: right top;
+}
+
+@keyframes hand-icon-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :where(a, button):hover .hand-icon [data-part="glow"] {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="draw"] {
+    stroke-dasharray: 1;
+    animation: hand-icon-draw 280ms var(--icon-ease) both;
+  }
+
+  :where(a, button):hover .hand-icon [data-part="lens"] {
+    transform: rotate(-12deg);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="left"] {
+    transform: rotate(4deg);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="right"] {
+    transform: rotate(-4deg);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="lid"] {
+    transform: translateY(-1px) rotate(-4deg);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="roof"] {
+    transform: translateY(-1px);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="arrow"] {
+    transform: translateY(1.5px);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="body"] {
+    transform: translate(1px, -1px);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="flame"] {
+    transform: translate(1px, -1px) scale(1.2);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="needle"] {
+    transform: rotate(30deg);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="drift"] {
+    transform: translateX(1px);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="tilt"] {
+    transform: rotate(-10deg);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="middle"] {
+    transform: translateX(-2px);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="cross"] {
+    transform: rotate(12deg);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="rays"] {
+    transform: rotate(30deg);
+  }
+
+  :where(a, button):hover .hand-icon [data-part="crescent"] {
+    transform: rotate(-14deg);
+  }
+}

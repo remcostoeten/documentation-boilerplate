@@ -1,6 +1,6 @@
 "use client";
 
-import { MenuIcon, XIcon } from "lucide-react";
+import { CloseIcon, MenuIcon } from "@/shared/icons/icons";
 import { setMobileNavigationOpen, useMobileNavigationOpen } from "../hooks/use-mobile-navigation";
 
 export function MenuToggle() {
@@ -15,7 +15,7 @@ export function MenuToggle() {
       onClick={() => setMobileNavigationOpen(!open)}
       className="ms-auto inline-flex size-(--topbar-height) items-center justify-center text-foreground/60 transition-colors duration-150 ease-hover hover:text-foreground focus-visible:bg-foreground/6 focus-visible:text-foreground lg:hidden"
     >
-      {open ? <XIcon className="size-4" /> : <MenuIcon className="size-4" />}
+      {open ? <CloseIcon className="size-4" /> : <MenuIcon className="size-4" />}
     </button>
   );
 }

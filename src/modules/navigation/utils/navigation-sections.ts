@@ -1,6 +1,6 @@
 import type { Node, Root } from "fumadocs-core/page-tree";
-import { BookOpenIcon } from "lucide-react";
 import { createElement } from "react";
+import { BookIcon } from "@/shared/icons/icons";
 import type { NavigationSection } from "../types/navigation";
 
 /**
@@ -31,7 +31,7 @@ export function getNavigationSections(tree: Root): NavigationSection[] {
     sections.push({
       id: tree.$id ?? "root",
       name: tree.name,
-      icon: createElement(BookOpenIcon),
+      icon: createElement(BookIcon),
       children: rootChildren,
     });
   }

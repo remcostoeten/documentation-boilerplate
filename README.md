@@ -5,7 +5,7 @@
 Pages are MDX files in `content/docs`. The sidebar is built from the folder structure: each top-level folder is a section that opens on click, one at a time, and a nested folder with an `index.mdx` expands while you are inside it.
 
 - **Sidebar animation** uses `motion` with one shared spring (`duration: 0.35`, `bounce: 0`) for every section and folder.
-- Section icons are [Lucide](https://lucide.dev/icons) names set with `icon` in `meta.json` or frontmatter.
+- Icons are hand-drawn SVGs in `src/shared/icons`, picked by name with `icon` in `meta.json` or frontmatter. Each one has a small hover animation that only runs with a mouse and with reduced motion off.
 - `sidebarTitle` and `sidebarBadge` in frontmatter set a shorter label and a small badge.
 - Search opens with `⌘K` and is served by `src/app/api/search/route.ts`.
 - On small screens the sidebar becomes a full screen dialog behind the top bar menu button.

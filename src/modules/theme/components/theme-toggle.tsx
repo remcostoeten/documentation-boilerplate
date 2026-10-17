@@ -1,6 +1,6 @@
 "use client";
 
-import { MoonIcon, SunIcon } from "lucide-react";
+import { MoonIcon, SunIcon } from "@/shared/icons/icons";
 import { useTheme } from "next-themes";
 
 export function ThemeToggle() {
