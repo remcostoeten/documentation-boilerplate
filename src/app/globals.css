@@ -6,6 +6,17 @@
 @source "../../node_modules/fumadocs-ui/dist/**/*.js";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
+@theme {
+  --ease-hover: ease;
+}
 
 @theme inline {
   --color-background: var(--color-fd-background);
@@ -70,7 +81,7 @@ body {
     outline-color: transparent;
     transition-property: color, background-color, border-color, fill, stroke;
     transition-duration: 150ms;
-    transition-timing-function: ease-out;
+    transition-timing-function: var(--ease-hover);
   }
 
   /* A transparent outline stays visible in forced-colors mode */
@@ -87,4 +98,9 @@ body {
     color: var(--color-fd-foreground);
     background-color: color-mix(in oklab, var(--color-fd-foreground) 7%, transparent);
   }
+}
+
+/* Unlayered so it beats duration utilities: keyboard focus shows instantly */
+:where(:focus-visible, :focus-visible *) {
+  transition-duration: 0s;
 }

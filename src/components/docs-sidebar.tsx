@@ -197,12 +197,12 @@ function SearchButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
-      className="group/search flex w-full items-center gap-2 border-b border-foreground/5 px-4 py-[9px] text-sm text-foreground/55 transition-colors duration-150 ease-out hover:bg-foreground/3 hover:text-foreground/80 focus-visible:bg-foreground/6 focus-visible:text-foreground"
+      className="group/search flex w-full items-center gap-2 border-b border-foreground/5 px-4 py-[9px] text-sm text-foreground/55 transition-colors duration-150 ease-hover hover:bg-foreground/3 hover:text-foreground/80 focus-visible:bg-foreground/6 focus-visible:text-foreground"
       onClick={onClick}
     >
-      <SearchIcon className="size-4 shrink-0 text-foreground/40 transition-colors duration-150 ease-out group-hover/search:text-foreground/70 group-focus-visible/search:text-foreground" />
+      <SearchIcon className="size-4 shrink-0 text-foreground/40 transition-colors duration-150 ease-hover group-hover/search:text-foreground/70 group-focus-visible/search:text-foreground" />
       <span className="truncate">Search</span>
-      <kbd className="ml-auto inline-flex shrink-0 items-center gap-0.5 rounded-md border border-foreground/10 px-1.5 py-0.5 font-mono text-[10px] text-foreground/40 transition-colors duration-150 ease-out group-hover/search:border-foreground/20 group-hover/search:text-foreground/60 group-focus-visible/search:border-foreground/25">
+      <kbd className="ml-auto inline-flex shrink-0 items-center gap-0.5 rounded-md border border-foreground/10 px-1.5 py-0.5 font-mono text-[10px] text-foreground/40 transition-colors duration-150 ease-hover group-hover/search:border-foreground/20 group-hover/search:text-foreground/60 group-focus-visible/search:border-foreground/25">
         <span className="text-[11px]">&#8984;</span>K
       </kbd>
     </button>
@@ -236,7 +236,7 @@ function SidebarNavigation({
                 aria-expanded={open}
                 aria-controls={panelId}
                 className={cn(
-                  "flex w-full items-center gap-2 border-b border-foreground/6 text-left text-sm font-medium transition-colors duration-150 ease-out focus-visible:bg-foreground/6 focus-visible:text-foreground",
+                  "flex w-full items-center gap-2 border-b border-foreground/6 text-left text-sm font-medium transition-colors duration-150 ease-hover focus-visible:bg-foreground/6 focus-visible:text-foreground",
                   mobile ? "px-5 py-3" : "px-4 py-2.5",
                   open
                     ? "bg-foreground/3 text-foreground"
@@ -443,7 +443,7 @@ function NavigationLink({
       onClick={onNavigate}
       data-active={active || undefined}
       className={cn(
-        "relative flex w-full items-center gap-2.5 py-1 text-[14px] transition-colors duration-150 ease-out focus-visible:bg-foreground/10 focus-visible:text-foreground",
+        "relative flex w-full items-center gap-2.5 py-1 text-[14px] transition-colors duration-150 ease-hover focus-visible:bg-foreground/10 focus-visible:text-foreground",
         nested ? "pr-4 pl-12 text-[13px]" : "px-4",
         active
           ? "bg-foreground/6 text-foreground"
@@ -488,7 +488,7 @@ function SidebarFooter() {
         href={site.repository}
         target="_blank"
         rel="noreferrer noopener"
-        className="inline-flex size-8 items-center justify-center transition-colors duration-150 ease-out hover:bg-foreground/5 hover:text-foreground/70 focus-visible:bg-foreground/8 focus-visible:text-foreground"
+        className="inline-flex size-8 items-center justify-center transition-colors duration-150 ease-hover hover:bg-foreground/5 hover:text-foreground/70 focus-visible:bg-foreground/8 focus-visible:text-foreground"
         aria-label="GitHub"
       >
         <GitHubIcon className="size-4" />
