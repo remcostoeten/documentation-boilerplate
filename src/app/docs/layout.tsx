@@ -1,8 +1,7 @@
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import type { ReactNode } from "react";
-import { DocsSidebar } from "@/components/docs-sidebar";
-import { Topbar } from "@/components/topbar";
-import { source } from "@/helpers/source";
+import { source } from "@/modules/docs/server/source";
+import { DocsSidebar, Topbar } from "@/modules/navigation";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const tree = source.getPageTree();

@@ -1,0 +1,22 @@
+import { ThemeToggle } from "@/modules/theme/components/theme-toggle";
+import { site } from "@/shared/config/site";
+import { GitHubIcon } from "@/shared/components/github-icon";
+
+export function SidebarFooter() {
+  return (
+    <div className="flex items-center gap-1 border-t border-foreground/5 p-2 text-foreground/40">
+      <a
+        href={site.repository}
+        target="_blank"
+        rel="noreferrer noopener"
+        className="inline-flex size-8 items-center justify-center transition-colors duration-150 ease-hover hover:bg-foreground/5 hover:text-foreground/70 focus-visible:bg-foreground/8 focus-visible:text-foreground"
+        aria-label="GitHub"
+      >
+        <GitHubIcon className="size-4" />
+      </a>
+      <div className="ms-auto">
+        <ThemeToggle />
+      </div>
+    </div>
+  );
+}

@@ -1,26 +1,12 @@
-import type { Node } from "fumadocs-core/page-tree";
+import "server-only";
 import type { LoaderPlugin } from "fumadocs-core/source";
 import * as z from "zod";
+import type { SidebarMetadata } from "@/modules/navigation/types/navigation";
 
 const sidebarMetadataSchema = z.object({
   sidebarTitle: z.string().optional().catch(undefined),
   sidebarBadge: z.string().optional().catch(undefined),
-});
-
-export type SidebarPageNode = Extract<Node, { type: "page" }> &
-  z.infer<typeof sidebarMetadataSchema>;
-
-/**
- * @name isPathWithinFolderIndex
- * @description True when the pathname is a folder's index page or any page
- * below it.
- *
- * @example
- * isPathWithinFolderIndex("/docs/guides", "/docs/guides/deployment") // true
- */
-export function isPathWithinFolderIndex(indexUrl: string | undefined, pathname: string) {
-  return indexUrl === pathname || (indexUrl !== undefined && pathname.startsWith(`${indexUrl}/`));
-}
+}) satisfies z.ZodType<SidebarMetadata>;
 
 /**
  * @name sidebarMetadataPlugin

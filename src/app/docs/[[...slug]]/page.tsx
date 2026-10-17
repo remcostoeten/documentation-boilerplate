@@ -2,7 +2,7 @@ import defaultMdxComponents from "fumadocs-ui/mdx";
 import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/page";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { source } from "@/helpers/source";
+import { source } from "@/modules/docs/server/source";
 
 type Props = {
   params: Promise<{ slug?: string[] }>;

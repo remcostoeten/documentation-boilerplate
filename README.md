@@ -10,7 +10,7 @@ Pages are MDX files in `content/docs`. The sidebar is built from the folder stru
 - Search opens with `⌘K` and is served by `src/app/api/search/route.ts`.
 - On small screens the sidebar becomes a full screen dialog behind the top bar menu button.
 
-The sidebar lives in `src/components/docs-sidebar.tsx`, layout sizes in `src/app/globals.css` (`--topbar-height`, `--sidebar-width`) and the site name, URL, repository link and SEO metadata in `src/helpers/site.ts`.
+The sidebar and top bar live in `src/modules/navigation`, layout sizes in `src/app/globals.css` (`--topbar-height`, `--sidebar-width`) and the site name, URL, repository link and SEO metadata in `src/shared/config/site.ts`.
 
 ## Development
 
