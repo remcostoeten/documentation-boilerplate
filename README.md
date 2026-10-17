@@ -7,10 +7,10 @@ Pages are MDX files in `content/docs`. The sidebar is built from the folder stru
 - **Sidebar animation** uses `motion` with one shared spring (`duration: 0.35`, `bounce: 0`) for every section and folder.
 - Section icons are [Lucide](https://lucide.dev/icons) names set with `icon` in `meta.json` or frontmatter.
 - `sidebarTitle` and `sidebarBadge` in frontmatter set a shorter label and a small badge.
-- Search opens with `⌘K` and is served by `app/api/search/route.ts`.
+- Search opens with `⌘K` and is served by `src/app/api/search/route.ts`.
 - On small screens the sidebar becomes a full screen dialog behind the top bar menu button.
 
-The sidebar lives in `components/docs-sidebar.tsx`, layout sizes in `app/globals.css` (`--topbar-height`, `--sidebar-width`) and the site name, URL, repository link and SEO metadata in `helpers/site.ts`.
+The sidebar lives in `src/components/docs-sidebar.tsx`, layout sizes in `src/app/globals.css` (`--topbar-height`, `--sidebar-width`) and the site name, URL, repository link and SEO metadata in `src/helpers/site.ts`.
 
 ## Development
 

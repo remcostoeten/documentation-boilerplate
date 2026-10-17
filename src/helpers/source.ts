@@ -1,6 +1,6 @@
 import { loader } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
-import { docs } from "@/.source/server";
+import { docs } from "collections/server";
 import { sidebarMetadataPlugin } from "./page-tree";
 
 export const source = loader({

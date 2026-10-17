@@ -3,7 +3,7 @@
 @import "fumadocs-ui/css/preset.css";
 
 @source "../components/**/*.{ts,tsx}";
-@source "../node_modules/fumadocs-ui/dist/**/*.js";
+@source "../../node_modules/fumadocs-ui/dist/**/*.js";
 
 @custom-variant dark (&:is(.dark *));
 
