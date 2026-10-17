@@ -1,0 +1,34 @@
+---
+title: Cards
+description: Link grids for overview and landing pages.
+icon: BookOpen
+---
+
+## With icons
+
+<Cards>
+  <Card icon={<RocketIcon />} title="Quick start" href="/docs/quick-start">
+    Write your first page.
+  </Card>
+  <Card icon={<DownloadIcon />} title="Installation" href="/docs/installation">
+    Install the dependencies.
+  </Card>
+</Cards>
+
+## Without icons
+
+<Cards>
+  <Card title="Routing" href="/docs/concepts/routing" description="How files become URLs." />
+  <Card title="Search" href="/docs/concepts/search" description="How the search index is built." />
+  <Card title="Theming" href="/docs/guides/theming" description="Colors and layout sizes." />
+</Cards>
+
+## External link
+
+<Cards>
+  <Card
+    title="Fumadocs"
+    href="https://fumadocs.dev"
+    description="The documentation framework this boilerplate is built on."
+  />
+</Cards>

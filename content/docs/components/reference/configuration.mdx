@@ -1,0 +1,54 @@
+---
+title: Configuration
+description: Every option in one place. A long page that exercises the table of contents.
+sidebarBadge: api
+---
+
+## Site
+
+Site wide settings live in `src/shared/config/site.ts`.
+
+### name
+
+Shown in the top bar and as the default page title.
+
+### description
+
+Used for the meta description and social cards.
+
+### url
+
+The production URL. Next.js resolves social image URLs against it.
+
+### repository
+
+Linked from the GitHub button in the sidebar footer.
+
+## Content
+
+Content settings live in `source.config.ts`.
+
+### dir
+
+The folder MDX pages are read from. Defaults to `content/docs`.
+
+### schema
+
+Extend the frontmatter schema with Zod to add fields of your own.
+
+## Layout
+
+Layout sizes are CSS variables in `src/app/globals.css`.
+
+### --topbar-height
+
+Height of the fixed top bar.
+
+### --sidebar-width
+
+Width of the sidebar on large screens.
+
+## Search
+
+The search route is `src/app/api/search/route.ts`. It indexes headings and paragraphs of every page
+at build time, so this page's headings are searchable too.

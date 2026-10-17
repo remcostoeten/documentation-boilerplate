@@ -1,0 +1,38 @@
+---
+title: Tables
+description: Plain Markdown tables and typed prop tables.
+icon: Download
+---
+
+## Markdown table
+
+| Script              | What it does                         |
+| ------------------- | ------------------------------------ |
+| `bun dev`           | Starts the dev server on a free port |
+| `bun run build`     | Builds for production                |
+| `bun run check`     | Formats, lints and type checks       |
+| `bun run typecheck` | Regenerates `.source` and runs `tsc` |
+
+## Alignment
+
+| Size   | Width |    Used for     |
+| :----- | ----: | :-------------: |
+| Small  |  14px |  Sidebar links  |
+| Medium |  16px |     Buttons     |
+| Large  |  18px | Section headers |
+
+## Type table
+
+<TypeTable
+  type={{
+    title: { type: "string", description: "Page title and default sidebar label.", required: true },
+    description: { type: "string", description: "Shown under the title and in search results." },
+    icon: { type: "string", description: "Icon name from `src/shared/icons`." },
+    sidebarTitle: { type: "string", description: "Shorter label for the sidebar." },
+    sidebarBadge: {
+      type: "string",
+      description: "Small badge next to the sidebar label.",
+      default: "none",
+    },
+  }}
+/>

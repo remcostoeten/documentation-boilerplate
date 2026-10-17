@@ -1,0 +1,16 @@
+{
+  "title": "Components",
+  "icon": "Palette",
+  "pages": [
+    "index",
+    "callouts",
+    "code-blocks",
+    "tabs-and-steps",
+    "cards",
+    "accordions",
+    "files",
+    "tables",
+    "---Reference---",
+    "reference"
+  ]
+}

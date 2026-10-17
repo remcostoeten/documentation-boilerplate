@@ -1,0 +1,65 @@
+---
+title: Tabs and steps
+description: Show variants side by side and walk through a procedure.
+icon: Route
+---
+
+## Tabs
+
+<Tabs items={["MDX", "meta.json", "Frontmatter"]}>
+  <Tab value="MDX">Write pages as MDX files inside `content/docs`.</Tab>
+  <Tab value="meta.json">Order pages and name sections with a `meta.json` per folder.</Tab>
+  <Tab value="Frontmatter">Set the title, description, icon and sidebar badge per page.</Tab>
+</Tabs>
+
+## Shared tab state
+
+Tabs with the same `groupId` stay in sync, and `persist` remembers the choice between visits.
+
+<Tabs groupId="runtime" persist items={["Bun", "Docker"]}>
+<Tab value="Bun">
+
+```bash
+bun run build && bun start
+```
+
+</Tab>
+<Tab value="Docker">
+
+```bash
+docker build -t docs . && docker run -p 3000:3000 docs
+```
+
+</Tab>
+</Tabs>
+
+<Tabs groupId="runtime" persist items={["Bun", "Docker"]}>
+  <Tab value="Bun">Bun serves the production build directly.</Tab>
+  <Tab value="Docker">The image runs the same build inside a container.</Tab>
+</Tabs>
+
+## Steps
+
+<Steps>
+<Step>
+
+### Create the file
+
+Add `content/docs/guides/my-guide.mdx` with a `title` in its frontmatter.
+
+</Step>
+<Step>
+
+### Add it to the sidebar
+
+Put `"my-guide"` in the `pages` array of `content/docs/guides/meta.json`.
+
+</Step>
+<Step>
+
+### Check it
+
+Open `/docs/guides/my-guide` and search for its title with `⌘K`.
+
+</Step>
+</Steps>

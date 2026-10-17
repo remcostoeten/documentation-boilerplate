@@ -1,0 +1,28 @@
+---
+title: Accordions
+description: Collapsible sections for questions and optional detail.
+icon: Compass
+---
+
+## FAQ
+
+<Accordions type="single">
+  <Accordion title="Can I add a page without touching meta.json?">
+    Yes. Pages missing from `pages` are appended at the end of their folder, but listing them keeps
+    the order explicit.
+  </Accordion>
+  <Accordion title="How do I hide a page from the sidebar?">
+    Leave it out of `meta.json` and link to it from another page. It still builds and is still
+    searchable.
+  </Accordion>
+  <Accordion title="Which icons can I use?">
+    Any name exported from `src/shared/icons`, such as `Rocket`, `Compass` or `FileText`.
+  </Accordion>
+</Accordions>
+
+## Several open at once
+
+<Accordions type="multiple">
+  <Accordion title="Development">Run `bun dev` and open the printed URL.</Accordion>
+  <Accordion title="Production">Run `bun run build`, then `bun start`.</Accordion>
+</Accordions>

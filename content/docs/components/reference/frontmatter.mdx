@@ -1,0 +1,26 @@
+---
+title: Frontmatter
+description: The fields a page can set at the top of its MDX file.
+---
+
+```mdx title="content/docs/example.mdx"
+---
+title: Example
+description: One line under the title.
+icon: Rocket
+sidebarTitle: Short label
+sidebarBadge: beta
+---
+```
+
+<TypeTable
+  type={{
+    title: { type: "string", description: "Page title.", required: true },
+    description: { type: "string", description: "Subtitle and meta description." },
+    icon: { type: "string", description: "Icon name from `src/shared/icons`." },
+    sidebarTitle: { type: "string", description: "Shorter sidebar label." },
+    sidebarBadge: { type: "string", description: "Badge next to the sidebar label." },
+  }}
+/>
+
+See the [Tables](/docs/components/tables) page for how this table is written.

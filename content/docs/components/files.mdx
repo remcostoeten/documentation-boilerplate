@@ -1,0 +1,29 @@
+---
+title: Files
+description: Show a project structure as a collapsible tree.
+icon: Cloud
+---
+
+<Files>
+  <Folder name="content" defaultOpen>
+    <Folder name="docs" defaultOpen>
+      <File name="index.mdx" />
+      <File name="meta.json" />
+      <Folder name="guides">
+        <File name="theming.mdx" />
+        <File name="meta.json" />
+      </Folder>
+    </Folder>
+  </Folder>
+  <Folder name="src" defaultOpen>
+    <Folder name="app" />
+    <Folder name="modules">
+      <Folder name="docs" />
+      <Folder name="navigation" />
+      <Folder name="theme" />
+    </Folder>
+    <Folder name="shared" />
+  </Folder>
+  <File name="source.config.ts" />
+  <File name="package.json" />
+</Files>

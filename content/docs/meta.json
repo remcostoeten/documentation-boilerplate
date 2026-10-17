@@ -1,5 +1,14 @@
 {
   "title": "Get Started",
   "root": true,
-  "pages": ["index", "installation", "quick-start", "concepts", "guides"]
+  "pages": [
+    "index",
+    "installation",
+    "quick-start",
+    "concepts",
+    "guides",
+    "components",
+    "---Links---",
+    "[GitHub](https://github.com/remcostoeten/docs-boilerplate)"
+  ]
 }

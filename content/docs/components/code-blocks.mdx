@@ -1,0 +1,75 @@
+---
+title: Code blocks
+description: Syntax highlighting with titles, line highlights, diffs and tabs.
+icon: FileText
+sidebarBadge: new
+---
+
+## Title
+
+```ts title="src/shared/config/site.ts"
+export const site = {
+  name: "Docs",
+  url: "http://localhost:3000",
+};
+```
+
+## Highlighted lines
+
+```tsx
+export default function Layout({ children }: { children: ReactNode }) {
+  const tree = source.getPageTree(); // [!code highlight]
+  return <DocsLayout tree={tree}>{children}</DocsLayout>;
+}
+```
+
+## Highlighted words
+
+```ts
+// [!code word:loader]
+export const source = loader({
+  baseUrl: "/docs",
+  source: docs.toFumadocsSource(),
+});
+```
+
+## Diff
+
+```ts
+const config: NextConfig = {
+  reactStrictMode: false, // [!code --]
+  reactStrictMode: true, // [!code ++]
+};
+```
+
+## Focus
+
+```ts
+function getPage(slug: string[]) {
+  const page = source.getPage(slug); // [!code focus]
+  if (!page) notFound();
+  return page;
+}
+```
+
+## Line numbers
+
+```ts lineNumbers
+const sections = getNavigationSections(tree);
+const open = getDefaultOpen(sections, pathname);
+const active = sections[open];
+```
+
+## Tabbed code
+
+```bash tab="Install"
+bun install
+```
+
+```bash tab="Develop"
+bun dev
+```
+
+```bash tab="Build"
+bun run build
+```

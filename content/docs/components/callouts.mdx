@@ -1,0 +1,33 @@
+---
+title: Callouts
+description: Draw attention to information the reader should not skip.
+icon: Lightbulb
+---
+
+## Default
+
+<Callout>Pages are rebuilt automatically while `bun dev` is running.</Callout>
+
+## With a title
+
+<Callout title="Heads up">
+  Frontmatter is validated with Zod. An unknown `icon` name logs a warning and renders no icon.
+</Callout>
+
+## Types
+
+<Callout type="info" title="Info">
+  Search indexes every heading and paragraph.
+</Callout>
+
+<Callout type="warn" title="Warning">
+  Renaming a file changes its URL. Add a redirect in `next.config.ts` if the old link is public.
+</Callout>
+
+<Callout type="error" title="Error">
+  A page that is missing from `meta.json` still builds but will not appear in the sidebar.
+</Callout>
+
+<Callout type="success" title="Success">
+  Your docs are ready to deploy.
+</Callout>
