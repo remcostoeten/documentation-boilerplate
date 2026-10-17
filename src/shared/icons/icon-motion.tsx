@@ -35,11 +35,9 @@ function playIcon(svg: SVGSVGElement, icon: MotionIcon) {
   });
 }
 
-function onPointerOver(event: PointerEvent) {
-  if (!(event.target instanceof Element)) return;
-  const host = event.target.closest(hostSelector);
-  if (!host) return;
-  if (event.relatedTarget instanceof Node && host.contains(event.relatedTarget)) return;
+let hoveredHost: Element | null = null;
+
+function playHost(host: Element) {
   if (!window.matchMedia(motionQuery).matches) return;
   for (const svg of host.querySelectorAll<SVGSVGElement>("svg[data-icon]")) {
     const icon = svg.dataset.icon;
@@ -47,10 +45,26 @@ function onPointerOver(event: PointerEvent) {
   }
 }
 
+function onPointerMove(event: PointerEvent) {
+  const host = event.target instanceof Element ? event.target.closest(hostSelector) : null;
+  if (host === hoveredHost) return;
+  const replacedUnderPointer = hoveredHost !== null && !hoveredHost.isConnected;
+  hoveredHost = host;
+  if (host && !replacedUnderPointer) playHost(host);
+}
+
+function onPointerOut(event: PointerEvent) {
+  if (event.relatedTarget === null) hoveredHost = null;
+}
+
 export function IconMotion() {
   useEffect(() => {
-    document.addEventListener("pointerover", onPointerOver);
-    return () => document.removeEventListener("pointerover", onPointerOver);
+    document.addEventListener("pointermove", onPointerMove);
+    document.addEventListener("pointerout", onPointerOut);
+    return () => {
+      document.removeEventListener("pointermove", onPointerMove);
+      document.removeEventListener("pointerout", onPointerOut);
+    };
   }, []);
 
   return null;
