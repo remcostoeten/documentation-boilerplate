@@ -34,7 +34,7 @@
     "build": "bun --bun next build",
     "start": "bun scripts/serve.ts start",
     "postinstall": "bun --bun fumadocs-mdx",
-    "typecheck": "bun --bun fumadocs-mdx && bun --bun tsc --noEmit",
+    "typecheck": "bun --bun fumadocs-mdx && bun --bun next typegen && bun --bun tsc --noEmit",
     "lint": "vp lint",
     "lint:fix": "vp lint --fix",
     "format": "vp fmt",

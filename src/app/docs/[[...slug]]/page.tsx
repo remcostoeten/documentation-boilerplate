@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageActions } from "@/modules/docs/components/page-actions";
 import { mdxComponents } from "@/modules/docs/mdx-components";
+import { pageImage, pageJsonLd } from "@/modules/docs/server/seo";
 import { source } from "@/modules/docs/server/source";
 
 type Props = {
@@ -22,6 +23,7 @@ export default async function Page({ params }: Props) {
       tableOfContent={{ style: "clerk" }}
       breadcrumb={{ enabled: false }}
     >
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: pageJsonLd(page) }} />
       <DocsTitle>{page.data.title}</DocsTitle>
       {page.data.description ? <DocsDescription>{page.data.description}</DocsDescription> : null}
       <PageActions markdownUrl={`${page.url}.mdx`} />
@@ -40,5 +42,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const page = source.getPage(slug);
   if (!page) notFound();
-  return { title: page.data.title, description: page.data.description };
+  const image = pageImage(page).url;
+  return {
+    title: page.data.title,
+    description: page.data.description,
+    alternates: { canonical: page.url },
+    openGraph: {
+      title: page.data.title,
+      description: page.data.description,
+      url: page.url,
+      images: image,
+    },
+    twitter: { card: "summary_large_image", title: page.data.title, images: image },
+  };
 }
