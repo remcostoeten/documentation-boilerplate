@@ -3,6 +3,8 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
+import { DocsSearchDialog } from "@/modules/search/components/search-dialog";
+import { searchTags } from "@/modules/search/server/sections";
 import { site } from "@/shared/config/site";
 import { IconMotion } from "@/shared/icons/icon-motion";
 
@@ -35,7 +37,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <body className="font-sans">
-        <RootProvider>{children}</RootProvider>
+        <RootProvider search={{ SearchDialog: DocsSearchDialog, options: { tags: searchTags() } }}>
+          {children}
+        </RootProvider>
         <IconMotion />
       </body>
     </html>
