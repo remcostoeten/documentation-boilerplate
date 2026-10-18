@@ -19,6 +19,9 @@ export const docs = defineDocs({
       sidebarTitle: z.string().min(1).optional(),
       sidebarBadge: z.string().min(1).optional(),
     }),
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
   },
 });
 

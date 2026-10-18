@@ -165,7 +165,7 @@
   filter: none;
 }
 
-.code-block button[data-copied] > svg {
+:where(button[data-copied]) > svg {
   transition:
     opacity 160ms var(--ease-snappy),
     transform 160ms var(--ease-snappy);
