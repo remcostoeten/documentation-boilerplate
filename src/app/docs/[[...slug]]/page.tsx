@@ -2,9 +2,11 @@ import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/page
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageActions } from "@/modules/docs/components/page-actions";
+import { PageMeta } from "@/modules/docs/components/page-meta";
 import { mdxComponents } from "@/modules/docs/mdx-components";
 import { pageImage, pageJsonLd } from "@/modules/docs/server/seo";
 import { source } from "@/modules/docs/server/source";
+import { site } from "@/shared/config/site";
 
 type Props = {
   params: Promise<{ slug?: string[] }>;
@@ -30,6 +32,10 @@ export default async function Page({ params }: Props) {
       <DocsBody>
         <MDX components={mdxComponents} />
       </DocsBody>
+      <PageMeta
+        editUrl={`${site.repository}/blob/${site.branch}/${site.contentDir}/${page.path}`}
+        lastModified={page.data.lastModified}
+      />
     </DocsPage>
   );
 }
