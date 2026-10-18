@@ -31,10 +31,11 @@
   "type": "module",
   "scripts": {
     "dev": "bun scripts/serve.ts dev",
-    "build": "bun --bun next build",
+    "build": "bun run check:links && bun --bun next build",
     "start": "bun scripts/serve.ts start",
     "postinstall": "bun --bun fumadocs-mdx",
     "typecheck": "bun --bun fumadocs-mdx && bun --bun next typegen && bun --bun tsc --noEmit",
+    "check:links": "bun scripts/check-links.ts",
     "lint": "vp lint",
     "lint:fix": "vp lint --fix",
     "format": "vp fmt",
