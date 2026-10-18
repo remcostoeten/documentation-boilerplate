@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { PageActions } from "@/modules/docs/components/page-actions";
 import { PageMeta } from "@/modules/docs/components/page-meta";
 import { mdxComponents } from "@/modules/docs/mdx-components";
+import { Feedback } from "@/modules/feedback/components/feedback";
 import { pageImage, pageJsonLd } from "@/modules/docs/server/seo";
 import { source } from "@/modules/docs/server/source";
 import { site } from "@/shared/config/site";
@@ -32,6 +33,7 @@ export default async function Page({ params }: Props) {
       <DocsBody>
         <MDX components={mdxComponents} />
       </DocsBody>
+      <Feedback url={page.url} />
       <PageMeta
         editUrl={`${site.repository}/blob/${site.branch}/${site.contentDir}/${page.path}`}
         lastModified={page.data.lastModified}
