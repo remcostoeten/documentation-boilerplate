@@ -16,17 +16,25 @@ import {
   RouteIcon,
   SearchIcon,
 } from "@/shared/icons/icons";
+import { CodeBlock } from "./components/code-block";
+import { CodeTab, CodeTabs, CodeTabsList, CodeTabsTrigger } from "./components/code-tabs";
 
 /**
  * @name mdxComponents
  * @description Components available in every MDX page: the Fumadocs defaults
- * plus tabs, steps, accordions, file trees, type tables and the site icons.
+ * plus tabs, steps, accordions, file trees, type tables, the site icons and
+ * the custom code block.
  *
  * @example
  * <MDX components={mdxComponents} />
  */
 export const mdxComponents: MDXComponents = {
   ...defaultMdxComponents,
+  pre: CodeBlock,
+  CodeBlockTab: CodeTab,
+  CodeBlockTabs: CodeTabs,
+  CodeBlockTabsList: CodeTabsList,
+  CodeBlockTabsTrigger: CodeTabsTrigger,
   Accordion,
   Accordions,
   File,

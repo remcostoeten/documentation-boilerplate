@@ -220,6 +220,23 @@ export function MoonIcon({ className }: IconProps) {
   );
 }
 
+export function CopyIcon({ className }: IconProps) {
+  return (
+    <Glyph name="copy" className={className}>
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+    </Glyph>
+  );
+}
+
+export function CheckIcon({ className }: IconProps) {
+  return (
+    <Glyph name="check" className={className}>
+      <path d="M20 6 9 17l-5-5" />
+    </Glyph>
+  );
+}
+
 /**
  * @name namedIcons
  * @description Icons by name, used to resolve the `icon` field in MDX

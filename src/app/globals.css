@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "fumadocs-ui/css/black.css";
 @import "fumadocs-ui/css/preset.css";
+@import "../modules/docs/components/code-block.css";
 
 @source "../**/*.{ts,tsx}";
 @source "../../node_modules/fumadocs-ui/dist/**/*.js";
@@ -171,17 +172,6 @@ body {
 
 :where(a.bg-fd-card):active {
   transform: scale(0.985);
-}
-
-:where(button[data-checked]) > svg {
-  transition:
-    opacity 160ms var(--ease-snappy),
-    transform 160ms var(--ease-snappy);
-
-  @starting-style {
-    opacity: 0;
-    transform: scale(0.8);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

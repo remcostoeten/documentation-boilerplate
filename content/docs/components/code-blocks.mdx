@@ -1,11 +1,13 @@
 ---
 title: Code blocks
-description: Syntax highlighting with titles, line highlights, diffs and tabs.
+description: Server-highlighted code with a file header, language label, copy button, line notation and tabs.
 icon: FileText
 sidebarBadge: new
 ---
 
-## Title
+## File header
+
+A `title` adds a header with the language and a copy button.
 
 ```ts title="src/shared/config/site.ts"
 export const site = {
@@ -14,9 +16,19 @@ export const site = {
 };
 ```
 
+## Plain block
+
+Without a title the copy button floats in the corner and shows on hover or keyboard focus.
+
+```ts
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
 ## Highlighted lines
 
-```tsx
+```tsx title="src/app/docs/layout.tsx"
 export default function Layout({ children }: { children: ReactNode }) {
   const tree = source.getPageTree(); // [!code highlight]
   return <DocsLayout tree={tree}>{children}</DocsLayout>;
@@ -25,7 +37,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
 ## Highlighted words
 
-```ts
+```ts title="src/modules/docs/server/source.ts"
 // [!code word:loader]
 export const source = loader({
   baseUrl: "/docs",
@@ -35,7 +47,7 @@ export const source = loader({
 
 ## Diff
 
-```ts
+```ts title="next.config.ts"
 const config: NextConfig = {
   reactStrictMode: false, // [!code --]
   reactStrictMode: true, // [!code ++]
@@ -43,6 +55,8 @@ const config: NextConfig = {
 ```
 
 ## Focus
+
+Hover the block to bring the other lines back.
 
 ```ts
 function getPage(slug: string[]) {
@@ -54,13 +68,27 @@ function getPage(slug: string[]) {
 
 ## Line numbers
 
-```ts lineNumbers
+```ts title="sidebar.ts" lineNumbers
 const sections = getNavigationSections(tree);
 const open = getDefaultOpen(sections, pathname);
 const active = sections[open];
 ```
 
-## Tabbed code
+Start counting from any line with `lineNumbers=12`:
+
+```ts lineNumbers=12
+const label = languageLabel(language);
+const copyable = allowCopy !== "false";
+```
+
+## Without copy
+
+```txt title="output" noCopy
+✓ Compiled successfully
+✓ Generating static pages (24/24)
+```
+
+## Tabs
 
 ```bash tab="Install"
 bun install
