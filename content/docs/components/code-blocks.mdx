@@ -101,3 +101,87 @@ bun dev
 ```bash tab="Build"
 bun run build
 ```
+
+## TypeScript hover types
+
+Add `twoslash` to the fence and the snippet is type checked with the TypeScript compiler at build time. Hover an identifier to see its type and JSDoc, as in an editor.
+
+```ts twoslash title="src/shared/config/site.ts"
+import { site } from "@/shared/config/site";
+
+const accent = site.theme.accent;
+const pages = site.changelogs.map((changelog) => changelog.page);
+```
+
+`@/` resolves to `src`, so a snippet can import the real modules of this project and hovers show their real types. The compiler options live under `twoslashOptions` in `source.config.ts`.
+
+## Type queries
+
+A `^?` marker prints the type of the token above it under the line.
+
+```ts twoslash
+import { site } from "@/shared/config/site";
+
+const footer = site.pageFooter;
+//    ^?
+```
+
+## Completions
+
+A `^|` marker shows the completion list at that position. Incomplete code needs `@noErrors`.
+
+```ts twoslash
+// @noErrors
+import { site } from "@/shared/config/site";
+
+site.pageFooter.
+//              ^|
+```
+
+## Expected errors
+
+An error listed in `@errors` is shown under its line. Any other type error fails the build, so a snippet cannot drift from the types it documents.
+
+```ts twoslash
+// @errors: 2322
+import { site } from "@/shared/config/site";
+
+site.pageFooter.editLink = "yes";
+```
+
+## Hide setup code
+
+Everything above `// ---cut---` is type checked but not shown.
+
+```ts twoslash
+import { site } from "@/shared/config/site";
+// ---cut---
+const titles = site.changelogs.map((changelog) => changelog.title);
+```
+
+## Mock a module
+
+For a package that is not installed here, declare a stand-in in a `.d.ts` file with `// @filename:`. The mock is checked with the snippet and not shown.
+
+```ts twoslash
+// @filename: acme-docs.d.ts
+declare module "acme-docs" {
+  export type DocsConfig = {
+    /** Shown in the header and the browser tab. */
+    name: string;
+    url: string;
+  };
+  export function defineConfig(config: DocsConfig): DocsConfig;
+}
+
+// @filename: index.ts
+// ---cut---
+import { defineConfig } from "acme-docs";
+
+export default defineConfig({
+  name: "Acme",
+  url: "https://acme.dev",
+});
+```
+
+Any `// @name: value` line that names a TypeScript compiler option, such as `// @strict: false`, applies to that block only. Results are cached in `.next/cache/twoslash`.
