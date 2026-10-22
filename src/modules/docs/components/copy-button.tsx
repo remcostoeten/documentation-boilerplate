@@ -17,8 +17,9 @@ export function CopyButton({ className }: Props) {
   useEffect(() => () => clearTimeout(timer.current), []);
 
   function copy(button: HTMLButtonElement) {
-    const code = button.closest("[data-code-block]")?.querySelector("pre code");
-    if (!code) return;
+    const code = button.closest("[data-code-block]")?.querySelector("pre code")?.cloneNode(true);
+    if (!(code instanceof HTMLElement)) return;
+    code.querySelectorAll(".nd-copy-ignore").forEach((node) => node.remove());
     void navigator.clipboard.writeText(code.textContent ?? "").then(() => {
       setCopied(true);
       clearTimeout(timer.current);

@@ -36,3 +36,24 @@ icon: Download
     },
   }}
 />
+
+Expand a row to see the full type. Types are highlighted as TypeScript, unions are listed one member per line, and `default` is highlighted too. Pass `typeDescription` to override the generated declaration.
+
+<TypeTable
+  type={{
+    mode: {
+      type: "'light' | 'dark' | 'system'",
+      description: "Colour scheme of the page.",
+      default: "'system'",
+    },
+    editUrl: {
+      type: "string | false",
+      description: "Full URL for the edit link, or false to hide it.",
+    },
+    onSelect: {
+      type: "(id: string) => void",
+      description: "Called when a result is chosen.",
+      parameters: [{ name: "id", description: "The page URL." }],
+    },
+  }}
+/>

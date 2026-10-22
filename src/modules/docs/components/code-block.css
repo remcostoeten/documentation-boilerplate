@@ -225,3 +225,42 @@
     color: color-mix(in oklab, var(--color-fd-foreground) 80%, transparent);
   }
 }
+
+.prop-code {
+  display: inline;
+  font-family: var(--font-mono);
+}
+
+div.prop-code {
+  display: block;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+div.prop-code code {
+  display: flex;
+  flex-direction: column;
+}
+
+.prop-code code {
+  font-family: inherit;
+}
+
+.prop-code code span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
+}
+
+.dark .prop-code code span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+}
+
+.prop-code .line {
+  display: block;
+  min-height: 1lh;
+}
+
+span.prop-code .line {
+  display: inline;
+}

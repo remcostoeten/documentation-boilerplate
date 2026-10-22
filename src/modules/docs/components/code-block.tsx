@@ -36,6 +36,15 @@ export function CodeBlock({
   "data-line-numbers-start": lineNumbersStart,
   ...props
 }: Props) {
+  // Twoslash popups nest a bare pre without data-language, keep it out of the frame
+  if (!language) {
+    return (
+      <pre className={className} style={style} {...props}>
+        {children}
+      </pre>
+    );
+  }
+
   const label = languageLabel(language);
   const copyable = allowCopy !== "false";
 

@@ -1,7 +1,9 @@
 @import "tailwindcss";
 @import "fumadocs-ui/css/black.css";
 @import "fumadocs-ui/css/preset.css";
+@import "fumadocs-twoslash/twoslash.css";
 @import "../modules/docs/components/code-block.css";
+@import "../modules/docs/components/twoslash.css";
 
 @source "../**/*.{ts,tsx}";
 @source "../../node_modules/fumadocs-ui/dist/**/*.js";
