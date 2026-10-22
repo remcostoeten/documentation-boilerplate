@@ -12,6 +12,7 @@ sidebarTitle: Short label
 sidebarBadge: beta
 tocDepth: 2
 editUrl: false
+askAI: false
 ---
 ```
 
@@ -20,12 +21,17 @@ editUrl: false
     title: { type: "string", description: "Page title.", required: true },
     description: { type: "string", description: "Subtitle and meta description." },
     icon: { type: "string", description: "Icon name from `src/shared/icons`." },
+    full: {
+      type: "boolean",
+      description: "Use the full page width and hide the table of contents.",
+    },
     sidebarTitle: { type: "string", description: "Shorter sidebar label." },
     sidebarBadge: { type: "string", description: "Badge next to the sidebar label." },
     tocDepth: {
       type: "number",
       description: "Deepest heading level listed in the table of contents.",
     },
+    askAI: { type: "boolean", description: "Set to false to hide the Ask AI button on this page." },
     editUrl: {
       type: "string | false",
       description:
@@ -34,4 +40,42 @@ editUrl: false
   }}
 />
 
-See the [Tables](/docs/components/tables) page for how this table is written.
+A field that is not in the schema fails the build with the field name, and so does a value of the wrong type. To add a field, see [schema](/docs/components/reference/configuration#schema).
+
+## title
+
+The `h1` of the page, the title in the search results, the `<title>` tag (as `Title | Site name`), the Open Graph image and the default sidebar label. It is the only required field.
+
+## description
+
+Shown under the title, and used as the meta description, in search, on the Open Graph image and in `llms.txt`. When it is missing, the meta description falls back to `site.description`.
+
+## icon
+
+The name of an icon, shown before the label in the sidebar. See [Icons](/docs/guides/icons) for the names. An unknown name logs a warning and renders no icon.
+
+## full
+
+A Fumadocs field. It gives the page the full width and removes the table of contents.
+
+## sidebarTitle
+
+A shorter label for the sidebar when the title is long. The page title stays the same everywhere else.
+
+## sidebarBadge
+
+A small badge after the sidebar label, such as `new`, `beta` or `api`. It must not be an empty string.
+
+## tocDepth
+
+An integer from 2 to 6. Headings deeper than this are left out of the table of contents on the right. The default is to list every heading.
+
+## askAI
+
+`false` hides the Ask AI button on the page, for example on the changelog. `true` or no value follows `site.askAI` and `hideOn`. See [Ask AI](/docs/guides/ask-ai).
+
+## editUrl
+
+A full URL for the edit link of this page, or `false` to hide it. The default is the page file in the repository. Generated changelog pages set it for you.
+
+See the [Tables](/docs/components/tables) page for how the table above is written.

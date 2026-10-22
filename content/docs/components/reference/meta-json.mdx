@@ -1,0 +1,69 @@
+---
+title: meta.json
+description: The fields of the file that orders and names the pages of a folder.
+---
+
+Every folder in `content/docs` can have a `meta.json`. It decides what the folder is called, what icon it has and which pages are in it, in which order.
+
+```json title="content/docs/guides/meta.json"
+{
+  "title": "Guides",
+  "icon": "Compass",
+  "pages": ["theming", "---More---", "changelog", "ask-ai", "deployment"]
+}
+```
+
+<TypeTable
+  type={{
+    title: { type: "string", description: "Folder name in the sidebar and in search filters." },
+    icon: { type: "string", description: "Icon name from `src/shared/icons`." },
+    description: { type: "string", description: "Folder description." },
+    pages: { type: "string[]", description: "Entries in the order they appear." },
+    root: {
+      type: "boolean",
+      description: "Marks the folder as a root. Set on `content/docs/meta.json`.",
+    },
+    pagesIndex: { type: "string", description: "Page that opens when the folder is clicked." },
+  }}
+/>
+
+## title
+
+Without a `title`, the folder takes the title of its `index.mdx`, and without that the folder name in title case. For `content/docs/meta.json`, the `title` names the first sidebar section and the search filter for the root pages.
+
+## icon
+
+An icon for the folder. When missing, a top-level section shows a folder icon.
+
+## pages
+
+The list of entries, in order. When the array is missing the folder lists everything in alphabetical order. When it is present, only the entries in it show.
+
+| Entry                     | Result                                                                  |
+| ------------------------- | ----------------------------------------------------------------------- |
+| `"installation"`          | The page `installation.mdx`, or the folder `installation`               |
+| `"---Advanced---"`        | A separator labeled `Advanced`                                          |
+| `"[GitHub](https://...)"` | A link. It opens in a new tab when the URL starts with `http`           |
+| `"..."`                   | Every page and folder not listed elsewhere, alphabetically              |
+| `"z...a"`                 | The same, in reverse alphabetical order                                 |
+| `"!draft"`                | Leaves `draft` out of the `...` entries                                 |
+| `"...other"`              | Inlines the pages of the folder `other` here, without the folder itself |
+
+A separator can carry an icon from the same set: `"---[Rocket]Start here---"`.
+
+<Callout type="warn" title="Listed means visible">
+  A page missing from `pages` still builds, can be opened by URL and is found by search, but it is
+  not in the sidebar.
+</Callout>
+
+## root
+
+`true` on `content/docs/meta.json` marks the top of the tree. The boilerplate has exactly one.
+
+## pagesIndex
+
+Names a page in the folder to use as its index instead of `index.mdx`.
+
+## Not used by the sidebar
+
+Fumadocs also defines `defaultOpen` and `collapsible` for folders. The sidebar here is its own component and opens folders from the current URL, so they have no effect.

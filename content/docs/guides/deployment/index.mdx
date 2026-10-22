@@ -1,6 +1,52 @@
 ---
 title: Deployment
-description: Ship the docs.
+description: Build the site and run it on a host.
 ---
 
-Open this page to see its children expand in the sidebar. A top-level folder has no index page because its section header only toggles.
+The site is a Next.js app, so it deploys anywhere Next.js does. Pick a host on the pages below, and read the checklist first.
+
+## Before you deploy
+
+<Steps>
+<Step>
+
+### Set the site URL
+
+Set `NEXT_PUBLIC_SITE_URL` to the public address, such as `https://docs.example.com`, in the environment of the **build**. Without it, canonical links, the sitemap and social images point at `http://localhost:3000`.
+
+</Step>
+<Step>
+
+### Add Ask AI keys, if you use it
+
+Set the API key variable of your provider. Never commit it. See [Ask AI](/docs/guides/ask-ai).
+
+</Step>
+<Step>
+
+### Build locally once
+
+```bash
+bun run build
+```
+
+This also runs the changelog sync and the link check, so a deploy fails for the same reasons your machine does.
+
+</Step>
+<Step>
+
+### Keep the git history
+
+The last updated dates come from git. A host that clones with `--depth 1` shows no dates. Deploy from a full clone, or turn them off with `pageFooter.lastUpdated`.
+
+</Step>
+</Steps>
+
+## What the build does
+
+`bun run build` runs `sync:changelog`, then `check:links`, then `next build`. All pages, the Markdown routes, `llms.txt`, the sitemap and the Open Graph images are prerendered. The runtime routes are `/api/search` and `/api/ask`.
+
+## Hosts
+
+- [Vercel](/docs/guides/deployment/vercel)
+- [Docker](/docs/guides/deployment/docker)

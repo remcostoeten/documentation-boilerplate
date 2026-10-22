@@ -1,21 +1,80 @@
 ---
 title: Introduction
-description: What this documentation covers and how it is organized.
+description: What this boilerplate is, what it includes and where everything lives.
 icon: House
 ---
 
-This is a documentation boilerplate. Pages live in `content/docs` as MDX, and the sidebar is built from the folder structure and the `meta.json` file in each folder.
+This is a documentation site starter built on Next.js and Fumadocs. Pages are MDX files in `content/docs`, the sidebar is built from the folder structure and the `meta.json` file in each folder, and everything else is configured in one file, `src/shared/config/site.ts`.
 
-## Sidebar sections
+## What is included
 
-Each top-level folder becomes a collapsible section in the sidebar. Pages at the root of `content/docs` are grouped under the root `title` from `meta.json`.
+- An accordion sidebar with sections, nested folders, separators, icons and badges. See [Sidebar](/docs/concepts/sidebar).
+- Search with recent pages and a filter per sidebar section. See [Search](/docs/concepts/search).
+- Markdown for every page, `llms.txt`, Open Graph images, a sitemap and structured data. See [SEO and LLM output](/docs/concepts/seo-and-llms).
+- An edit on GitHub link, a last updated date and a feedback widget under each page. See [Page footer and feedback](/docs/guides/feedback).
+- An optional Ask AI chat that answers from your pages. See [Ask AI](/docs/guides/ask-ai).
+- A changelog page generated from `CHANGELOG.md` or GitHub Releases. See [Publishing a changelog](/docs/guides/changelog).
+- Code blocks, tabs, steps, callouts, cards, accordions, file trees and type tables. See [Components](/docs/components).
 
-## Page frontmatter
+## Project layout
 
-| Field          | Purpose                                              |
-| -------------- | ---------------------------------------------------- |
-| `title`        | Page title and default sidebar label                 |
-| `description`  | Shown under the title                                |
-| `icon`         | An icon name from `src/shared/icons`                 |
-| `sidebarTitle` | Shorter label for the sidebar                        |
-| `sidebarBadge` | Small badge next to the sidebar label, such as `new` |
+<Files>
+  <Folder name="content" defaultOpen>
+    <Folder name="docs" defaultOpen>
+      <File name="index.mdx" />
+      <File name="meta.json" />
+      <Folder name="guides" />
+    </Folder>
+  </Folder>
+  <Folder name="scripts" defaultOpen>
+    <File name="serve.ts" />
+    <File name="sync-changelog.ts" />
+    <File name="check-links.ts" />
+  </Folder>
+  <Folder name="src" defaultOpen>
+    <Folder name="app" defaultOpen>
+      <File name="docs/[[...slug]]/page.tsx" />
+      <File name="api/search/route.ts" />
+      <File name="api/ask/route.ts" />
+      <File name="llms.txt/route.ts" />
+      <File name="og/docs/[...slug]/route.tsx" />
+      <File name="globals.css" />
+    </Folder>
+    <Folder name="modules">
+      <Folder name="ask-ai" />
+      <Folder name="changelog" />
+      <Folder name="docs" />
+      <Folder name="feedback" />
+      <Folder name="navigation" />
+      <Folder name="search" />
+      <Folder name="theme" />
+    </Folder>
+    <Folder name="shared">
+      <File name="config/site.ts" />
+      <File name="config/repository.ts" />
+      <File name="icons" />
+    </Folder>
+  </Folder>
+  <File name="source.config.ts" />
+  <File name="next.config.ts" />
+  <File name="CHANGELOG.md" />
+</Files>
+
+| Path                        | What it holds                                                                  |
+| --------------------------- | ------------------------------------------------------------------------------ |
+| `content/docs`              | Every page and the `meta.json` files that order them                           |
+| `src/shared/config/site.ts` | The site config. See [Configuration](/docs/components/reference/configuration) |
+| `source.config.ts`          | The MDX collection, the frontmatter schema and code highlighting               |
+| `src/app`                   | Routes: docs pages, search, Ask AI, Markdown output, images, sitemap           |
+| `src/modules`               | One folder per feature, each with its own components and server code           |
+| `src/shared`                | Config, helpers and icons used by more than one module                         |
+| `scripts`                   | The dev server wrapper, the changelog sync and the link check                  |
+
+## How a page is built
+
+1. `fumadocs-mdx` reads every file in `content/docs` and validates its frontmatter against the schema in `source.config.ts`.
+2. `src/modules/docs/server/source.ts` turns the files and `meta.json` into a page tree, resolving icons and sidebar labels on the way.
+3. The catch-all route `src/app/docs/[[...slug]]/page.tsx` renders the page with the components from `src/modules/docs/mdx-components.tsx`.
+4. The same source feeds the sidebar, search, the Markdown routes, the sitemap and the Open Graph images.
+
+Where to go next: [Installation](/docs/installation), [Quick start](/docs/quick-start), then [Content](/docs/concepts/content) for how pages are written.

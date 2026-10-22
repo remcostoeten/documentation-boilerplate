@@ -1,0 +1,109 @@
+---
+title: Icons
+description: Pick an icon by name, see which names exist and add your own.
+icon: Palette
+---
+
+Icons are drawn as SVG in `src/shared/icons`, not loaded from an icon package. They are Lucide line drawings split into parts, so a part can move on hover.
+
+## Using an icon
+
+Set `icon` to a name in the frontmatter of a page, or in the `meta.json` of a folder.
+
+```mdx title="content/docs/my-page.mdx"
+---
+title: My page
+icon: Rocket
+---
+```
+
+```json title="content/docs/guides/meta.json"
+{ "title": "Guides", "icon": "Compass", "pages": ["theming"] }
+```
+
+A name that does not exist logs `[icons] Unknown icon "..."` during the build and renders no icon.
+
+## Available names
+
+| Name        | Component      |
+| ----------- | -------------- |
+| `BookOpen`  | `BookIcon`     |
+| `Cloud`     | `CloudIcon`    |
+| `Compass`   | `CompassIcon`  |
+| `Download`  | `DownloadIcon` |
+| `FileText`  | `PageIcon`     |
+| `Folder`    | `FolderIcon`   |
+| `House`     | `HouseIcon`    |
+| `Lightbulb` | `BulbIcon`     |
+| `Palette`   | `PaletteIcon`  |
+| `Rocket`    | `RocketIcon`   |
+| `Route`     | `RouteIcon`    |
+| `Search`    | `SearchIcon`   |
+
+The names follow Lucide, so content written for another Lucide based site keeps working. The list is `namedIcons` in `src/shared/icons/icons.tsx`.
+
+## Using one inside a page
+
+Nine of the components are registered for MDX, so cards can use them without an import: `BookIcon`, `CloudIcon`, `CompassIcon`, `DownloadIcon`, `PageIcon`, `PaletteIcon`, `RocketIcon`, `RouteIcon` and `SearchIcon`.
+
+```mdx
+<Card icon={<RocketIcon />} title="Quick start" href="/docs/quick-start">
+  Write your first page.
+</Card>
+```
+
+## Hover motion
+
+Hovering a link or button plays a one-shot motion on the icon inside it. Each part of an icon is a `<Part>` with a name, and the motion is keyframe data for those names in `src/shared/icons/motion.ts`, played with the Web Animations API by `icon-motion.tsx`. A motion ends exactly where the icon rests, so nothing flashes or jumps.
+
+It only plays with a mouse, `(hover: hover) and (pointer: fine)`, and when the visitor has not asked for reduced motion. Touch and keyboard users see the static icon.
+
+## Adding an icon
+
+<Steps>
+<Step>
+
+### Draw it
+
+Add a component to `src/shared/icons/icons.tsx` with the paths of a 24 by 24 icon. A static icon needs nothing more than `Glyph`.
+
+```tsx title="src/shared/icons/icons.tsx"
+export function StarIcon({ className }: IconProps) {
+  return (
+    <Glyph name="star" className={className}>
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" />
+    </Glyph>
+  );
+}
+```
+
+</Step>
+<Step>
+
+### Register the name
+
+Add it to `namedIcons`. The key is the name used in frontmatter.
+
+```tsx title="src/shared/icons/icons.tsx"
+export const namedIcons = {
+  // ...
+  Star: StarIcon,
+} satisfies Record<string, ComponentType<IconProps>>;
+```
+
+</Step>
+<Step>
+
+### Optional: add a motion
+
+Wrap the part that should move in `<Part icon="star" part="shape">` and add an `iconMotions.star` entry with one track per part in `motion.ts`. A track has a `duration`, an `ease`, an `origin` in the 24 unit view box and a list of keyframes that starts and ends at rest.
+
+</Step>
+<Step>
+
+### Use it in MDX
+
+To use the icon inside cards, add it to the imports and the object in `src/modules/docs/mdx-components.tsx`.
+
+</Step>
+</Steps>

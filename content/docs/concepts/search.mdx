@@ -1,7 +1,51 @@
 ---
 title: Search
-description: How search works.
+description: How the search dialog finds pages, filters by section and remembers recent pages.
 icon: Search
 ---
 
-Write about search here.
+## Using it
+
+Press `⌘K` (`Ctrl K` on Windows and Linux) or use the search button in the sidebar. Results show the page, the heading and the paragraph that matched.
+
+Before anything is typed, the dialog lists the five pages you opened most recently, newest first. They are kept in the browser under the `docs:recent-pages` key in `localStorage` and are never sent to the server. If storage is blocked, the list is empty and nothing else changes.
+
+A row of filters above the results narrows the search to one sidebar section. There is one filter per top-level folder plus one for the pages at the root of `content/docs`, and each is named like its sidebar section.
+
+## How it works
+
+<Steps>
+<Step>
+
+### Indexing
+
+`src/app/api/search/route.ts` builds an index from the structured data of every page: its title, description, headings and paragraphs. Each page is tagged with its section.
+
+</Step>
+<Step>
+
+### Querying
+
+The dialog, `src/modules/search/components/search-dialog.tsx`, calls `/api/search` with the query and the selected tag. The response is a list of matches that the dialog renders.
+
+</Step>
+<Step>
+
+### Sections
+
+`src/modules/search/server/sections.ts` decides the tag of a page. It is the first segment of the URL when that segment is a folder with pages in it, and `get-started` for pages directly in `content/docs`. The filter names come from the page tree, so renaming a folder `title` in its `meta.json` renames its filter.
+
+</Step>
+</Steps>
+
+## Changing it
+
+- **The text results are built from.** Edit `buildIndex` in the search route. Return a different `description` or drop `structuredData` to index less of each page.
+- **The look of the dialog.** It is built from the Fumadocs search dialog parts in `search-dialog.tsx`, with the placeholder `Search the docs`.
+- **The number of recent pages.** `maxRecent` in `src/modules/search/hooks/use-recent-pages.ts`.
+- **A hosted search.** The Fumadocs search endpoint can be swapped for Algolia, Orama Cloud or similar. Replace the route and the `fetchClient` call in the dialog, and keep the `tag` option so the section filters work.
+
+<Callout type="info" title="New pages">
+  Search is built from the content, so a page appears in it as soon as it exists, whether or not it
+  is listed in `meta.json`.
+</Callout>

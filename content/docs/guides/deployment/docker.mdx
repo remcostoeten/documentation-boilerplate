@@ -1,6 +1,61 @@
 ---
 title: Docker
-description: Run in a container.
+description: Build the site into an image and run it in a container.
 ---
 
-Build with `bun run build` and serve with `bun start`.
+The project has no Dockerfile. This one builds the site and starts the production server, and was checked by building it and requesting pages from the running container.
+
+```dockerfile title="Dockerfile"
+FROM node:22-slim
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends git \
+  && rm -rf /var/lib/apt/lists/* \
+  && npm install --global bun
+WORKDIR /app
+COPY . .
+RUN bun install --frozen-lockfile
+ARG NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+RUN bun run build
+ENV NODE_ENV=production
+EXPOSE 3000
+CMD ["bun", "run", "start"]
+```
+
+```txt title=".dockerignore"
+node_modules
+.next
+.source
+.git
+.env*
+```
+
+Build and run:
+
+```bash
+docker build --build-arg NEXT_PUBLIC_SITE_URL=https://docs.example.com -t docs .
+docker run -p 3000:3000 docs
+```
+
+## Why the image looks like this
+
+- **Node.js is required.** Next.js evaluates the MDX loader in a Node.js process during the build. The `oven/bun` image has no Node.js, and the build fails with `Node.js subprocess crashed while evaluating loaders`. Bun is installed on top of a Node image.
+- **Git is required.** The `lastModified` plugin runs `git` for every page. The build fails with `Executable not found in $PATH: "git"` when it is missing.
+- **The site URL is a build argument.** `NEXT_PUBLIC_SITE_URL` is read at build time, so it must be set in the build, not only when the container runs.
+- **Sources are copied before the install.** `bun install` runs `fumadocs-mdx` as a postinstall step, and it needs `source.config.ts` and `content`.
+
+## Git history
+
+Without a `.git` folder in the build context the build still passes, but pages have no last updated date, the sitemap has no modified dates, and the GitHub button and edit links are missing unless `repository` is set in `site.ts`. The Dockerfile above was built that way. To keep them, remove `.git` from `.dockerignore` and build from a full clone.
+
+## Ask AI
+
+Pass the provider key when you run the container, never at build time:
+
+```bash
+docker run -p 3000:3000 -e ANTHROPIC_API_KEY=... docs
+```
+
+## Port
+
+The container listens on port 3000. `scripts/serve.ts` moves to the next free port if 3000 is taken, which cannot happen inside a fresh container. Map the port with `-p`.

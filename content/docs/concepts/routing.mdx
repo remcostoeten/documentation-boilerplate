@@ -1,7 +1,50 @@
 ---
 title: Routing
-description: How routing works.
+description: Which URLs the site serves and where each one is handled.
 icon: Route
 ---
 
-Write about routing here.
+## Pages
+
+One catch-all route, `src/app/docs/[[...slug]]/page.tsx`, renders every docs page. It looks the page up by slug in the source and returns a 404 when there is none. `generateStaticParams` lists every page, so all of them are prerendered at build time.
+
+The root URL `/` redirects to `/docs`. This is a temporary redirect set in `next.config.ts`, so change it there if the site should serve something else at `/`.
+
+## Every route
+
+| URL                      | Handler                                      | Returns                                                     |
+| ------------------------ | -------------------------------------------- | ----------------------------------------------------------- |
+| `/docs/...`              | `src/app/docs/[[...slug]]/page.tsx`          | A docs page                                                 |
+| `/docs/....mdx`          | `src/app/llms.mdx/docs/[[...slug]]/route.ts` | The page as Markdown                                        |
+| `/llms.txt`              | `src/app/llms.txt/route.ts`                  | An index of every page for LLMs                             |
+| `/llms-full.txt`         | `src/app/llms-full.txt/route.ts`             | The Markdown of every page in one file                      |
+| `/og/docs/.../image.png` | `src/app/og/docs/[...slug]/route.tsx`        | The 1200 by 630 Open Graph image of a page                  |
+| `/sitemap.xml`           | `src/app/sitemap.ts`                         | Every page with its last modified date                      |
+| `/robots.txt`            | `src/app/robots.ts`                          | Allows all crawlers and points at the sitemap               |
+| `/api/search`            | `src/app/api/search/route.ts`                | Search results as JSON                                      |
+| `/api/ask`               | `src/app/api/ask/route.ts`                   | A streamed Ask AI answer. See [Ask AI](/docs/guides/ask-ai) |
+
+## Markdown URLs
+
+Adding `.mdx` to a page URL returns its Markdown. The two rewrites in `next.config.ts` map `/docs.mdx` and `/docs/:path*.mdx` to the `llms.mdx` route, so the plain URL stays the page and the `.mdx` URL is the source. The Copy Markdown and View as Markdown buttons under each title use it.
+
+## Folders and index pages
+
+A folder with an `index.mdx` is reachable at the folder URL, and a folder without one has no page of its own. `content/docs/guides/deployment/index.mdx` is `/docs/guides/deployment`, while `content/docs/guides` has no index, so `/docs/guides` is a 404. A top-level folder has no index page on purpose: its header in the sidebar only expands and collapses. See [Sidebar](/docs/concepts/sidebar).
+
+## Redirects and rewrites
+
+Add them to `next.config.ts`, next to the existing ones.
+
+```ts title="next.config.ts"
+async redirects() {
+  return [
+    { source: "/", destination: "/docs", permanent: false },
+    { source: "/docs/old-page", destination: "/docs/new-page", permanent: true },
+  ];
+},
+```
+
+## Changing the base path
+
+The `/docs` prefix is set in three places: `baseUrl` in `src/modules/docs/server/source.ts`, the folder name `src/app/docs`, and `baseUrl` in `scripts/check-links.ts`. The redirect and rewrites in `next.config.ts` also name it. Change all of them together.

@@ -1,40 +1,156 @@
 ---
 title: Configuration
-description: Every option in one place. A long page that exercises the table of contents.
+description: Every option in src/shared/config/site.ts, source.config.ts and the layout CSS.
 sidebarBadge: api
 ---
 
+The site is configured in three places: `src/shared/config/site.ts` for the site itself, `source.config.ts` for how content is read, and `src/app/globals.css` for layout sizes.
+
 ## Site
 
-Site wide settings live in `src/shared/config/site.ts`.
+`src/shared/config/site.ts` exports one object, `site`, typed as `SiteConfig`.
+
+```ts title="src/shared/config/site.ts"
+export const site: SiteConfig = {
+  name: "Docs",
+  description: "Documentation site boilerplate built on Next.js and Fumadocs.",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  contentDir: "content/docs",
+  author: { name: "Remco Stoeten", url: "https://remcostoeten.com" },
+  keywords: ["docs", "documentation"],
+  logo: null,
+  theme: { accent: null },
+  pageFooter: { editLink: true, lastUpdated: true },
+  askAI: null,
+  changelogs: [],
+};
+```
+
+<TypeTable
+  type={{
+    name: { type: "string", description: "Site name.", required: true },
+    description: { type: "string", description: "Default meta description.", required: true },
+    url: { type: "string", description: "Production URL.", required: true },
+    repository: { type: "string | false", description: "GitHub repository URL." },
+    branch: { type: "string", description: "Branch the edit links point at." },
+    contentDir: { type: "string", description: "Folder of the MDX pages.", required: true },
+    author: { type: "{ name: string; url: string }", description: "Page author.", required: true },
+    keywords: { type: "string[]", description: "Meta keywords.", required: true },
+    logo: { type: "LogoConfig | null", description: "Image in the top bar.", required: true },
+    theme: { type: "{ accent: AccentConfig | null }", description: "Colors.", required: true },
+    pageFooter: {
+      type: "{ editLink: boolean; lastUpdated: boolean }",
+      description: "What shows under each page.",
+      required: true,
+    },
+    changelogs: {
+      type: "ChangelogConfig[]",
+      description: "Changelog pages to generate.",
+      required: true,
+    },
+    askAI: { type: "AskAIConfig | null", description: "Ask AI chat.", required: true },
+  }}
+/>
 
 ### name
 
-Shown in the top bar and as the default page title.
+Shown in the top bar, as the suffix of every page title (`Page | Docs`), on the Open Graph image, and as the publisher in the structured data.
 
 ### description
 
-Used for the meta description and social cards.
+The default meta description, used by pages that have none of their own, and by the Open Graph and Twitter tags of the site.
 
 ### url
 
-The production URL. Next.js resolves social image URLs against it.
+The production URL. It defaults to `NEXT_PUBLIC_SITE_URL`, then to `http://localhost:3000`. It is the base for canonical links, social image URLs, the sitemap and `robots.txt`, so set the variable before a production build. See [Environment variables](/docs/components/reference/environment-variables).
 
 ### repository
 
-Linked from the GitHub button in the sidebar footer.
+The GitHub repository the content lives in, as `https://github.com/owner/name`. It needs no setting: it is read from the `origin` git remote, then from the Vercel and GitHub Actions environment when there is no `.git` folder, so it needs no token. Credentials in a remote are dropped. Only GitHub remotes are detected.
+
+Set it to a URL to override, or to `false` to hide the GitHub button and every edit link.
+
+### branch
+
+The branch the edit links point at. Defaults to the default branch of `origin`, then the current branch, then `VERCEL_GIT_COMMIT_REF`, then `main`.
+
+### contentDir
+
+The folder of the MDX pages, relative to the repository root. The site uses it to build edit links and to decide where the changelog sync writes its pages. It does not tell Fumadocs where to read: that is `dir` in [source.config.ts](#content). If you move the pages, change both, plus `contentDir` in `scripts/check-links.ts`.
+
+### author
+
+Used for the page author in the metadata and in the structured data of each page.
+
+### keywords
+
+The meta keywords of the site.
+
+### logo
+
+An image shown before the site name in the top bar.
+
+<TypeTable
+  type={{
+    src: { type: "string", description: "Path in `public`.", required: true },
+    darkSrc: { type: "string", description: "Image for dark mode." },
+    alt: { type: "string", description: "Text description, used when the name is hidden." },
+    width: { type: "number", description: "Displayed width in pixels.", required: true },
+    height: { type: "number", description: "Displayed height in pixels.", required: true },
+    hideName: { type: "boolean", description: "Hide the site name next to the logo." },
+  }}
+/>
+
+See [Theming](/docs/guides/theming#logo).
+
+### theme
+
+`theme.accent` takes a `light` and a `dark` CSS color, and sets the Fumadocs primary color for each mode. Any CSS color works, since the text color on top of it is chosen from its lightness. A color containing `;`, `{`, `}`, `<`, `>` or `\` is rejected and fails the build. `null` keeps the neutral black theme. See [Theming](/docs/guides/theming#accent-color).
+
+### pageFooter
+
+<TypeTable
+  type={{
+    editLink: { type: "boolean", description: "Show the edit on GitHub link.", required: true },
+    lastUpdated: { type: "boolean", description: "Show the last commit date.", required: true },
+  }}
+/>
+
+Both are hidden on their own when they have nothing to show. See [Page footer and feedback](/docs/guides/feedback).
+
+### askAI
+
+An Ask AI button that answers questions from your docs. `null` turns it off. See [Ask AI](/docs/guides/ask-ai) for the provider, the limits and the other options.
+
+### changelogs
+
+A list of changelog pages to generate, one per entry, from a file or a URL. An empty list turns the feature off. See [Publishing a changelog](/docs/guides/changelog).
 
 ## Content
 
-Content settings live in `source.config.ts`.
+`source.config.ts` configures how Fumadocs reads the pages.
 
 ### dir
 
-The folder MDX pages are read from. Defaults to `content/docs`.
+The folder MDX pages are read from, passed to `defineDocs`. It is `content/docs`.
 
 ### schema
 
-Extend the frontmatter schema with Zod to add fields of your own.
+The frontmatter schema, `pageSchema` extended with Zod. Add a field here to use it in frontmatter, and read it from `page.data` in the page route. The fields the boilerplate adds are on [Frontmatter](/docs/components/reference/frontmatter).
+
+```ts title="source.config.ts"
+schema: pageSchema.extend({
+  status: z.enum(["draft", "stable"]).optional(),
+}),
+```
+
+### postprocess
+
+`includeProcessedMarkdown: true` keeps the processed Markdown of each page so it can be served at `.mdx` URLs and in `llms.txt`. Leave it on.
+
+### Plugins and code highlighting
+
+The `lastModified` plugin reads the last commit date of each page from git. `mdxOptions.rehypeCodeOptions` sets the Shiki themes, `github-light` and `github-dark-default`, and adds a transformer that records the language of each block for the language label.
 
 ## Layout
 
@@ -42,13 +158,16 @@ Layout sizes are CSS variables in `src/app/globals.css`.
 
 ### --topbar-height
 
-Height of the fixed top bar.
+Height of the fixed top bar. 48px, and 44px on small screens.
 
 ### --sidebar-width
 
-Width of the sidebar on large screens.
+Width of the sidebar on large screens. `min(22vw, 300px)`.
 
 ## Search
 
-The search route is `src/app/api/search/route.ts`. It indexes headings and paragraphs of every page
-at build time, so this page's headings are searchable too.
+The search route is `src/app/api/search/route.ts`. It builds the index from the structured data of every page and tags each page with its sidebar section. See [Search](/docs/concepts/search).
+
+## Colors and fonts
+
+Colors come from the Fumadocs theme imported in `src/app/globals.css`, with `site.theme.accent` on top. Fonts are set in `src/app/layout.tsx`. See [Theming](/docs/guides/theming).

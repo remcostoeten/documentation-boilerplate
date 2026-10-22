@@ -2,19 +2,100 @@
 title: Quick start guide
 sidebarTitle: Quick start
 sidebarBadge: new
-description: Write your first page.
+description: Add a page, put it in the sidebar and add a section of your own.
 icon: Rocket
 ---
 
-Create `content/docs/my-page.mdx`:
+## Add a page
 
-```mdx
+<Steps>
+<Step>
+
+### Create the file
+
+```mdx title="content/docs/my-page.mdx"
 ---
 title: My page
+description: One line under the title.
 icon: FileText
 ---
 
 Hello.
 ```
 
-Add `"my-page"` to the `pages` array in `content/docs/meta.json` to place it in the sidebar.
+Only `title` is required. The file name becomes the URL, so this page is `/docs/my-page`.
+
+</Step>
+<Step>
+
+### Put it in the sidebar
+
+Add `"my-page"` to the `pages` array in `content/docs/meta.json`.
+
+```json title="content/docs/meta.json"
+{
+  "title": "Get Started",
+  "root": true,
+  "pages": ["index", "installation", "quick-start", "my-page"]
+}
+```
+
+A page that is not listed still builds and is reachable by URL and search, but it is not in the sidebar.
+
+</Step>
+<Step>
+
+### Open it
+
+`bun dev` rebuilds on save. Open `http://localhost:3000/docs/my-page`.
+
+</Step>
+</Steps>
+
+## Add a section
+
+A top-level folder in `content/docs` is a collapsible section in the sidebar.
+
+<Steps>
+<Step>
+
+### Create the folder and a page
+
+```mdx title="content/docs/api/overview.mdx"
+---
+title: Overview
+---
+
+The API at a glance.
+```
+
+</Step>
+<Step>
+
+### Describe the folder
+
+```json title="content/docs/api/meta.json"
+{
+  "title": "API",
+  "icon": "Cloud",
+  "pages": ["overview"]
+}
+```
+
+</Step>
+<Step>
+
+### Place the section
+
+Add `"api"` to the `pages` array of `content/docs/meta.json`. The order of that array is the order of the sidebar.
+
+</Step>
+</Steps>
+
+## Make it yours
+
+- Set the site name, URL, logo and accent color in `src/shared/config/site.ts`. See [Configuration](/docs/components/reference/configuration) and [Theming](/docs/guides/theming).
+- Delete the pages you do not need. The component showcase lives in `content/docs/components`, and the sample guides in `content/docs/guides`.
+- Run `bun run build` before you push. It fails on a broken internal link.
+
+The sidebar options are explained in [Sidebar](/docs/concepts/sidebar), and every frontmatter field in [Frontmatter](/docs/components/reference/frontmatter).

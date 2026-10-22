@@ -1,0 +1,48 @@
+---
+title: Environment variables
+description: Every variable the site, the scripts and Ask AI read.
+---
+
+Put variables for local work in `.env.local`. All `.env*` files are gitignored. For production, set them in your host.
+
+None are required to run the site.
+
+## Site
+
+| Variable               | Read by                     | Purpose                                                                    |
+| ---------------------- | --------------------------- | -------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL` | `src/shared/config/site.ts` | The production URL. Default `http://localhost:3000`. Set it before a build |
+| `PORT`                 | `scripts/serve.ts`          | The port `bun dev` and `bun start` try first. Default `3000`               |
+
+`NEXT_PUBLIC_` variables are read when the site is built, so changing the URL means building again.
+
+## Repository detection
+
+These are fallbacks, used only when there is no GitHub `origin` remote. Hosts set them for you.
+
+| Variable                                                               | Purpose                                          |
+| ---------------------------------------------------------------------- | ------------------------------------------------ |
+| `GITHUB_REPOSITORY`                                                    | `owner/name`, set by GitHub Actions              |
+| `VERCEL_GIT_PROVIDER`, `VERCEL_GIT_REPO_OWNER`, `VERCEL_GIT_REPO_SLUG` | The repository on Vercel. Only `github` works    |
+| `VERCEL_GIT_COMMIT_REF`                                                | The branch, used when no git branch is available |
+
+`site.repository` and `site.branch` override all of them.
+
+## Changelog
+
+| Variable       | Purpose                                                                                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GITHUB_TOKEN` | Optional. Authenticates requests when a changelog `url` is a GitHub repository or releases page, which raises the rate limit and allows private repositories |
+
+## Ask AI
+
+Only the variable of the provider you chose is read. `apiKeyEnv` in `site.askAI` points to a different variable name.
+
+| Provider     | Variable                       |
+| ------------ | ------------------------------ |
+| `anthropic`  | `ANTHROPIC_API_KEY`            |
+| `openai`     | `OPENAI_API_KEY`               |
+| `google`     | `GOOGLE_GENERATIVE_AI_API_KEY` |
+| `openrouter` | `OPENROUTER_API_KEY`           |
+
+Never put a key in `site.ts`. See [Ask AI](/docs/guides/ask-ai).

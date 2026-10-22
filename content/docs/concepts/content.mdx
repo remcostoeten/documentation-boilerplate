@@ -1,7 +1,64 @@
 ---
 title: Content
-description: How content works.
+description: How pages are written, validated and turned into HTML.
 icon: FileText
 ---
 
-Write about content here.
+## Where content lives
+
+Every `.mdx` file under `content/docs` is a page. Its path is its URL, with `/docs` in front:
+
+| File                                       | URL                       |
+| ------------------------------------------ | ------------------------- |
+| `content/docs/index.mdx`                   | `/docs`                   |
+| `content/docs/installation.mdx`            | `/docs/installation`      |
+| `content/docs/guides/theming.mdx`          | `/docs/guides/theming`    |
+| `content/docs/guides/deployment/index.mdx` | `/docs/guides/deployment` |
+
+An `index.mdx` is the page of its folder. Renaming or moving a file changes its URL, so add a redirect in `next.config.ts` if the old link is public.
+
+## Frontmatter
+
+Each page starts with a YAML block. It is validated with Zod when the site builds, so a wrong type fails the build instead of rendering silently.
+
+```mdx
+---
+title: Example
+description: One line under the title.
+icon: Rocket
+---
+```
+
+`title` is required. The schema is `pageSchema` from Fumadocs extended in `source.config.ts`, and every field is listed on [Frontmatter](/docs/components/reference/frontmatter). To add a field of your own, extend the schema there with Zod.
+
+## Headings and the table of contents
+
+Headings from level 2 down become entries in the table of contents on the right and anchors you can link to. The anchor is the heading text in lowercase with spaces turned into dashes, so `## Add a page` is `#add-a-page`. Set `tocDepth` in the frontmatter to cut the table of contents to a heading level, as the changelog does with `tocDepth: 2`.
+
+To pick the anchor yourself, end the heading with `[#your-id]`. The link check does not know custom ids and reports links to them as broken.
+
+## Components
+
+Every page can use the components registered in `src/modules/docs/mdx-components.tsx`, without importing them:
+
+- `Callout`, `Cards`, `Card` and the other Fumadocs defaults
+- `Tabs`, `Tab`, `Steps`, `Step`, `Accordions`, `Accordion`
+- `Files`, `Folder`, `File`
+- `TypeTable`
+- `Release`, for [changelog pages written by hand](/docs/guides/changelog)
+- The icons `BookIcon`, `CloudIcon`, `CompassIcon`, `DownloadIcon`, `PageIcon`, `PaletteIcon`, `RocketIcon`, `RouteIcon` and `SearchIcon`, for use inside cards
+- Fenced code blocks, with titles, line highlighting, diffs, focus, line numbers and tabs
+
+The [Components](/docs/components) section shows each one. To add a component, import it in `mdx-components.tsx` and add it to the exported object.
+
+## Code blocks
+
+Code is highlighted on the server with Shiki, using `github-light` and `github-dark-default`. Change the themes under `rehypeCodeOptions` in `source.config.ts`. The block itself, with its header, language label and copy button, is `src/modules/docs/components/code-block.tsx`.
+
+## Internal links
+
+Link to other pages with their full path, such as `[Sidebar](/docs/concepts/sidebar)`, and to a heading with `#heading`. `bun run check:links` checks both, and `bun run build` runs it first. See [Scripts](/docs/components/reference/scripts#checklinks).
+
+## Last updated
+
+The date under a page is the last git commit that touched its file, read by the `lastModified` plugin in `source.config.ts`. It needs a git history, so a shallow clone or a build without `.git` shows no date. In CI, fetch the full history, as `.github/workflows/ci.yml` does with `fetch-depth: 0`.

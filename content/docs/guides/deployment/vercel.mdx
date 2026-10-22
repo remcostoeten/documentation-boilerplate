@@ -1,6 +1,45 @@
 ---
 title: Vercel
-description: Deploy to Vercel.
+description: Deploy to Vercel from a GitHub repository.
 ---
 
-Import the repository in Vercel.
+<Steps>
+<Step>
+
+### Import the repository
+
+Create a project in Vercel from the GitHub repository. The framework preset is Next.js. Because the repository has a `bun.lock`, Vercel installs with Bun, and the build command is the `build` script of `package.json`.
+
+</Step>
+<Step>
+
+### Add the environment variables
+
+In Project Settings, Environment Variables, add:
+
+| Variable                 | Value                                                       |
+| ------------------------ | ----------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`   | Your production URL, for example `https://docs.example.com` |
+| The key of your provider | Only when Ask AI is on, such as `ANTHROPIC_API_KEY`         |
+
+</Step>
+<Step>
+
+### Deploy
+
+Push to the production branch. Each pull request gets its own preview deployment.
+
+</Step>
+</Steps>
+
+## Repository links
+
+On Vercel the `origin` remote may not be available, so the GitHub button and edit links use `VERCEL_GIT_REPO_OWNER` and `VERCEL_GIT_REPO_SLUG`, which Vercel sets for projects connected to GitHub. Nothing needs to be configured. If you deploy without a Git connection, set `repository` in `site.ts`.
+
+## Preview URLs
+
+`NEXT_PUBLIC_SITE_URL` is one value for every deployment, so preview deployments also use it for canonical links and social images.
+
+## Ask AI rate limit
+
+The default Ask AI limit counts requests in the memory of one server instance. On Vercel each instance has its own counter, so the limit is per instance, not global. For a strict limit, pass a `limit` function backed by a shared store. See [Ask AI](/docs/guides/ask-ai).

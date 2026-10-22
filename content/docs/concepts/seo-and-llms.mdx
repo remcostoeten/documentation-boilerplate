@@ -1,0 +1,44 @@
+---
+title: SEO and LLM output
+description: The metadata, images and Markdown routes generated for every page.
+icon: Cloud
+---
+
+## Page metadata
+
+`generateMetadata` in `src/app/docs/[[...slug]]/page.tsx` sets, per page:
+
+- The title, as `Page title | Site name`, from the `%s | name` template in `src/app/layout.tsx`.
+- The description from the page, or `site.description` when the page has none.
+- A canonical URL.
+- Open Graph and Twitter tags, with the generated image below.
+
+`src/app/layout.tsx` sets the site wide defaults from `site.ts`: `name`, `description`, `keywords`, `author` and `url`, which becomes `metadataBase`. Set `NEXT_PUBLIC_SITE_URL` to the production URL, or social images and canonical links point at `localhost`.
+
+## Open Graph images
+
+Each page has an image at `/og/docs/<slug>/image.png`, 1200 by 630, drawn by `src/app/og/docs/[...slug]/route.tsx` with `next/og`. It shows the site name, the page title and description, the host of `site.url` and the page path. The images are generated at build time. Edit the JSX in that route to restyle them.
+
+## Structured data
+
+Each page includes `TechArticle` JSON-LD with the headline, description, URL, image, author and publisher. It comes from `pageJsonLd` in `src/modules/docs/server/seo.ts`. The author is `site.author` and the publisher is the site.
+
+## Sitemap and robots
+
+`/sitemap.xml` lists every page with its last modified date, a weekly change frequency and a priority of 1 for the home page and 0.7 for the rest. `/robots.txt` allows every crawler and links the sitemap. To keep a page out of both, edit `src/app/sitemap.ts` and `src/app/robots.ts`.
+
+## Markdown for every page
+
+Add `.mdx` to any page URL to get its Markdown, for example `/docs/concepts/sidebar.mdx`. The output is the title, URL and description followed by the processed MDX body. The buttons under each page title use it:
+
+- **Copy Markdown** copies it to the clipboard.
+- **View as Markdown** opens it in a new tab.
+
+## llms.txt
+
+| URL              | Content                                                  |
+| ---------------- | -------------------------------------------------------- |
+| `/llms.txt`      | A list of every page with its title, URL and description |
+| `/llms-full.txt` | The full Markdown of every page in one file              |
+
+Both are built by `docsLlms` in `src/modules/docs/server/llms.ts` and are static. They always match the pages in `content/docs`, so there is nothing to maintain.

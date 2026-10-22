@@ -1,0 +1,77 @@
+---
+title: Sidebar
+description: How the sidebar is built from folders and meta.json, and how it behaves.
+icon: BookOpen
+---
+
+## How it is built
+
+The sidebar reads the Fumadocs page tree, which comes from the folder structure and the `meta.json` files. It does not use the default Fumadocs sidebar. The sidebar and top bar are in `src/modules/navigation`.
+
+The top level of the tree becomes **sections**:
+
+- The pages at the root of `content/docs` are grouped in one section. It is named after the `title` in the root `meta.json`, here `Get Started`.
+- Every top-level folder is its own section, named after the `title` and `icon` in its `meta.json`.
+
+## Behavior
+
+- Sections work as an accordion: opening one closes the others, and clicking the open one closes it.
+- The section that holds the current page is open on load.
+- A nested folder with an `index.mdx` shows as one link and expands while you are on its index or any page below it. See the [Reference](/docs/components/reference) folder.
+- A nested folder without an index is shown as a separator with its pages below it.
+- The active link is scrolled into view if it sits outside the visible part of the sidebar.
+- Below the `lg` breakpoint the sidebar is replaced by a full screen dialog opened from the menu button in the top bar.
+- Sections and folders open and close with one shared spring, `duration: 0.35` and `bounce: 0`, set in `sidebar-navigation.tsx` and `navigation-nodes.tsx`.
+
+## What `meta.json` controls
+
+`content/docs/meta.json` and the one in each folder decide the order and the contents.
+
+```json title="content/docs/guides/meta.json"
+{
+  "title": "Guides",
+  "icon": "Compass",
+  "pages": ["theming", "changelog", "---Advanced---", "ask-ai", "deployment"]
+}
+```
+
+The `pages` array holds, in order:
+
+| Entry                     | Result                                                 |
+| ------------------------- | ------------------------------------------------------ |
+| `"theming"`               | The page `theming.mdx`, or the folder `theming`        |
+| `"---Advanced---"`        | A separator with a label                               |
+| `"[GitHub](https://...)"` | A link, opened in a new tab when it starts with `http` |
+| `"..."`                   | All pages not listed elsewhere, in alphabetical order  |
+| `"!draft"`                | Leaves `draft` out of the `...` entries                |
+
+When `pages` is missing, the folder behaves as if it were `["..."]`. When it is present without `"..."`, only the listed entries show, which is how a page stays out of the sidebar.
+
+Every field of `meta.json` is on [meta.json](/docs/components/reference/meta-json).
+
+## Labels, icons and badges
+
+Each page can change how it looks in the sidebar through its frontmatter:
+
+- `sidebarTitle` replaces the title with a shorter label.
+- `sidebarBadge` adds a small badge after the label, such as `new` or `api`.
+- `icon` shows an icon from `src/shared/icons` before the label. See [Icons](/docs/guides/icons).
+
+```mdx
+---
+title: Quick start guide
+sidebarTitle: Quick start
+sidebarBadge: new
+icon: Rocket
+---
+```
+
+The badge and the short label are copied onto the page tree by `src/modules/docs/server/page-tree-plugin.ts`. Icons are resolved by `src/modules/docs/server/icons-plugin.ts`, which logs a warning for a name it does not know and renders no icon.
+
+## Sizes
+
+Two CSS variables in `src/app/globals.css` set the layout: `--topbar-height` (48px, 44px on small screens) and `--sidebar-width` (`min(22vw, 300px)`).
+
+## The footer
+
+At the bottom of the sidebar are the GitHub link and the theme toggle. The link is hidden when the site has no repository. See [Configuration](/docs/components/reference/configuration#repository).

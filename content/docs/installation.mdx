@@ -1,12 +1,79 @@
 ---
 title: Installation
-description: Install the dependencies and start the dev server.
+description: Requirements, install, the dev server and the environment variables.
 icon: Download
 ---
+
+## Requirements
+
+- [Bun](https://bun.sh). Next.js runs on Bun here: `bun dev` and `bun start` go through `scripts/serve.ts`, which starts `bun --bun next`.
+- [Vite+](https://viteplus.dev) (`vp`) for `bun run check`, which formats and lints. It is not needed to run or build the site.
+- Git, if you want the repository link, the edit links and the last updated dates. See [Repository detection](#repository-detection).
+
+## Install and run
 
 ```bash
 bun install
 bun dev
 ```
 
-Open `http://localhost:3000`.
+`bun install` also runs `fumadocs-mdx`, which generates the `.source` folder the site imports from. `bun dev` opens on `http://localhost:3000`.
+
+The dev server wrapper does a few things on top of `next dev`:
+
+- If port 3000 is in use it takes the next free port, up to 50 ports further. Set `PORT` to start from another port.
+- It syncs the changelog pages before starting and watches the changelog files while it runs.
+- In a terminal, press `o` to open the site in the browser and `q` to quit.
+
+## Environment variables
+
+None are required to run the site. Put them in `.env.local`, which is gitignored.
+
+```bash title=".env.local"
+NEXT_PUBLIC_SITE_URL=https://docs.example.com
+```
+
+Set `NEXT_PUBLIC_SITE_URL` to the production URL before you build. It is used for canonical links, the sitemap, `robots.txt` and Open Graph images. The full list is on [Environment variables](/docs/components/reference/environment-variables).
+
+## Repository detection
+
+The GitHub button, the edit on GitHub links and the last updated dates need to know where the content lives. The site reads the `origin` git remote, and falls back to the Vercel and GitHub Actions environment when there is no `.git` folder. Only GitHub remotes are detected.
+
+Set `repository` in `src/shared/config/site.ts` to override it, or to `false` to hide every link that points at GitHub. See [Configuration](/docs/components/reference/configuration#repository).
+
+## Check the setup
+
+<Steps>
+<Step>
+
+### Format and lint
+
+```bash
+bun run check
+```
+
+</Step>
+<Step>
+
+### Test and type check
+
+```bash
+bun test
+bun run typecheck
+```
+
+</Step>
+<Step>
+
+### Build
+
+```bash
+bun run build
+```
+
+The build syncs the changelog, fails on broken internal links, then runs `next build`. See [Scripts](/docs/components/reference/scripts).
+
+</Step>
+</Steps>
+
+Next: [Quick start](/docs/quick-start).
