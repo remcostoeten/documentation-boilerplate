@@ -45,17 +45,28 @@
     "check": "vp check"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.86",
+    "@ai-sdk/google": "^4.0.103",
+    "@ai-sdk/openai": "^4.0.99",
+    "@ai-sdk/react": "^4.0.153",
+    "@openrouter/ai-sdk-provider": "^3.1.0",
+    "ai": "^7.0.149",
     "clsx": "^2.1.1",
     "fumadocs-core": "^16.17.5",
     "fumadocs-mdx": "^15.4.7",
+    "fumadocs-twoslash": "^3.3.1",
     "fumadocs-ui": "^16.17.5",
     "motion": "^14.3.0",
     "next": "^16.4.2",
     "next-themes": "^0.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "server-only": "^0.0.1",
+    "shiki": "^4.5.0",
     "tailwind-merge": "^3.7.0",
+    "use-stick-to-bottom": "^1.1.6",
     "zod": "^4.6.7"
   },
   "devDependencies": {
