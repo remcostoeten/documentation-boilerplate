@@ -1,3 +1,12 @@
+export type ChangelogConfig = {
+  file: string;
+  page: string;
+  title: string;
+  description: string;
+  skipPrereleases?: boolean;
+  editUrl?: string | false;
+};
+
 export const site = {
   name: "Docs",
   description:
@@ -8,4 +17,12 @@ export const site = {
   contentDir: "content/docs",
   author: { name: "Remco Stoeten", url: "https://remcostoeten.com" },
   keywords: ["docs", "documentation", "boilerplate", "nextjs", "fumadocs", "mdx"],
+  changelogs: [
+    {
+      file: "CHANGELOG.md",
+      page: "changelog",
+      title: "Changelog",
+      description: "What changed in each release.",
+    },
+  ] as ChangelogConfig[],
 };

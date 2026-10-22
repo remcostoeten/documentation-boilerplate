@@ -11,6 +11,7 @@ Pages are MDX files in `content/docs`. The sidebar is built from the folder stru
 - Every page is available as Markdown at its URL plus `.mdx`, with copy and view buttons under the title. `/llms.txt` and `/llms-full.txt` cover the whole site.
 - Each page gets an Open Graph image, canonical and social metadata and TechArticle JSON-LD. `sitemap.xml` and `robots.txt` use `NEXT_PUBLIC_SITE_URL`.
 - Pages end with a feedback widget, an edit on GitHub link and the date of their last commit. Feedback goes through a server action to `src/modules/feedback/server/feedback-handler.ts`, which only logs until you point it somewhere.
+- A changelog page is generated from `CHANGELOG.md` by `scripts/sync-changelog.ts`, or written by hand with the `Release` component. `changelogs` in `site.ts` lists the files, one page each, and can point outside the repository.
 - On small screens the sidebar becomes a full screen dialog behind the top bar menu button.
 
 The sidebar and top bar live in `src/modules/navigation`, layout sizes in `src/app/globals.css` (`--topbar-height`, `--sidebar-width`) and the site name, URL, repository link and SEO metadata in `src/shared/config/site.ts`.
@@ -24,7 +25,8 @@ bun install        # install dependencies and generate .source
 bun dev            # start the dev server on localhost:3000
 bun run check      # format and lint through vp
 bun run typecheck  # regenerate .source and route types, then tsc
-bun run build      # check internal links, then build for production
+bun test           # changelog parser tests
+bun run build      # sync the changelog, check internal links, then build for production
 ```
 
 CI in `.github/workflows/ci.yml` runs the same checks and the build on every push and pull request. Next.js runs on Bun. Vite+ only handles formatting and linting, since Next.js builds with its own bundler.

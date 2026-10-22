@@ -1,0 +1,104 @@
+---
+title: Publishing a changelog
+description: Publish release notes from a CHANGELOG.md file or write them by hand.
+icon: Compass
+---
+
+There are two ways to publish a changelog. They share the `Release` component and the table of contents, so pick whichever fits how you keep release notes.
+
+## From CHANGELOG.md
+
+Keep a `CHANGELOG.md` in the repository root. `bun run sync:changelog` turns it into `content/docs/changelog.mdx`, and `bun dev` and `bun run build` run it for you. `bun dev` also re-syncs when the file changes.
+
+```md title="CHANGELOG.md"
+## [1.2.0] - 2026-10-18
+
+### Added
+
+- Dark mode.
+
+## [Unreleased]
+
+### Fixed
+
+- Sidebar scroll position.
+```
+
+The parser reads these headings:
+
+- Keep a Changelog: `## [1.2.0] - 2026-10-18` and `## [Unreleased]`.
+- Conventional changelog tools such as release-please and changesets: `## [1.2.0](compare-url) (2026-10-18)`.
+- Plain headings such as `## v1.2.0 - 2026-10-18`.
+
+Each level 2 heading becomes one release, with the date shown next to it. Empty releases are dropped, link reference definitions for versions are removed, and the latest version is shown as the sidebar badge. Raw HTML, JSX, comments and curly braces outside code are escaped, because MDX would otherwise fail to compile them.
+
+The generated file is listed in `.gitignore`. Its edit link points at the file in your repository.
+
+Changelogs from Changesets (`## 2.0.1` with `### Patch Changes`) work too. They carry no dates, so the date column stays empty.
+
+## By hand
+
+Write `content/docs/changelog.mdx` yourself and wrap each entry in `Release`. Put the version in a level 2 heading inside it so it appears in the table of contents and in search.
+
+```mdx title="content/docs/changelog.mdx"
+---
+title: Publishing a changelog
+tocDepth: 2
+---
+
+<Release date="2026-10-18">
+
+## 1.2.0
+
+- Added dark mode.
+
+</Release>
+```
+
+The sync script refuses to overwrite a page that was written by hand. Remove its entry from `changelogs` in `src/shared/config/site.ts` to turn the sync off for that page.
+
+## Options
+
+`changelogs` in `src/shared/config/site.ts` is a list, so a monorepo can publish one page per package. The file can live outside the repository, as an absolute path or a path with `..`. Each page also has to be listed in `content/docs/meta.json`.
+
+```ts title="src/shared/config/site.ts"
+changelogs: [
+  {
+    file: "../analytics/packages/sdk/CHANGELOG.md",
+    page: "sdk-changelog",
+    title: "SDK changelog",
+    description: "Releases of the SDK.",
+    skipPrereleases: true,
+    editUrl: "https://github.com/acme/analytics/edit/main/packages/sdk/CHANGELOG.md",
+  },
+],
+```
+
+<TypeTable
+  type={{
+    file: {
+      type: "string",
+      description: "Changelog file to read. Relative to the repository root, or absolute.",
+      required: true,
+    },
+    page: {
+      type: "string",
+      description: "Name of the generated page in `content/docs`.",
+      required: true,
+    },
+    title: { type: "string", description: "Title of the generated page.", required: true },
+    description: { type: "string", description: "Subtitle of the generated page.", required: true },
+    skipPrereleases: {
+      type: "boolean",
+      description: "Leave out versions such as `2.0.0-next.1`.",
+      default: "false",
+    },
+    editUrl: {
+      type: "string | false",
+      description:
+        "Where the edit link points. Defaults to the file in this repository, and is hidden for files outside it.",
+    },
+  }}
+/>
+
+An empty list turns the sync off. If a changelog file does not exist, its page is skipped, and a generated page that is no longer configured is removed. Two entries cannot share a page name.

@@ -19,13 +19,11 @@ export default async function Page({ params }: Props) {
   if (!page) notFound();
 
   const MDX = page.data.body;
+  const { tocDepth } = page.data;
+  const toc = tocDepth ? page.data.toc.filter((item) => item.depth <= tocDepth) : page.data.toc;
 
   return (
-    <DocsPage
-      toc={page.data.toc}
-      tableOfContent={{ style: "clerk" }}
-      breadcrumb={{ enabled: false }}
-    >
+    <DocsPage toc={toc} tableOfContent={{ style: "clerk" }} breadcrumb={{ enabled: false }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: pageJsonLd(page) }} />
       <DocsTitle>{page.data.title}</DocsTitle>
       {page.data.description ? <DocsDescription>{page.data.description}</DocsDescription> : null}
@@ -35,7 +33,10 @@ export default async function Page({ params }: Props) {
       </DocsBody>
       <Feedback url={page.url} />
       <PageMeta
-        editUrl={`${site.repository}/blob/${site.branch}/${site.contentDir}/${page.path}`}
+        editUrl={
+          page.data.editUrl ??
+          `${site.repository}/blob/${site.branch}/${site.contentDir}/${page.path}`
+        }
         lastModified={page.data.lastModified}
       />
     </DocsPage>

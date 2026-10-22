@@ -10,6 +10,8 @@ description: One line under the title.
 icon: Rocket
 sidebarTitle: Short label
 sidebarBadge: beta
+tocDepth: 2
+editUrl: false
 ---
 ```
 
@@ -20,6 +22,15 @@ sidebarBadge: beta
     icon: { type: "string", description: "Icon name from `src/shared/icons`." },
     sidebarTitle: { type: "string", description: "Shorter sidebar label." },
     sidebarBadge: { type: "string", description: "Badge next to the sidebar label." },
+    tocDepth: {
+      type: "number",
+      description: "Deepest heading level listed in the table of contents.",
+    },
+    editUrl: {
+      type: "string | false",
+      description:
+        "Full URL the edit link points to, or false to hide it. Defaults to the page file on GitHub.",
+    },
   }}
 />
 

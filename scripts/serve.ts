@@ -1,3 +1,5 @@
+import { syncChangelog, watchChangelog } from "./sync-changelog";
+
 type Mode = "dev" | "start";
 
 const DEFAULT_PORT = 3000;
@@ -38,7 +40,7 @@ function openInBrowser(url: string) {
   }
 }
 
-function main() {
+async function main() {
   const mode = parseMode(process.argv[2]);
   const preferred = Number(process.env.PORT) || DEFAULT_PORT;
   const port = findFreePort(preferred);
@@ -46,6 +48,11 @@ function main() {
 
   if (port !== preferred) {
     console.log(`Port ${preferred} is in use, using ${port} instead.`);
+  }
+
+  if (mode === "dev") {
+    await syncChangelog();
+    watchChangelog();
   }
 
   const child = Bun.spawn(["bun", "--bun", "next", mode, "-p", String(port)], {
@@ -77,7 +84,7 @@ function main() {
 }
 
 try {
-  main();
+  await main();
 } catch (error) {
   console.error(error instanceof Error ? error.message : error);
   process.exit(1);
