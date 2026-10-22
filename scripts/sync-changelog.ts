@@ -1,12 +1,21 @@
 import { existsSync, watch } from "node:fs";
 import { basename, dirname, isAbsolute, join, resolve } from "node:path";
 import { Glob } from "bun";
-import { dropPrereleases, parseChangelog } from "../src/modules/changelog/utils/parse-changelog";
+import { resolveChangelogSource } from "../src/modules/changelog/utils/changelog-source";
+import { releasesFromGithub } from "../src/modules/changelog/utils/github-releases";
+import {
+  dropPrereleases,
+  parseChangelog,
+  type Release,
+} from "../src/modules/changelog/utils/parse-changelog";
 import {
   generatedMarker,
   renderChangelogPage,
 } from "../src/modules/changelog/utils/render-changelog-page";
+import { repositoryFileUrl } from "../src/shared/config/repository";
 import { type ChangelogConfig, site } from "../src/shared/config/site";
+
+const githubPages = 5;
 
 type Result = "written" | "unchanged" | "removed";
 
@@ -21,8 +30,9 @@ function outputPath(config: ChangelogConfig) {
 
 function defaultEditUrl(config: ChangelogConfig) {
   if (config.editUrl !== undefined) return config.editUrl;
+  if (config.file === undefined) return resolveChangelogSource(config.url).editUrl;
   if (isAbsolute(config.file) || config.file.startsWith("..")) return false;
-  return `${site.repository}/blob/${site.branch}/${config.file}`;
+  return repositoryFileUrl(config.file);
 }
 
 async function readIfExists(path: string) {
@@ -30,25 +40,73 @@ async function readIfExists(path: string) {
   return (await file.exists()) ? file.text() : undefined;
 }
 
+function githubHeaders() {
+  const token = process.env.GITHUB_TOKEN;
+  return {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "docs-boilerplate",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
+
+async function fetchOk(url: string, headers: Record<string, string>) {
+  const response = await fetch(url, { headers });
+  if (!response.ok) throw new Error(`${url} answered ${response.status}`);
+  return response;
+}
+
+async function fetchGithubReleases(owner: string, repo: string) {
+  const releases: Release[] = [];
+  for (let page = 1; page <= githubPages; page++) {
+    const url = `https://api.github.com/repos/${owner}/${repo}/releases?per_page=100&page=${page}`;
+    const batch = releasesFromGithub(await (await fetchOk(url, githubHeaders())).json());
+    releases.push(...batch);
+    if (batch.length < 100) break;
+  }
+  return releases;
+}
+
+async function loadReleases(config: ChangelogConfig) {
+  if (config.file === undefined) {
+    const source = resolveChangelogSource(config.url);
+    if (source.kind === "github-releases") return fetchGithubReleases(source.owner, source.repo);
+    const markdown = await (await fetchOk(source.url, {})).text();
+    return parseChangelog(markdown);
+  }
+  const markdown = await readIfExists(config.file);
+  return markdown === undefined ? undefined : parseChangelog(markdown);
+}
+
+async function loadOrKeep(config: ChangelogConfig, existing: string | undefined) {
+  if (config.file !== undefined) return loadReleases(config);
+  try {
+    return await loadReleases(config);
+  } catch (error) {
+    if (existing === undefined) throw error;
+    console.warn(`! ${config.page}: could not fetch ${config.url}, keeping the last page`);
+    return undefined;
+  }
+}
+
 async function syncOne(config: ChangelogConfig): Promise<Outcome | undefined> {
   const output = outputPath(config);
   const existing = await readIfExists(output);
   const generated = existing?.includes(generatedMarker) ?? false;
-  const markdown = await readIfExists(config.file);
 
-  if (markdown === undefined) {
-    if (!generated) return undefined;
+  if (existing !== undefined && !generated) {
+    throw new Error(
+      `${output} is written by hand. Remove it from site.changelogs or change its page name to generate ${config.url ?? config.file} somewhere else.`,
+    );
+  }
+
+  const parsed = await loadOrKeep(config, existing);
+
+  if (parsed === undefined) {
+    if (!generated || config.file === undefined) return undefined;
     await Bun.file(output).delete();
     return { page: config.page, result: "removed" };
   }
 
-  if (existing !== undefined && !generated) {
-    throw new Error(
-      `${output} is written by hand. Remove it from site.changelogs or change its page name to generate ${config.file} somewhere else.`,
-    );
-  }
-
-  const parsed = parseChangelog(markdown);
   const releases = config.skipPrereleases ? dropPrereleases(parsed) : parsed;
   const page = renderChangelogPage(releases, config, defaultEditUrl(config));
   if (page === existing) return { page: config.page, result: "unchanged" };
@@ -104,6 +162,7 @@ export async function syncChangelog() {
 export function watchChangelog() {
   let timer: ReturnType<typeof setTimeout> | undefined;
   for (const config of site.changelogs) {
+    if (!config.file) continue;
     const file = resolve(config.file);
     if (!existsSync(dirname(file))) continue;
     watch(dirname(file), (_event, name) => {

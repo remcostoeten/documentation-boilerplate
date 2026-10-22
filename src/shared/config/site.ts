@@ -1,5 +1,6 @@
-export type ChangelogConfig = {
-  file: string;
+type ChangelogSource = { file: string; url?: never } | { url: string; file?: never };
+
+export type ChangelogConfig = ChangelogSource & {
   page: string;
   title: string;
   description: string;

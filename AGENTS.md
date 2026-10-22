@@ -14,9 +14,10 @@ A changelog page is either generated from a changelog file or written by hand. F
 
 ### Files
 
-- `src/shared/config/site.ts`: `changelogs` lists the files to publish. Type is `ChangelogConfig` (`file`, `page`, `title`, `description`, optional `skipPrereleases`, optional `editUrl`). An empty list turns the feature off.
+- `src/shared/config/site.ts`: `changelogs` lists the files to publish. Type is `ChangelogConfig` (exactly one of `file` or `url`, then `page`, `title`, `description`, optional `skipPrereleases`, optional `editUrl`). An empty list turns the feature off.
 - `scripts/sync-changelog.ts`: writes `content/docs/<page>.mdx` for each entry. Run it with `bun run sync:changelog`. `bun dev` runs it and watches the files, `bun run build` runs it before the link check.
 - `src/modules/changelog/utils/parse-changelog.ts`: splits a changelog into releases and makes the body MDX safe. Tests are next to it, run them with `bun test`.
+- `src/modules/changelog/utils/changelog-source.ts` and `github-releases.ts`: resolve a `url` to GitHub Releases or a Markdown file, and map the GitHub API response to releases.
 - `src/modules/changelog/utils/render-changelog-page.ts`: builds the page frontmatter and `Release` blocks.
 - `src/modules/changelog/components/release.tsx`: the `Release` MDX component, registered in `src/modules/docs/mdx-components.tsx`.
 
@@ -26,6 +27,7 @@ A changelog page is either generated from a changelog file or written by hand. F
 - Generated pages are not added to `.gitignore` automatically. Add `content/docs/<page>.mdx` for each new entry, and list `<page>` in `content/docs/meta.json` or it will not show in the sidebar.
 - To write a changelog by hand, create the page yourself without the marker and use `<Release date="YYYY-MM-DD">` with a `## version` heading inside. The sync throws instead of overwriting a page without the marker, so keep the page name out of `changelogs`.
 - `file` is relative to the repository root, or absolute, and may point outside the repository. Edit links are hidden for files outside it unless `editUrl` is set.
+- `url` accepts a GitHub repository or releases page (GitHub Releases API), a GitHub `blob` URL (raw file) or any Markdown URL. It is fetched on sync, uses `GITHUB_TOKEN` if set, and a failed fetch keeps the existing generated page with a warning.
 - Each page must have a unique `page` name.
 - Accepted heading formats: Keep a Changelog (`## [1.2.0] - 2026-10-18`, `## [Unreleased]`), conventional changelog (`## [1.2.0](url) (2026-10-18)`), Changesets (`## 1.2.0`, no date) and plain `## v1.2.0 - 2026-10-18`. Each level 2 heading is one release, and releases with an empty body are dropped.
 - Outside code, raw HTML, JSX, HTML comments and curly braces in the changelog are escaped or removed so MDX compiles. Put anything that needs them in a code span.

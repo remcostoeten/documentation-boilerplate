@@ -4,7 +4,7 @@ description: Publish release notes from a CHANGELOG.md file or write them by han
 icon: Compass
 ---
 
-There are two ways to publish a changelog. They share the `Release` component and the table of contents, so pick whichever fits how you keep release notes.
+There are three ways to publish a changelog. They share the `Release` component and the table of contents, so pick whichever fits how you keep release notes.
 
 ## From CHANGELOG.md
 
@@ -35,6 +35,28 @@ Each level 2 heading becomes one release, with the date shown next to it. Empty 
 The generated file is listed in `.gitignore`. Its edit link points at the file in your repository.
 
 Changelogs from Changesets (`## 2.0.1` with `### Patch Changes`) work too. They carry no dates, so the date column stays empty.
+
+## From a URL
+
+Give `url` instead of `file` and the sync fetches it at build time and when `bun dev` starts.
+
+- A GitHub repository (`https://github.com/acme/app`) or its releases page reads GitHub Releases. Drafts and releases without notes are skipped, the leading `v` is removed from tags, and headings in the notes are lowered to level 3 so they stay out of the table of contents.
+- A GitHub file URL (`https://github.com/acme/app/blob/main/CHANGELOG.md`) reads the raw file and links the edit link to it.
+- Any other URL is fetched as Markdown with no edit link.
+
+Set `GITHUB_TOKEN` to raise the GitHub API limit from 60 requests an hour, or to read a private repository. If a fetch fails and the page already exists, the build keeps the existing page and prints a warning. Without an existing page it fails. The file is not watched in `bun dev`, so restart it to refetch.
+
+```ts title="src/shared/config/site.ts"
+changelogs: [
+  {
+    url: "https://github.com/acme/app",
+    page: "releases",
+    title: "Releases",
+    description: "Every release of the app.",
+    skipPrereleases: true,
+  },
+],
+```
 
 ## By hand
 

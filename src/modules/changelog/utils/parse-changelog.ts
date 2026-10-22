@@ -2,6 +2,7 @@ export type Release = {
   version: string;
   date?: string;
   body: string;
+  prerelease?: boolean;
 };
 
 const releaseHeading = /^##\s+(.+?)\s*#*\s*$/;
@@ -46,10 +47,22 @@ function escapeLine(line: string) {
   return result + escapePlain(withLinks.slice(last));
 }
 
-function toMdxSafe(body: string) {
+/**
+ * @name toMdxSafe
+ * @description Makes a release body safe to embed in MDX by escaping braces and
+ * angle brackets outside code, turning autolinks into links and removing HTML
+ * comments and version link definitions.
+ *
+ * @example
+ * const body = toMdxSafe(release.body)
+ */
+export function toMdxSafe(body: string) {
   const lines: string[] = [];
   let inFence = false;
-  for (const line of body.replace(/<!--[\s\S]*?-->/g, "").split("\n")) {
+  for (const line of body
+    .replace(/\r\n/g, "\n")
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .split("\n")) {
     if (fence.test(line)) {
       inFence = !inFence;
       lines.push(line);
@@ -106,5 +119,28 @@ export function parseChangelog(markdown: string): Release[] {
  * const stable = dropPrereleases(parseChangelog(markdown))
  */
 export function dropPrereleases(releases: Release[]) {
-  return releases.filter((release) => !/^v?\d+\.\d+(?:\.\d+)?-/.test(release.version));
+  return releases.filter(
+    (release) => !release.prerelease && !/^v?\d+\.\d+(?:\.\d+)?-/.test(release.version),
+  );
+}
+
+/**
+ * @name demoteHeadings
+ * @description Turns level 1 and 2 headings outside code fences into level 3,
+ * so a release body from an external source cannot add releases of its own to
+ * the table of contents.
+ *
+ * @example
+ * const body = demoteHeadings("## What's Changed\n- A")
+ */
+export function demoteHeadings(body: string) {
+  let inFence = false;
+  return body
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .map((line) => {
+      if (fence.test(line)) inFence = !inFence;
+      return inFence ? line : line.replace(/^#{1,2}(?=\s)/, "###");
+    })
+    .join("\n");
 }
