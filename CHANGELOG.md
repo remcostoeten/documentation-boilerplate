@@ -7,6 +7,18 @@ All notable changes to this project are documented in this file.
 ### Added
 
 - Changelog page generated from `CHANGELOG.md`, and a `Release` component for writing entries by hand.
+- Changelog entries can set `url` instead of `file` to read GitHub Releases, a GitHub `blob` URL or any Markdown file.
+- Ask AI chat that answers from the text of the docs with Anthropic, OpenAI, Google or OpenRouter. It is off until `askAI` is set in `site.ts`, has a default rate limit and can be hidden per page or with `hideOn`.
+- `site.logo` for an image before the site name, with a dark mode variant, and `site.theme.accent` for the primary color.
+- `site.pageFooter` to turn the edit link and the last updated date on or off.
+- Twoslash hover types, type queries, completions and expected errors in code blocks marked `twoslash`.
+- `TypeTable` with highlighted types, one union member per line and a `typeDescription` override.
+- Pages for the content model, routing, sidebar, search, SEO and LLM output, icons, feedback, Docker and Vercel deployment, and reference pages for configuration, frontmatter, `meta.json`, environment variables and scripts.
+
+### Changed
+
+- The repository and branch behind the GitHub button, edit links and last updated dates are detected from the `origin` git remote, then from the Vercel and GitHub Actions environment, instead of being set in `site.ts`. `site.repository` and `site.branch` override them, and `site.repository: false` hides every link.
+- The GitHub button and the edit links are hidden when the site has no repository, and the page footer is not rendered when it has nothing to show.
 
 ## [0.1.0] - 2026-10-18
 
