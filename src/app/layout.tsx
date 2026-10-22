@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { DocsSearchDialog } from "@/modules/search/components/search-dialog";
 import { searchTags } from "@/modules/search/server/sections";
 import { site } from "@/shared/config/site";
+import { themeCss } from "@/shared/config/theme-css";
 import { IconMotion } from "@/shared/icons/icon-motion";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -36,6 +37,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${sans.variable} ${mono.variable} antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: themeCss(site.theme.accent) }} />
+      </head>
       <body className="font-sans">
         <RootProvider search={{ SearchDialog: DocsSearchDialog, options: { tags: searchTags() } }}>
           {children}

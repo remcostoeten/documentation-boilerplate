@@ -1,7 +1,58 @@
 ---
 title: Theming
-description: Change colors and fonts.
+description: Change the accent color, add a logo and swap the theme.
 icon: Palette
 ---
 
-Colors come from the Fumadocs theme imported in `src/app/globals.css`.
+## Accent color
+
+Set `theme.accent` in `src/shared/config/site.ts`. It sets the Fumadocs primary color, which its components use for active and selected states. The text color on top of it is chosen from the color's lightness, so any CSS color works.
+
+```ts title="src/shared/config/site.ts"
+theme: {
+  accent: { light: "oklch(0.55 0.2 260)", dark: "oklch(0.75 0.15 260)" },
+},
+```
+
+Leave it as `null` to keep the neutral black theme.
+
+## Logo
+
+Put the image in `public` and point `logo` at it. `darkSrc` is shown in dark mode. `width` and `height` are the displayed size in pixels. The site name stays next to the logo unless `hideName` is set, and then `alt` describes the logo.
+
+```ts title="src/shared/config/site.ts"
+logo: {
+  src: "/logo.svg",
+  darkSrc: "/logo-dark.svg",
+  width: 20,
+  height: 20,
+},
+```
+
+For the browser tab icon, add `icon.svg` or `icon.png` to `src/app`.
+
+## Theme preset
+
+The colors come from the Fumadocs theme imported in `src/app/globals.css`. Swap `black.css` for another file from `fumadocs-ui/css`, such as `neutral.css`, `ocean.css` or `emerald.css`.
+
+```css title="src/app/globals.css"
+@import "fumadocs-ui/css/ocean.css";
+```
+
+## Individual colors
+
+Override any Fumadocs variable in `src/app/globals.css`, in `:root` for light mode and `.dark` for dark mode.
+
+```css title="src/app/globals.css"
+:root {
+  --color-fd-background: hsl(40 30% 98%);
+}
+
+.dark {
+  --color-fd-border: hsl(0 0% 20%);
+}
+```
+
+## Fonts
+
+Fonts are set in `src/app/layout.tsx`. Replace `Geist` and `Geist_Mono` with another `next/font` family and keep the `--font-sans` and `--font-mono` variables.

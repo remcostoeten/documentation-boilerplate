@@ -14,7 +14,7 @@ Pages are MDX files in `content/docs`. The sidebar is built from the folder stru
 - A changelog page is generated from `CHANGELOG.md` by `scripts/sync-changelog.ts`, or written by hand with the `Release` component. `changelogs` in `site.ts` lists the files, one page each, and can point outside the repository or at a URL such as GitHub Releases.
 - On small screens the sidebar becomes a full screen dialog behind the top bar menu button.
 
-The sidebar and top bar live in `src/modules/navigation`, layout sizes in `src/app/globals.css` (`--topbar-height`, `--sidebar-width`) and the site name, URL, repository link and SEO metadata in `src/shared/config/site.ts`.
+The sidebar and top bar live in `src/modules/navigation`, layout sizes in `src/app/globals.css` (`--topbar-height`, `--sidebar-width`) and the site name, logo, accent color, URL and SEO metadata in `src/shared/config/site.ts`.
 
 ## Development
 

@@ -8,6 +8,20 @@ export type ChangelogConfig = ChangelogSource & {
   editUrl?: string | false;
 };
 
+export type LogoConfig = {
+  src: string;
+  darkSrc?: string;
+  alt?: string;
+  width: number;
+  height: number;
+  hideName?: boolean;
+};
+
+export type AccentConfig = {
+  light: string;
+  dark: string;
+};
+
 type SiteConfig = {
   name: string;
   description: string;
@@ -17,6 +31,8 @@ type SiteConfig = {
   contentDir: string;
   author: { name: string; url: string };
   keywords: string[];
+  logo: LogoConfig | null;
+  theme: { accent: AccentConfig | null };
   pageFooter: { editLink: boolean; lastUpdated: boolean };
   changelogs: ChangelogConfig[];
 };
@@ -29,6 +45,8 @@ export const site: SiteConfig = {
   contentDir: "content/docs",
   author: { name: "Remco Stoeten", url: "https://remcostoeten.com" },
   keywords: ["docs", "documentation", "boilerplate", "nextjs", "fumadocs", "mdx"],
+  logo: null,
+  theme: { accent: null },
   pageFooter: { editLink: true, lastUpdated: true },
   changelogs: [
     {

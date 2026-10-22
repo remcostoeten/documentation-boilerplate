@@ -45,5 +45,7 @@ A changelog page is either generated from a changelog file or written by hand. F
 `src/shared/config/site.ts` is the single config object (`SiteConfig`). Related files:
 
 - `src/shared/config/repository.ts`: `getRepository()` and `repositoryFileUrl(path)` read the GitHub repository and branch from the `origin` remote, then from Vercel and GitHub Actions environment variables. `site.repository` and `site.branch` override them, `site.repository: false` disables them. Use these instead of hardcoding a repository URL. When there is no repository, callers must hide the link, not render a broken one. Credentials in a remote are stripped.
+- `src/shared/config/theme-css.ts`: turns `site.theme.accent` into CSS variables injected in `src/app/layout.tsx`. Everything else about the theme lives in `src/app/globals.css`.
+- `site.logo` is rendered by `src/modules/navigation/components/logo.tsx` from files in `public`.
 - `site.pageFooter` toggles the edit link and the last updated date under each page.
 - Server code calls `getRepository()`. Client components get the URL as a prop, as `DocsSidebar` does through `src/app/docs/layout.tsx`.
