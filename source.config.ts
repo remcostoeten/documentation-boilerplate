@@ -30,6 +30,7 @@ export const docs = defineDocs({
     schema: pageSchema.extend({
       sidebarTitle: z.string().min(1).optional(),
       sidebarBadge: z.string().min(1).optional(),
+      askAI: z.boolean().optional(),
       tocDepth: z.number().int().min(2).max(6).optional(),
       editUrl: z.union([z.string().min(1), z.literal(false)]).optional(),
     }),

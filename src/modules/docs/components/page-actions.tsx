@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { CheckIcon, CopyIcon, PageIcon } from "@/shared/icons/icons";
 
 type Props = {
   markdownUrl: string;
+  children?: ReactNode;
 };
 
 const resetDelay = 1600;
 const actionClass =
   "pressable inline-flex h-7 items-center gap-1.5 rounded-md border border-foreground/10 px-2.5 text-xs text-foreground/60 hover:border-foreground/20 hover:bg-foreground/4 hover:text-foreground focus-visible:bg-foreground/8 focus-visible:text-foreground data-copied:text-foreground";
 
-export function PageActions({ markdownUrl }: Props) {
+export function PageActions({ markdownUrl, children }: Props) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -41,6 +42,7 @@ export function PageActions({ markdownUrl }: Props) {
         <PageIcon className="size-3.5" />
         View as Markdown
       </a>
+      {children}
     </div>
   );
 }

@@ -49,3 +49,15 @@ A changelog page is either generated from a changelog file or written by hand. F
 - `site.logo` is rendered by `src/modules/navigation/components/logo.tsx` from files in `public`.
 - `site.pageFooter` toggles the edit link and the last updated date under each page.
 - Server code calls `getRepository()`. Client components get the URL as a prop, as `DocsSidebar` does through `src/app/docs/layout.tsx`.
+
+## Ask AI
+
+An optional docs chat. Off while `site.askAI` is null. User docs are in `content/docs/guides/ask-ai.mdx`. This project uses AI SDK v7, so read `node_modules/ai/docs` before changing the server code: `streamText` takes `instructions`, and the route returns `createUIMessageStreamResponse({ stream: toUIMessageStream({ stream: result.stream }) })`.
+
+- `src/modules/ask-ai/types.ts`: `AskAIConfig` is a union keyed by `provider`, so `model` is required and typed per provider. The model types come from the provider packages. Add a provider by extending `ProviderModels`, `loadModel` in `server/model.ts` and the key variable table there.
+- `server/handler.ts`: `POST /api/ask` (`src/app/api/ask/route.ts`). Order is limit, validation, key check, context, stream. Messages are validated with zod, cut to the last 12 and 2000 characters each.
+- `server/context.ts`: sends the whole site when it fits in `maxContextChars`, otherwise ranks pages by the question and the current URL.
+- `server/rate-limit.ts`: in memory counter by default (20 per hour per IP). `limit` can be a preset with `by` and `skipIf`, a function, or false. Never remove the default limit, it protects the API key.
+- `components/ask-ai-slot.tsx`: server component that applies `hideOn` and the `askAI: false` frontmatter, then renders the client `ask-ai.tsx` inside `PageActions`. The chat is a module level `Chat` so it survives navigation.
+- Functions in `site.askAI` run on the server only. Never pass the config object to a client component, pass plain props as `AskAISlot` does.
+- API keys come from environment variables only. Never put a key in `site.ts`.

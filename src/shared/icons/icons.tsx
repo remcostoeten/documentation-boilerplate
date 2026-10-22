@@ -114,6 +114,15 @@ export function BulbIcon({ className }: IconProps) {
   );
 }
 
+export function SparkleIcon({ className }: IconProps) {
+  return (
+    <Glyph name="sparkle" className={className}>
+      <path d="M12 3c.6 4.2 2.8 6.4 7 7-4.2.6-6.4 2.8-7 7-.6-4.2-2.8-6.4-7-7 4.2-.6 6.4-2.8 7-7Z" />
+      <path d="M19 16v4M17 18h4" />
+    </Glyph>
+  );
+}
+
 export function CompassIcon({ className }: IconProps) {
   return (
     <Glyph name="compass" className={className}>

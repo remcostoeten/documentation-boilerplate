@@ -1,0 +1,131 @@
+---
+title: Ask AI
+description: Let readers ask questions that are answered from your docs.
+icon: Compass
+---
+
+Ask AI adds a button next to Copy Markdown on every docs page. It opens a chat panel, and answers are written by the model you choose from the text of your own pages. It is off by default.
+
+## Turn it on
+
+Set `askAI` in `src/shared/config/site.ts` and add the provider's API key to `.env.local`.
+
+```ts title="src/shared/config/site.ts"
+askAI: {
+  provider: "anthropic",
+  model: "claude-sonnet-5-5",
+},
+```
+
+```bash title=".env.local"
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+`provider` and `model` are typed together. Choosing a provider requires a `model`, the editor suggests that provider's model names, and a model name of another provider is not suggested. Any string is accepted, so new models work before the suggestions catch up.
+
+| Provider     | Key variable                   | Models                                                  |
+| ------------ | ------------------------------ | ------------------------------------------------------- |
+| `anthropic`  | `ANTHROPIC_API_KEY`            | Anthropic models                                        |
+| `openai`     | `OPENAI_API_KEY`               | OpenAI models                                           |
+| `google`     | `GOOGLE_GENERATIVE_AI_API_KEY` | Gemini models                                           |
+| `openrouter` | `OPENROUTER_API_KEY`           | Any OpenRouter model ID, such as `anthropic/claude-...` |
+
+The key is only read on the server. Without it the panel shows that the variable is missing. Set `apiKeyEnv` to read a different variable name. Set `baseUrl` to use a proxy, a gateway or a local OpenAI compatible server such as Ollama. With `provider: "openai"` and a `baseUrl`, the Chat Completions API is used.
+
+## Where the answers come from
+
+A site that fits in `maxContextChars` (default 60000 characters) is sent whole with every question. A larger one sends the page the reader is on and the pages that best match the question. The model is told to answer from that text only and to say so when the docs do not cover the question.
+
+## Rate limits
+
+Every question costs money, so a limit of 20 questions per hour per IP applies unless you change it.
+
+```ts title="src/shared/config/site.ts"
+askAI: {
+  provider: "openai",
+  model: "gpt-5",
+  limit: {
+    max: 10,
+    per: "1h",
+    by: (request) => request.headers.get("x-user-id") ?? "anonymous",
+    skipIf: (request) => request.headers.get("x-plan") === "team",
+  },
+},
+```
+
+- `max` and `per` (`"1m"`, `"1h"` or `"1d"`) set the budget for each key.
+- `by` returns the key to count. It defaults to the caller's IP.
+- `skipIf` returns true for requests that are never limited.
+- A function `limit: (request) => boolean` decides on its own. Return false to answer with a 429. Use it to check Redis or a KV store.
+- `limit: false` turns the limit off.
+
+The built in counter lives in server memory, so each serverless instance counts on its own. Use a function backed by a shared store when that matters.
+
+## Hiding the button
+
+`hideOn` takes page URLs. `*` matches one path segment and `**` matches any number of segments.
+
+```ts title="src/shared/config/site.ts"
+hideOn: ["/docs/changelog", "/docs/guides/**"],
+```
+
+A single page can opt out in its frontmatter.
+
+```mdx title="content/docs/example.mdx"
+---
+title: Example
+askAI: false
+---
+```
+
+## Options
+
+<TypeTable
+  type={{
+    provider: {
+      type: '"anthropic" | "openai" | "google" | "openrouter"',
+      description: "Model provider.",
+      required: true,
+    },
+    model: {
+      type: "string",
+      description: "Model name. Suggestions depend on the provider.",
+      required: true,
+    },
+    apiKeyEnv: {
+      type: "string",
+      description:
+        "Environment variable holding the API key. Defaults to the provider's usual variable.",
+    },
+    baseUrl: {
+      type: "string",
+      description: "Custom API endpoint for proxies, gateways and local servers.",
+    },
+    title: { type: "string", description: "Panel title.", default: '"Ask AI"' },
+    placeholder: {
+      type: "string",
+      description: "Input placeholder.",
+      default: '"Ask about these docs"',
+    },
+    suggestions: { type: "string[]", description: "Questions shown before the first message." },
+    instructions: {
+      type: "string",
+      description:
+        "Extra instructions added to the system prompt, such as a tone or product names.",
+    },
+    hideOn: { type: "string[]", description: "Page URL patterns without the button." },
+    limit: {
+      type: "LimitPreset | function | false",
+      description: "Rate limit.",
+      default: "20 per hour per IP",
+    },
+    maxContextChars: {
+      type: "number",
+      description: "Most documentation characters sent with a question.",
+      default: "60000",
+    },
+    maxOutputTokens: { type: "number", description: "Longest answer in tokens.", default: "1024" },
+  }}
+/>
+
+The chat is at `POST /api/ask`. The conversation is kept while the reader moves between pages and cleared on reload.

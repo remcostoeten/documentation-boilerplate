@@ -1,6 +1,7 @@
 import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/page";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { AskAISlot } from "@/modules/ask-ai/components/ask-ai-slot";
 import { PageActions } from "@/modules/docs/components/page-actions";
 import { PageMeta } from "@/modules/docs/components/page-meta";
 import { mdxComponents } from "@/modules/docs/mdx-components";
@@ -28,7 +29,9 @@ export default async function Page({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: pageJsonLd(page) }} />
       <DocsTitle>{page.data.title}</DocsTitle>
       {page.data.description ? <DocsDescription>{page.data.description}</DocsDescription> : null}
-      <PageActions markdownUrl={`${page.url}.mdx`} />
+      <PageActions markdownUrl={`${page.url}.mdx`}>
+        <AskAISlot url={page.url} enabled={page.data.askAI} />
+      </PageActions>
       <DocsBody>
         <MDX components={mdxComponents} />
       </DocsBody>

@@ -1,3 +1,5 @@
+import type { AskAIConfig } from "@/modules/ask-ai/types";
+
 type ChangelogSource = { file: string; url?: never } | { url: string; file?: never };
 
 export type ChangelogConfig = ChangelogSource & {
@@ -35,6 +37,7 @@ type SiteConfig = {
   theme: { accent: AccentConfig | null };
   pageFooter: { editLink: boolean; lastUpdated: boolean };
   changelogs: ChangelogConfig[];
+  askAI: AskAIConfig | null;
 };
 
 export const site: SiteConfig = {
@@ -48,6 +51,7 @@ export const site: SiteConfig = {
   logo: null,
   theme: { accent: null },
   pageFooter: { editLink: true, lastUpdated: true },
+  askAI: null,
   changelogs: [
     {
       file: "CHANGELOG.md",
