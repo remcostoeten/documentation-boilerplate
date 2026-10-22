@@ -10,7 +10,7 @@ Pages are MDX files in `content/docs`. The sidebar is built from the folder stru
 - Search opens with `⌘K`, lists recently opened pages before you type and filters results by sidebar section. The index is served by `src/app/api/search/route.ts`.
 - Every page is available as Markdown at its URL plus `.mdx`, with copy and view buttons under the title. `/llms.txt` and `/llms-full.txt` cover the whole site.
 - Each page gets an Open Graph image, canonical and social metadata and TechArticle JSON-LD. `sitemap.xml` and `robots.txt` use `NEXT_PUBLIC_SITE_URL`.
-- Pages end with a feedback widget, an edit on GitHub link and the date of their last commit. Feedback goes through a server action to `src/modules/feedback/server/feedback-handler.ts`, which only logs until you point it somewhere.
+- Pages end with a feedback widget, an edit on GitHub link and the date of their last commit. The repository comes from the `origin` git remote, so no settings or tokens are needed. Feedback goes through a server action to `src/modules/feedback/server/feedback-handler.ts`, which only logs until you point it somewhere.
 - A changelog page is generated from `CHANGELOG.md` by `scripts/sync-changelog.ts`, or written by hand with the `Release` component. `changelogs` in `site.ts` lists the files, one page each, and can point outside the repository.
 - On small screens the sidebar becomes a full screen dialog behind the top bar menu button.
 

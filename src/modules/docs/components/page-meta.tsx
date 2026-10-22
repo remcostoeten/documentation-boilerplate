@@ -8,6 +8,8 @@ type Props = {
 const dateFormat = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeZone: "UTC" });
 
 export function PageMeta({ editUrl, lastModified }: Props) {
+  if (!editUrl && !lastModified) return null;
+
   return (
     <div className="not-prose mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-foreground/8 pt-5 text-xs text-foreground/50">
       {editUrl ? (

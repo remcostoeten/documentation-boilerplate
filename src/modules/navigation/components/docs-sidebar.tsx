@@ -12,9 +12,9 @@ import { SearchButton } from "./search-button";
 import { SidebarFooter } from "./sidebar-footer";
 import { SidebarNavigation } from "./sidebar-navigation";
 
-type Props = { tree: Root };
+type Props = { tree: Root; repositoryUrl?: string };
 
-export function DocsSidebar({ tree }: Props) {
+export function DocsSidebar({ tree, repositoryUrl }: Props) {
   const pathname = usePathname() || "/docs";
   const mobileOpen = useMobileNavigationOpen();
   const mobileDialogRef = useMobileDialog(mobileOpen);
@@ -26,7 +26,7 @@ export function DocsSidebar({ tree }: Props) {
       <aside className="fixed top-(--topbar-height) bottom-0 left-0 z-30 hidden w-(--sidebar-width) flex-col border-r border-foreground/5 bg-background lg:flex">
         <SearchButton onClick={() => setOpenSearch(true)} />
         <SidebarNavigation key={pathname} sections={sections} pathname={pathname} />
-        <SidebarFooter />
+        <SidebarFooter repositoryUrl={repositoryUrl} />
       </aside>
 
       <AnimatePresence>
@@ -65,7 +65,7 @@ export function DocsSidebar({ tree }: Props) {
                   onNavigate={() => setMobileNavigationOpen(false)}
                 />
               </div>
-              <SidebarFooter />
+              <SidebarFooter repositoryUrl={repositoryUrl} />
             </div>
           </motion.dialog>
         ) : null}

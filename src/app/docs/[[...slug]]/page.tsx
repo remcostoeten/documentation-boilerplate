@@ -7,6 +7,7 @@ import { mdxComponents } from "@/modules/docs/mdx-components";
 import { Feedback } from "@/modules/feedback/components/feedback";
 import { pageImage, pageJsonLd } from "@/modules/docs/server/seo";
 import { source } from "@/modules/docs/server/source";
+import { repositoryFileUrl } from "@/shared/config/repository";
 import { site } from "@/shared/config/site";
 
 type Props = {
@@ -34,10 +35,10 @@ export default async function Page({ params }: Props) {
       <Feedback url={page.url} />
       <PageMeta
         editUrl={
-          page.data.editUrl ??
-          `${site.repository}/blob/${site.branch}/${site.contentDir}/${page.path}`
+          site.pageFooter.editLink &&
+          (page.data.editUrl ?? repositoryFileUrl(`${site.contentDir}/${page.path}`))
         }
-        lastModified={page.data.lastModified}
+        lastModified={site.pageFooter.lastUpdated ? page.data.lastModified : undefined}
       />
     </DocsPage>
   );

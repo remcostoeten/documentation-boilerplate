@@ -37,3 +37,11 @@ A changelog page is either generated from a changelog file or written by hand. F
 1. Add an entry to `changelogs` in `src/shared/config/site.ts`.
 2. Add `content/docs/<page>.mdx` to `.gitignore` and `<page>` to `content/docs/meta.json`.
 3. Run `bun run sync:changelog`, then `bun run check`, `bun test`, `bun run typecheck` and `bun run build`.
+
+## Site config
+
+`src/shared/config/site.ts` is the single config object (`SiteConfig`). Related files:
+
+- `src/shared/config/repository.ts`: `getRepository()` and `repositoryFileUrl(path)` read the GitHub repository and branch from the `origin` remote, then from Vercel and GitHub Actions environment variables. `site.repository` and `site.branch` override them, `site.repository: false` disables them. Use these instead of hardcoding a repository URL. When there is no repository, callers must hide the link, not render a broken one. Credentials in a remote are stripped.
+- `site.pageFooter` toggles the edit link and the last updated date under each page.
+- Server code calls `getRepository()`. Client components get the URL as a prop, as `DocsSidebar` does through `src/app/docs/layout.tsx`.
