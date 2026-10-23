@@ -15,6 +15,8 @@ type Props = {
   params: Promise<{ slug?: string[] }>;
 };
 
+export const instant = false;
+
 export default async function Page({ params }: Props) {
   const { slug } = await params;
   const page = source.getPage(slug);
@@ -25,7 +27,12 @@ export default async function Page({ params }: Props) {
   const toc = tocDepth ? page.data.toc.filter((item) => item.depth <= tocDepth) : page.data.toc;
 
   return (
-    <DocsPage toc={toc} tableOfContent={{ style: "clerk" }} breadcrumb={{ enabled: false }}>
+    <DocsPage
+      toc={toc}
+      tableOfContent={{ style: "clerk" }}
+      breadcrumb={{ enabled: false }}
+      footer={{ enabled: site.pageFooter.prevNext }}
+    >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: pageJsonLd(page) }} />
       <DocsTitle>{page.data.title}</DocsTitle>
       {page.data.description ? <DocsDescription>{page.data.description}</DocsDescription> : null}
@@ -35,7 +42,7 @@ export default async function Page({ params }: Props) {
       <DocsBody>
         <MDX components={mdxComponents} />
       </DocsBody>
-      <Feedback url={page.url} />
+      {site.pageFooter.feedback ? <Feedback url={page.url} /> : null}
       <PageMeta
         editUrl={
           site.pageFooter.editLink &&

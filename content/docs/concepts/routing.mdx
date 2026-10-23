@@ -8,12 +8,13 @@ icon: Route
 
 One catch-all route, `src/app/docs/[[...slug]]/page.tsx`, renders every docs page. It looks the page up by slug in the source and returns a 404 when there is none. `generateStaticParams` lists every page, so all of them are prerendered at build time.
 
-The root URL `/` redirects to `/docs`. This is a temporary redirect set in `next.config.ts`, so change it there if the site should serve something else at `/`.
+The root URL `/` is the landing page, `src/app/page.tsx`, when `landing` is `true` in `src/shared/config/site.ts`. When `landing` is `false` or not set, `/` redirects to `/docs`. It has a header, a hero with the site name, description and install commands, a grid of feature cards and a footer. The name, description, author, repository link and changelog link come from `src/shared/config/site.ts`. The feature cards are the `features` list in `src/modules/landing/content.ts`, so edit that list to change them.
 
 ## Every route
 
 | URL                      | Handler                                      | Returns                                                     |
 | ------------------------ | -------------------------------------------- | ----------------------------------------------------------- |
+| `/`                      | `src/app/page.tsx`                           | The landing page, or a redirect to `/docs`                  |
 | `/docs/...`              | `src/app/docs/[[...slug]]/page.tsx`          | A docs page                                                 |
 | `/docs/....mdx`          | `src/app/llms.mdx/docs/[[...slug]]/route.ts` | The page as Markdown                                        |
 | `/llms.txt`              | `src/app/llms.txt/route.ts`                  | An index of every page for LLMs                             |
@@ -39,7 +40,6 @@ Add them to `next.config.ts`, next to the existing ones.
 ```ts title="next.config.ts"
 async redirects() {
   return [
-    { source: "/", destination: "/docs", permanent: false },
     { source: "/docs/old-page", destination: "/docs/new-page", permanent: true },
   ];
 },
@@ -47,4 +47,4 @@ async redirects() {
 
 ## Changing the base path
 
-The `/docs` prefix is set in three places: `baseUrl` in `src/modules/docs/server/source.ts`, the folder name `src/app/docs`, and `baseUrl` in `scripts/check-links.ts`. The redirect and rewrites in `next.config.ts` also name it. Change all of them together.
+The `/docs` prefix is set in three places: `baseUrl` in `src/modules/docs/server/source.ts`, the folder name `src/app/docs`, and `baseUrl` in `scripts/check-links.ts`. The rewrites in `next.config.ts` and the links in `src/modules/landing` also name it. Change all of them together.

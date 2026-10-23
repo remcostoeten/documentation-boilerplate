@@ -1,8 +1,8 @@
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
+import { SiteFooter } from "@/modules/footer";
 import { source } from "@/modules/docs/server/source";
-import { DocsSidebar, Topbar } from "@/modules/navigation";
-import { RecentPagesTracker } from "@/modules/search/components/recent-pages";
+import { DocsSidebar, DocsSidebarFallback, Topbar } from "@/modules/navigation";
 import { getRepository } from "@/shared/config/repository";
 
 export default function Layout({ children }: { children: ReactNode }) {
@@ -12,8 +12,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       <Topbar />
-      <RecentPagesTracker />
-      <DocsSidebar tree={tree} repositoryUrl={repositoryUrl} />
+      <Suspense fallback={<DocsSidebarFallback />}>
+        <DocsSidebar tree={tree} repositoryUrl={repositoryUrl} />
+      </Suspense>
       <DocsLayout
         tree={tree}
         nav={{ enabled: false }}
@@ -24,6 +25,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       >
         {children}
       </DocsLayout>
+      <SiteFooter inset />
     </>
   );
 }

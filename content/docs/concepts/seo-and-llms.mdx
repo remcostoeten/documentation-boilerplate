@@ -25,7 +25,7 @@ Each page includes `TechArticle` JSON-LD with the headline, description, URL, im
 
 ## Sitemap and robots
 
-`/sitemap.xml` lists every page with its last modified date, a weekly change frequency and a priority of 1 for the home page and 0.7 for the rest. `/robots.txt` allows every crawler and links the sitemap. To keep a page out of both, edit `src/app/sitemap.ts` and `src/app/robots.ts`.
+`/sitemap.xml` lists every page with its last modified date, a weekly change frequency and a priority of 1 for the landing page, 0.9 for the docs introduction and 0.7 for the rest. Without a landing page the docs introduction gets 1. `/robots.txt` allows every crawler and links the sitemap. To keep a page out of both, edit `src/app/sitemap.ts` and `src/app/robots.ts`.
 
 ## Markdown for every page
 

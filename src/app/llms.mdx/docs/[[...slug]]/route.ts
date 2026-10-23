@@ -2,8 +2,6 @@ import { notFound } from "next/navigation";
 import { renderMarkdown } from "@/modules/docs/server/llms";
 import { source } from "@/modules/docs/server/source";
 
-export const dynamic = "force-static";
-
 export async function GET(
   _request: Request,
   { params }: RouteContext<"/llms.mdx/docs/[[...slug]]">,

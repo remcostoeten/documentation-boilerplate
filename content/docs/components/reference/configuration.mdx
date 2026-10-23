@@ -20,35 +20,33 @@ export const site: SiteConfig = {
   keywords: ["docs", "documentation"],
   logo: null,
   theme: { accent: null },
-  pageFooter: { editLink: true, lastUpdated: true },
+  pageFooter: { editLink: true, lastUpdated: true, feedback: true, prevNext: true },
+  footer: null,
+  landing: true,
   askAI: null,
   changelogs: [],
 };
 ```
 
 <TypeTable
-  type={{
-    name: { type: "string", description: "Site name.", required: true },
-    description: { type: "string", description: "Default meta description.", required: true },
-    url: { type: "string", description: "Production URL.", required: true },
-    repository: { type: "string | false", description: "GitHub repository URL." },
-    branch: { type: "string", description: "Branch the edit links point at." },
-    contentDir: { type: "string", description: "Folder of the MDX pages.", required: true },
-    author: { type: "{ name: string; url: string }", description: "Page author.", required: true },
-    keywords: { type: "string[]", description: "Meta keywords.", required: true },
-    logo: { type: "LogoConfig | null", description: "Image in the top bar.", required: true },
-    theme: { type: "{ accent: AccentConfig | null }", description: "Colors.", required: true },
-    pageFooter: {
-      type: "{ editLink: boolean; lastUpdated: boolean }",
-      description: "What shows under each page.",
-      required: true,
-    },
-    changelogs: {
-      type: "ChangelogConfig[]",
-      description: "Changelog pages to generate.",
-      required: true,
-    },
-    askAI: { type: "AskAIConfig | null", description: "Ask AI chat.", required: true },
+  path="src/shared/config/site.ts"
+  name="SiteConfig"
+  descriptions={{
+    name: "Site name.",
+    description: "Default meta description.",
+    url: "Production URL.",
+    repository: "GitHub repository URL.",
+    branch: "Branch the edit links point at.",
+    contentDir: "Folder of the MDX pages.",
+    author: "Page author.",
+    keywords: "Meta keywords.",
+    logo: "Image in the top bar.",
+    theme: "Colors.",
+    pageFooter: "What shows under each page.",
+    footer: "Column footer with links.",
+    landing: "Serve a landing page at `/`.",
+    changelogs: "Changelog pages to generate.",
+    askAI: "Ask AI chat.",
   }}
 />
 
@@ -92,8 +90,15 @@ An image shown before the site name in the top bar.
 
 <TypeTable
   type={{
-    src: { type: "string", description: "Path in `public`.", required: true },
-    darkSrc: { type: "string", description: "Image for dark mode." },
+    src: {
+      type: "string | ComponentType<SVGProps<SVGSVGElement>>",
+      description: "Path in `public`, a URL, inline SVG markup or a React component.",
+      required: true,
+    },
+    darkSrc: {
+      type: "string | ComponentType<SVGProps<SVGSVGElement>>",
+      description: "Logo for dark mode, same formats as `src`.",
+    },
     alt: { type: "string", description: "Text description, used when the name is hidden." },
     width: { type: "number", description: "Displayed width in pixels.", required: true },
     height: { type: "number", description: "Displayed height in pixels.", required: true },
@@ -103,20 +108,78 @@ An image shown before the site name in the top bar.
 
 See [Theming](/docs/guides/theming#logo).
 
+### favicon
+
+The browser tab icon. A path in `public`, a URL or inline SVG markup, or `{ light, dark }` to switch with the color scheme. Leave it out to use an `icon` file in `src/app`.
+
+See [Theming](/docs/guides/theming#favicon).
+
 ### theme
 
 `theme.accent` takes a `light` and a `dark` CSS color, and sets the Fumadocs primary color for each mode. Any CSS color works, since the text color on top of it is chosen from its lightness. A color containing `;`, `{`, `}`, `<`, `>` or `\` is rejected and fails the build. `null` keeps the neutral black theme. See [Theming](/docs/guides/theming#accent-color).
+
+`theme.radius` is one CSS length, such as `"0.75rem"`, `"12px"` or `"0"`, that sets the corner size of the whole site. Leave it out to keep the Fumadocs defaults. See [Theming](/docs/guides/theming#radius).
 
 ### pageFooter
 
 <TypeTable
   type={{
+    feedback: {
+      type: "boolean",
+      description: "Show the Was this page helpful? widget.",
+      required: true,
+    },
+    prevNext: {
+      type: "boolean",
+      description: "Show the previous and next page links.",
+      required: true,
+    },
     editLink: { type: "boolean", description: "Show the edit on GitHub link.", required: true },
     lastUpdated: { type: "boolean", description: "Show the last commit date.", required: true },
   }}
 />
 
-Both are hidden on their own when they have nothing to show. See [Page footer and feedback](/docs/guides/feedback).
+The edit link and the date are hidden on their own when they have nothing to show. See [Page footer and feedback](/docs/guides/feedback).
+
+### footer
+
+Off while it is `null`. Set it to show a footer with columns of links under every docs page and on the landing page, where it replaces the author link.
+
+```ts title="src/shared/config/site.ts"
+footer: {
+  columns: [
+    {
+      title: "Docs",
+      links: [
+        { label: "Introduction", href: "/docs" },
+        { label: "Configuration", href: "/docs/components/reference/configuration" },
+      ],
+    },
+    {
+      title: "Community",
+      links: [{ label: "GitHub", href: "https://github.com/you/repo" }],
+    },
+  ],
+  copyright: "© 2026 Your name",
+},
+```
+
+<TypeTable
+  type={{
+    columns: {
+      type: "{ title: string; links: { label: string; href: string }[] }[]",
+      description: "One column per entry. Four fit on a row on wide screens, two on narrow ones.",
+      required: true,
+    },
+    copyright: { type: "string", description: "A line under the columns." },
+  }}
+/>
+
+A link starting with `http` opens in a new tab. Any other link is a path inside the site.
+
+### landing
+
+Serves the landing page at `/`. When it is `false` or left out, `/` redirects to `/docs`, so the docs introduction is the first page visitors see. The sitemap and the top bar logo follow the same setting. See [Routing](/docs/concepts/routing).
 
 ### askAI
 

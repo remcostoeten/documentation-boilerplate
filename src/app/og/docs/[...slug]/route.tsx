@@ -4,8 +4,6 @@ import { pageImage } from "@/modules/docs/server/seo";
 import { source } from "@/modules/docs/server/source";
 import { site } from "@/shared/config/site";
 
-export const dynamic = "force-static";
-
 export async function GET(_request: Request, { params }: RouteContext<"/og/docs/[...slug]">) {
   const { slug } = await params;
   const page = source.getPage(slug.slice(0, -1));

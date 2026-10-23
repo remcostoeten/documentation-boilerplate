@@ -10,7 +10,8 @@ All notable changes to this project are documented in this file.
 - Changelog entries can set `url` instead of `file` to read GitHub Releases, a GitHub `blob` URL or any Markdown file.
 - Ask AI chat that answers from the text of the docs with Anthropic, OpenAI, Google or OpenRouter. It is off until `askAI` is set in `site.ts`, has a default rate limit and can be hidden per page or with `hideOn`.
 - `site.logo` for an image before the site name, with a dark mode variant, and `site.theme.accent` for the primary color.
-- `site.pageFooter` to turn the edit link and the last updated date on or off.
+- `site.pageFooter` to turn the feedback widget, the previous and next links, the edit link and the last updated date on or off.
+- `site.footer` for an opt in footer with columns of links under every docs page and on the landing page.
 - Twoslash hover types, type queries, completions and expected errors in code blocks marked `twoslash`.
 - `TypeTable` with highlighted types, one union member per line and a `typeDescription` override.
 - Pages for the content model, routing, sidebar, search, SEO and LLM output, icons, feedback, Docker and Vercel deployment, and reference pages for configuration, frontmatter, `meta.json`, environment variables and scripts.

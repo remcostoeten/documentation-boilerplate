@@ -3,6 +3,7 @@
 @import "fumadocs-ui/css/preset.css";
 @import "fumadocs-twoslash/twoslash.css";
 @import "../modules/docs/components/code-block.css";
+@import "../modules/docs/components/callout.css";
 @import "../modules/docs/components/twoslash.css";
 
 @source "../**/*.{ts,tsx}";
@@ -113,6 +114,12 @@ body {
 @media (min-width: 64rem) {
   .docs-layout {
     --fd-layout-width: min(calc(100vw - var(--sidebar-width)), 1200px);
+    padding-inline-start: var(--sidebar-width);
+  }
+}
+
+@media (min-width: 64rem) {
+  .docs-footer {
     padding-inline-start: var(--sidebar-width);
   }
 }
