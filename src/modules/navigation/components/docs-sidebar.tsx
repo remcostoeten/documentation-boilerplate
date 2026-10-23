@@ -5,6 +5,7 @@ import { useSearchContext } from "fumadocs-ui/contexts/search";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
+import { useRecentPages } from "@/modules/search/hooks/use-recent-pages";
 import { useMobileDialog } from "../hooks/use-mobile-dialog";
 import { setMobileNavigationOpen, useMobileNavigationOpen } from "../hooks/use-mobile-navigation";
 import { getNavigationSections } from "../utils/navigation-sections";
@@ -16,6 +17,7 @@ type Props = { tree: Root; repositoryUrl?: string };
 
 export function DocsSidebar({ tree, repositoryUrl }: Props) {
   const pathname = usePathname() || "/docs";
+  useRecentPages(pathname);
   const mobileOpen = useMobileNavigationOpen();
   const mobileDialogRef = useMobileDialog(mobileOpen);
   const { setOpenSearch } = useSearchContext();

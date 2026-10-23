@@ -15,13 +15,27 @@ The top level of the tree becomes **sections**:
 
 ## Behavior
 
-- Sections work as an accordion: opening one closes the others, and clicking the open one closes it.
-- The section that holds the current page is open on load.
-- A nested folder with an `index.mdx` shows as one link and expands while you are on its index or any page below it. See the [Reference](/docs/components/reference) folder.
+- Every section is open on load. Clicking a section header closes or reopens only that section.
+- A nested folder with an `index.mdx` shows as one link and its pages are always listed below it. See the [Reference](/docs/components/reference) folder.
 - A nested folder without an index is shown as a separator with its pages below it.
 - The active link is scrolled into view if it sits outside the visible part of the sidebar.
 - Below the `lg` breakpoint the sidebar is replaced by a full screen dialog opened from the menu button in the top bar.
 - Sections and folders open and close with one shared spring, `duration: 0.35` and `bounce: 0`, set in `sidebar-navigation.tsx` and `navigation-nodes.tsx`.
+
+## Keyboard shortcuts
+
+The sidebar can be driven from the keyboard on screens where it is visible, so from the `lg` breakpoint up. Shortcuts are ignored while a text field has focus, so they do not fire inside search or the Ask AI chat.
+
+Hold <kbd>Shift</kbd> and every section header shows a letter, <kbd>A</kbd> for the first section, <kbd>B</kbd> for the second and so on. The active section, which starts as the one holding the current page, has a brighter badge and its pages are numbered in sidebar order from <kbd>1</kbd> to <kbd>9</kbd> and then <kbd>0</kbd> for the tenth. Release <kbd>Shift</kbd> to hide the badges.
+
+- <kbd>Shift</kbd> + number opens that page.
+- <kbd>Shift</kbd> + letter makes that section active: it opens if it was closed, its first page
+  gets focus and its pages take over the numbers. Keep holding <kbd>Shift</kbd> and press a number
+  to open one of them.
+
+On a page in `Concepts`, holding <kbd>Shift</kbd> numbers the pages of `Concepts` and nothing else. <kbd>Shift</kbd> + <kbd>C</kbd> switches the numbers to `Guides`, and <kbd>Shift</kbd> + <kbd>2</kbd> then opens the second guide. Pages below a nested folder count too, so the folder link and its children take consecutive numbers. External links are skipped, and a section with more than ten pages only numbers the first ten.
+
+The logic is in `src/modules/navigation/hooks/use-sidebar-shortcuts.ts`, the badge is `shortcut-key.tsx`, and `getSectionShortcuts` in `utils/navigation-sections.ts` decides which page gets which number.
 
 ## What `meta.json` controls
 

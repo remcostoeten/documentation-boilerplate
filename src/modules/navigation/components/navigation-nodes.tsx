@@ -7,11 +7,14 @@ import { nodeContainsPath } from "../utils/navigation-sections";
 import { NavigationLink } from "./navigation-link";
 import { NavigationSeparator } from "./navigation-separator";
 
+type Shortcuts = ReadonlyMap<string, string>;
+
 type NodesProps = {
   nodes: Node[];
   pathname: string;
   onNavigate?: () => void;
   nested?: boolean;
+  shortcuts?: Shortcuts;
 };
 
 type NodeProps = {
@@ -19,6 +22,7 @@ type NodeProps = {
   pathname: string;
   onNavigate?: () => void;
   nested: boolean;
+  shortcuts?: Shortcuts;
 };
 
 type FolderProps = {
@@ -26,9 +30,16 @@ type FolderProps = {
   pathname: string;
   onNavigate?: () => void;
   nested: boolean;
+  shortcuts?: Shortcuts;
 };
 
-export function NavigationNodes({ nodes, pathname, onNavigate, nested = false }: NodesProps) {
+export function NavigationNodes({
+  nodes,
+  pathname,
+  onNavigate,
+  nested = false,
+  shortcuts,
+}: NodesProps) {
   return (
     <div
       className={cn(
@@ -44,6 +55,7 @@ export function NavigationNodes({ nodes, pathname, onNavigate, nested = false }:
           pathname={pathname}
           onNavigate={onNavigate}
           nested={nested}
+          shortcuts={shortcuts}
         />
       ))}
     </div>
@@ -56,7 +68,7 @@ function getNodeKey(node: Node, index: number) {
   return `separator-${index}`;
 }
 
-function NavigationNode({ node, pathname, onNavigate, nested }: NodeProps) {
+function NavigationNode({ node, pathname, onNavigate, nested, shortcuts }: NodeProps) {
   if (node.type === "separator") return <NavigationSeparator>{node.name}</NavigationSeparator>;
 
   if (node.type === "page") {
@@ -66,16 +78,23 @@ function NavigationNode({ node, pathname, onNavigate, nested }: NodeProps) {
         active={node.url === pathname}
         onNavigate={onNavigate}
         nested={nested}
+        shortcut={shortcuts?.get(node.url)}
       />
     );
   }
 
   return (
-    <NavigationFolder folder={node} pathname={pathname} onNavigate={onNavigate} nested={nested} />
+    <NavigationFolder
+      folder={node}
+      pathname={pathname}
+      onNavigate={onNavigate}
+      nested={nested}
+      shortcuts={shortcuts}
+    />
   );
 }
 
-function NavigationFolder({ folder, pathname, onNavigate, nested }: FolderProps) {
+function NavigationFolder({ folder, pathname, onNavigate, nested, shortcuts }: FolderProps) {
   const active = nodeContainsPath(folder, pathname);
   const index = folder.index;
 
@@ -88,6 +107,7 @@ function NavigationFolder({ folder, pathname, onNavigate, nested }: FolderProps)
           pathname={pathname}
           onNavigate={onNavigate}
           nested={nested}
+          shortcuts={shortcuts}
         />
       </>
     );
@@ -102,9 +122,10 @@ function NavigationFolder({ folder, pathname, onNavigate, nested }: FolderProps)
         active={active}
         onNavigate={onNavigate}
         nested={nested}
+        shortcut={shortcuts?.get(index.url)}
       />
       <AnimatePresence initial={false}>
-        {active && children.length > 0 ? (
+        {children.length > 0 ? (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -116,7 +137,13 @@ function NavigationFolder({ folder, pathname, onNavigate, nested }: FolderProps)
             transition={{ type: "spring", duration: 0.35, bounce: 0 }}
             className="overflow-hidden"
           >
-            <NavigationNodes nodes={children} pathname={pathname} onNavigate={onNavigate} nested />
+            <NavigationNodes
+              nodes={children}
+              pathname={pathname}
+              onNavigate={onNavigate}
+              nested
+              shortcuts={shortcuts}
+            />
           </motion.div>
         ) : null}
       </AnimatePresence>

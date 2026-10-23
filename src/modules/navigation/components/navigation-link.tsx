@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/shared/helpers/cn";
 import { useActiveScroll } from "../hooks/use-active-scroll";
 import type { SidebarPageNode } from "../types/navigation";
+import { ShortcutKey } from "./shortcut-key";
 import { SidebarBadge } from "./sidebar-badge";
 
 type Props = {
@@ -12,9 +13,10 @@ type Props = {
   active: boolean;
   onNavigate?: () => void;
   nested: boolean;
+  shortcut?: string;
 };
 
-export function NavigationLink({ node, active, onNavigate, nested }: Props) {
+export function NavigationLink({ node, active, onNavigate, nested, shortcut }: Props) {
   const opensNewTab = node.external && node.url.startsWith("http");
   const linkRef = useActiveScroll(active);
 
@@ -37,6 +39,7 @@ export function NavigationLink({ node, active, onNavigate, nested }: Props) {
       <SidebarIcon icon={node.icon} />
       <span className="min-w-0 grow truncate">{node.sidebarTitle ?? node.name}</span>
       {node.sidebarBadge ? <SidebarBadge active={active}>{node.sidebarBadge}</SidebarBadge> : null}
+      {shortcut ? <ShortcutKey modifier="Shift">{shortcut}</ShortcutKey> : null}
     </Link>
   );
 }

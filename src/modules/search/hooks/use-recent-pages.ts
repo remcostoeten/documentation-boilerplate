@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import * as z from "zod";
 import { noop } from "@/shared/helpers/noop";
@@ -46,13 +45,11 @@ function rememberPage(page: RecentPage) {
  * them before a query is typed.
  *
  * @example
- * useRecentPages()
+ * useRecentPages(pathname)
  */
-export function useRecentPages() {
-  const pathname = usePathname();
-
+export function useRecentPages(pathname: string) {
   useEffect(() => {
     const title = document.title.split(" | ")[0];
-    if (pathname && title) rememberPage({ url: pathname, title });
+    if (title) rememberPage({ url: pathname, title });
   }, [pathname]);
 }

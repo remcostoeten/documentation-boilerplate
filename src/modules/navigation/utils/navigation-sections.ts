@@ -67,18 +67,54 @@ export function nodeContainsPath(node: Node, pathname: string): boolean {
 }
 
 /**
- * @name getDefaultOpen
+ * @name getCurrentSection
  * @description Index of the section that holds the current page, falling back
  * to the first section.
  *
  * @example
- * const [open, setOpen] = useState(() => getDefaultOpen(sections, pathname))
+ * const section = sections[getCurrentSection(sections, pathname)]
  */
-export function getDefaultOpen(sections: NavigationSection[], pathname: string) {
+export function getCurrentSection(sections: NavigationSection[], pathname: string) {
   const index = sections.findIndex(
     (section) =>
       isPathWithinFolderIndex(section.index?.url, pathname) ||
       section.children.some((node) => nodeContainsPath(node, pathname)),
   );
   return index === -1 ? 0 : index;
+}
+
+export const shortcutKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"] as const;
+
+export const sectionKeys = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"] as const;
+
+/**
+ * @name getSectionShortcuts
+ * @description Maps the first ten internal page URLs of a section, in sidebar
+ * order, to the digit that opens them.
+ *
+ * @example
+ * getSectionShortcuts(section).get("/docs/guides/theming") // "2"
+ */
+export function getSectionShortcuts(section: NavigationSection) {
+  const urls: string[] = [];
+  collectPageUrls(section.children, urls);
+  return new Map(
+    urls.slice(0, shortcutKeys.length).map((url, index) => [url, shortcutKeys[index]]),
+  );
+}
+
+function collectPageUrls(nodes: Node[], urls: string[]) {
+  for (const node of nodes) {
+    if (node.type === "page") {
+      if (!node.external) urls.push(node.url);
+      continue;
+    }
+    if (node.type === "folder") {
+      if (node.index && !node.index.external) urls.push(node.index.url);
+      collectPageUrls(
+        node.children.filter((child) => child !== node.index),
+        urls,
+      );
+    }
+  }
 }
