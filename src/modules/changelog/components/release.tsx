@@ -28,8 +28,8 @@ function formatDate(date: string) {
  */
 export function Release({ date, children }: Props) {
   return (
-    <section className="mt-10 grid gap-3 border-t border-foreground/8 pt-8 first:mt-0 first:border-t-0 first:pt-0 md:grid-cols-[9rem_minmax(0,1fr)] md:gap-8">
-      <div className="text-sm text-foreground/50 md:sticky md:top-[calc(var(--topbar-height)+1.5rem)] md:self-start">
+    <section className="mt-10 grid gap-3 border-t border-fd-foreground/8 pt-8 first:mt-0 first:border-t-0 first:pt-0 md:grid-cols-[9rem_minmax(0,1fr)] md:gap-8">
+      <div className="text-sm text-fd-foreground/50 md:sticky md:top-[calc(var(--topbar-height)+1.5rem)] md:self-start">
         {date ? <time dateTime={date}>{formatDate(date)}</time> : null}
       </div>
       <div className="min-w-0 [&>h2]:mt-0">{children}</div>

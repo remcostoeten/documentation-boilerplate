@@ -1,7 +1,7 @@
 {
   "name": "create-docs-boilerplate",
   "version": "0.1.0",
-  "description": "Create a documentation site from docs-boilerplate, built on Next.js and Fumadocs.",
+  "description": "Create a documentation site from docs-boilerplate. Runs docs-boilerplate init.",
   "keywords": [
     "create",
     "docs",
@@ -26,17 +26,14 @@
     "directory": "packages/create-docs-boilerplate"
   },
   "bin": {
-    "create-docs-boilerplate": "dist/index.js"
+    "create-docs-boilerplate": "index.js"
   },
   "files": [
-    "dist",
-    "template.json"
+    "index.js"
   ],
   "type": "module",
-  "scripts": {
-    "build": "bun scripts/build-template.ts && bun build src/index.ts --target node --outfile dist/index.js",
-    "prepack": "bun run build",
-    "test": "bun test"
+  "dependencies": {
+    "docs-boilerplate": "^0.1.0"
   },
   "engines": {
     "node": ">=20"

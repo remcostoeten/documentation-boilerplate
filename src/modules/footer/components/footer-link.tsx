@@ -5,7 +5,7 @@ import type { FooterLink as FooterLinkData } from "../types";
 import { linkKind } from "../utils/link-kind";
 
 const linkClass =
-  "inline-flex items-center gap-1.5 text-foreground/50 transition-colors duration-150 ease-hover hover:text-foreground focus-visible:text-foreground";
+  "inline-flex items-center gap-1.5 text-fd-foreground/50 transition-colors duration-150 ease-hover hover:text-fd-foreground focus-visible:text-fd-foreground";
 
 type Props = { link: FooterLinkData };
 

@@ -21,7 +21,7 @@ export function CopyButton({ text, label }: Props) {
       onClick={() => {
         void navigator.clipboard.writeText(text).then(() => setCopied(true));
       }}
-      className="pressable inline-flex size-6 items-center justify-center rounded-md text-foreground/40 hover:text-foreground focus-visible:text-foreground"
+      className="pressable inline-flex size-6 items-center justify-center rounded-md text-fd-foreground/40 hover:text-fd-foreground focus-visible:text-fd-foreground"
     >
       {copied ? <CheckIcon className="size-3.5" /> : <CopyIcon className="size-3.5" />}
     </button>

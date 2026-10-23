@@ -1,0 +1,77 @@
+---
+title: Working with AI agents
+sidebarTitle: AI agents
+description: The agent instructions, skill and llms.txt that let a coding agent set up and change the site.
+icon: Lightbulb
+---
+
+Four things help a coding agent work on this site. Three are files in the repository, one is built into the site.
+
+Install the skill:
+
+```bash
+npx skills add remcostoeten/docs-boilerplate
+```
+
+| What               | Where                                 | For                                                                                   |
+| ------------------ | ------------------------------------- | ------------------------------------------------------------------------------------- |
+| Agent instructions | `AGENTS.md`                           | Commands, layout, code style and the rules that fail a build                          |
+| Skill              | `skills/docs-boilerplate`             | Task guides: setup, styling, migrating Markdown, databases, deployment                |
+| Repository index   | `llms.txt` in the repository root     | A list of the files worth reading, with raw URLs                                      |
+| Site output        | `/llms.txt`, `/llms-full.txt`, `.mdx` | The published docs as Markdown. See [SEO and LLM output](/docs/concepts/seo-and-llms) |
+
+## AGENTS.md
+
+Agents such as Claude Code, Codex and Cursor read `AGENTS.md` from the project root before they start. It lists the commands (`bun dev`, `bun run check`, `bun run typecheck`, `bun test`, `bun run build`), the folder layout, how to add a page, the code style and the rules for each feature. The block at the top is written by `next dev`, keep it.
+
+When a command, folder or option changes, update `AGENTS.md` in the same change, so the next agent does not work from stale facts.
+
+## The skill
+
+The skill is a `SKILL.md` with one reference file per task. An agent loads the reference for the task at hand instead of the whole project.
+
+| Reference                 | Covers                                                                          |
+| ------------------------- | ------------------------------------------------------------------------------- |
+| `getting-the-project`     | Cloning, `init` and its flags, `add`, `diff`                                    |
+| `configuring`             | Every `site.ts` field, footers, repository detection, environment variables     |
+| `styling`                 | Accent color, radius, logo, favicon, theme presets, fonts, icons                |
+| `frontmatter-and-sidebar` | The frontmatter schema, `meta.json`, adding pages and sections                  |
+| `migrating-markdown`      | Moving existing Markdown or MDX in, fixing MDX syntax, links, images, redirects |
+| `ai-setup`                | Ask AI, `llms.txt`, Markdown output, SEO output                                 |
+| `databases`               | Feedback stores, Postgres, Neon, libSQL, the changelog                          |
+| `deployment`              | The checklist, Vercel, Docker, CI                                               |
+
+Install it with the skills CLI, or copy the folder into `.claude/skills`:
+
+```bash
+npx skills add remcostoeten/docs-boilerplate
+```
+
+With it loaded, a short prompt is enough:
+
+```text
+Migrate the Markdown in ./old-docs into this site and fix the build.
+```
+
+## llms.txt in the repository
+
+The `llms.txt` in the repository root is not the one the site serves. It points an agent at the files of the repository: `AGENTS.md`, the skill, the configuration reference and the guides, each as a raw URL. Give an agent that link when it has no checkout yet.
+
+The site serves its own `/llms.txt`, with a line for every docs page. Do not add a `public/llms.txt`, it would clash with the route.
+
+## Prompts
+
+`PROMPT_GUIDE.md` in the repository root has copy and paste prompts for creating a site, configuring a clone, writing the docs, turning on Ask AI, storing feedback in a database, publishing a changelog, deploying and reviewing a change. Each one names the files to read first and the checks to run. It also has a block of rules to put at the start of a prompt when the agent does not read `AGENTS.md`.
+
+## Check an agent's work
+
+Whatever the agent changed, these catch most mistakes:
+
+```bash
+bun run check
+bun run typecheck
+bun test
+bun run build
+```
+
+`bun run build` fails on broken internal links, unknown frontmatter fields and type errors in `twoslash` code blocks. Never let an agent commit an API key, and keep the Ask AI rate limit.

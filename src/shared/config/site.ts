@@ -1,16 +1,7 @@
 import type { ComponentType, SVGProps } from "react";
 import type { AskAIConfig } from "@/modules/ask-ai/types";
+import type { ChangelogConfig } from "@/modules/changelog/types";
 import type { FooterConfig } from "@/modules/footer/types";
-
-type ChangelogSource = { file: string; url?: never } | { url: string; file?: never };
-
-export type ChangelogConfig = ChangelogSource & {
-  page: string;
-  title: string;
-  description: string;
-  skipPrereleases?: boolean;
-  editUrl?: string | false;
-};
 
 export type LogoSource = string | ComponentType<SVGProps<SVGSVGElement>>;
 

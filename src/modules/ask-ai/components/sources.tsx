@@ -29,8 +29,8 @@ export function Sources({ text }: Props) {
   if (sources.length === 0) return null;
 
   return (
-    <details className="mt-2 text-xs text-foreground/50">
-      <summary className="pressable inline-flex w-fit cursor-pointer list-none items-center gap-1 hover:text-foreground [&::-webkit-details-marker]:hidden">
+    <details className="mt-2 text-xs text-fd-foreground/50">
+      <summary className="pressable inline-flex w-fit cursor-pointer list-none items-center gap-1 hover:text-fd-foreground [&::-webkit-details-marker]:hidden">
         Sources ({sources.length})
       </summary>
       <ul className="mt-1.5 space-y-1">
@@ -38,10 +38,10 @@ export function Sources({ text }: Props) {
           <li key={source.url}>
             <Link
               href={source.url}
-              className="block truncate rounded-md border border-foreground/10 px-2 py-1 text-foreground/70 hover:bg-foreground/4 hover:text-foreground"
+              className="block truncate rounded-md border border-fd-foreground/10 px-2 py-1 text-fd-foreground/70 hover:bg-fd-foreground/4 hover:text-fd-foreground"
             >
               {source.title}
-              <span className="ms-1.5 text-foreground/35">{source.url}</span>
+              <span className="ms-1.5 text-fd-foreground/35">{source.url}</span>
             </Link>
           </li>
         ))}

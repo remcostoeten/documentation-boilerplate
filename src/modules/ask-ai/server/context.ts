@@ -1,5 +1,13 @@
 import "server-only";
-import { source } from "@/modules/docs/server/source";
+
+export type AskAIPage = {
+  url: string;
+  data: {
+    title: string;
+    description?: string;
+    getText: (type: "processed") => Promise<string>;
+  };
+};
 
 type IndexedPage = {
   url: string;
@@ -13,9 +21,9 @@ const minTermLength = 3;
 
 let index: Promise<IndexedPage[]> | undefined;
 
-function loadIndex() {
+function loadIndex(pages: AskAIPage[]) {
   index ??= Promise.all(
-    source.getPages().map(async (page) => {
+    pages.map(async (page) => {
       const text = await page.data.getText("processed");
       const description = page.data.description ?? "";
       return {
@@ -54,14 +62,15 @@ function score(page: IndexedPage, terms: string[]) {
  * reader is on and the pages that best match the question, in order of match.
  *
  * @example
- * const context = await buildContext("How do I deploy?", "/docs/guides", 60000)
+ * const context = await buildContext(source.getPages(), "How do I deploy?", "/docs/guides", 60000)
  */
 export async function buildContext(
+  source: AskAIPage[],
   question: string,
   currentUrl: string | undefined,
   maxChars: number,
 ) {
-  const pages = await loadIndex();
+  const pages = await loadIndex(source);
   const total = pages.reduce((sum, page) => sum + page.text.length, 0);
   if (total <= maxChars) return pages.map((page) => format(page, maxChars)).join("\n\n---\n\n");
 

@@ -10,6 +10,20 @@ icon: Download
 - [Vite+](https://viteplus.dev) (`vp`) for `bun run check`, which formats and lints. It is not needed to run or build the site.
 - Git, if you want the repository link, the edit links and the last updated dates. See [Repository detection](#repository-detection).
 
+## Create a site
+
+```bash
+bun create docs-boilerplate my-docs
+```
+
+This asks for the site name, description, production URL, author, accent color, the docs to start with and the features to turn on, then writes the site to `my-docs` with `src/shared/config/site.ts` filled in, installs and makes the first commit. Every question has a flag, such as `--accent blue` or `--features feedback,footer`, and `--yes` takes the defaults. To copy single modules into an existing Next.js and Fumadocs project instead:
+
+```bash
+npx docs-boilerplate add feedback footer
+```
+
+`npx docs-boilerplate list` shows the modules, and `npx docs-boilerplate diff <module>` shows how your copy differs from the latest version. In a clone of this repository, skip to the next step.
+
 ## Install and run
 
 ```bash

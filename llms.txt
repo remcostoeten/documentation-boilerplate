@@ -1,0 +1,50 @@
+# docs-boilerplate
+
+> A documentation site starter built on Next.js and Fumadocs, run with Bun. Pages are MDX files in `content/docs`, the sidebar is built from the folder structure and `meta.json` files, and the whole site is configured in one object, `src/shared/config/site.ts`. It ships with search, an animated accordion sidebar, Markdown and `llms.txt` output for every page, Open Graph images, a feedback widget, an optional Ask AI chat and a changelog page.
+
+Stack: Next.js 16 with Cache Components, React 19, Tailwind 4, Fumadocs 16, motion, AI SDK 7, TypeScript 6. Package manager and runtime: Bun 1.3 or newer. Lint and format: Oxlint and oxfmt through Vite+ (`vp`). There is no ESLint or Prettier.
+
+Read AGENTS.md before changing code. It lists the commands, the layout, the code style and the rules that fail a build.
+
+## Get the project
+
+- [Prompt guide](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/PROMPT_GUIDE.md): how to get the project, what to configure in what order, and prompts that do it
+- [README](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/README.md): what the project includes and the development commands
+- [CLI README](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/packages/cli/README.md): `init`, `add`, `diff` and `list`, with every option
+
+## Agent instructions
+
+- [Skill](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/skills/docs-boilerplate/SKILL.md): the docs-boilerplate skill, with references for getting the project, configuring, styling, frontmatter, migrating Markdown, AI setup, databases and deployment
+- [AGENTS.md](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/AGENTS.md): commands, layout, code style, and how each feature is wired
+
+## Configuration
+
+- [site.ts](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/src/shared/config/site.ts): the `site` object, the only file most users edit
+- [Configuration reference](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/components/reference/configuration.mdx): every option of `site.ts`, `source.config.ts` and the layout CSS
+- [Environment variables](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/components/reference/environment-variables.mdx): `NEXT_PUBLIC_SITE_URL`, the Ask AI keys and the repository detection fallbacks
+- [Frontmatter reference](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/components/reference/frontmatter.mdx): the fields a page can set
+- [meta.json reference](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/components/reference/meta-json.mdx): how folders and the sidebar order are defined
+- [source.config.ts](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/source.config.ts): the MDX collection and the frontmatter schema
+
+## Guides
+
+- [Installation](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/installation.mdx): requirements, install, dev server and environment
+- [Quick start](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/quick-start.mdx): add a page, a section and make the site yours
+- [Theming](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/guides/theming.mdx): accent color, radius, logo and favicon
+- [Ask AI](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/guides/ask-ai.mdx): provider, model, rate limit and page level hiding
+- [Page footer and feedback](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/guides/feedback.mdx): the feedback widget and where feedback is stored
+- [Changelog](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/guides/changelog.mdx): generate a changelog page from a file or GitHub Releases
+- [Deployment](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/content/docs/guides/deployment/index.mdx): the checklist before a deploy, then Vercel and Docker
+
+## Source
+
+- [src/modules](https://github.com/remcostoeten/docs-boilerplate/tree/master/src/modules): one folder per feature: ask-ai, changelog, docs, feedback, footer, navigation, search, theme
+- [src/app](https://github.com/remcostoeten/docs-boilerplate/tree/master/src/app): routes for docs pages, search, Ask AI, `llms.txt`, Markdown output and Open Graph images
+- [scripts](https://github.com/remcostoeten/docs-boilerplate/tree/master/scripts): dev server wrapper, changelog sync, link check and the registry build
+- [packages/cli](https://github.com/remcostoeten/docs-boilerplate/tree/master/packages/cli): the `docs-boilerplate` CLI that creates a site and copies modules into other projects
+
+## Optional
+
+- [Registry items](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/scripts/registry/items.ts): the modules the CLI can copy, with their files, dependencies and setup questions
+- [CI workflow](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/.github/workflows/ci.yml): the checks that run on every push and pull request
+- [Changelog](https://raw.githubusercontent.com/remcostoeten/docs-boilerplate/master/CHANGELOG.md): what changed in each release

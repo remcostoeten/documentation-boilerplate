@@ -1,4 +1,4 @@
-import type { ChangelogConfig } from "@/shared/config/site";
+import type { ChangelogConfig } from "../types";
 import type { Release } from "./parse-changelog";
 
 export const generatedMarker =

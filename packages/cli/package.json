@@ -1,0 +1,52 @@
+{
+  "name": "docs-boilerplate",
+  "version": "0.1.0",
+  "description": "Create a documentation site from docs-boilerplate, or copy its modules into an existing Next.js and Fumadocs project.",
+  "keywords": [
+    "cli",
+    "docs",
+    "documentation",
+    "fumadocs",
+    "nextjs",
+    "registry",
+    "starter",
+    "template"
+  ],
+  "homepage": "https://github.com/remcostoeten/docs-boilerplate#readme",
+  "bugs": {
+    "url": "https://github.com/remcostoeten/docs-boilerplate/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Remco Stoeten",
+    "url": "https://remcostoeten.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remcostoeten/docs-boilerplate.git",
+    "directory": "packages/cli"
+  },
+  "bin": {
+    "docs-boilerplate": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "template.json",
+    "registry"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "bun run --cwd ../.. build:registry && bun scripts/build-assets.ts && bun build src/cli.ts --target node --outfile dist/cli.js",
+    "prepack": "bun run build",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "postcss": "^8.5.31"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

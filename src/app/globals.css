@@ -2,6 +2,7 @@
 @import "fumadocs-ui/css/black.css";
 @import "fumadocs-ui/css/preset.css";
 @import "fumadocs-twoslash/twoslash.css";
+@import "../shared/styles/core.css";
 @import "../modules/docs/components/code-block.css";
 @import "../modules/docs/components/callout.css";
 @import "../modules/docs/components/twoslash.css";
@@ -19,9 +20,6 @@
 }
 
 @theme {
-  --ease-hover: ease;
-  --ease-snappy: cubic-bezier(0.23, 1, 0.32, 1);
-
   --animate-fd-dialog-in: none;
   --animate-fd-dialog-out: none;
   --animate-fd-fade-in: none;
@@ -65,17 +63,6 @@
       height: 0;
       opacity: 0;
     }
-  }
-}
-
-@utility pressable {
-  transition-property: color, background-color, border-color, transform;
-  transition-duration: 150ms, 150ms, 150ms, 160ms;
-  transition-timing-function:
-    var(--ease-hover), var(--ease-hover), var(--ease-hover), var(--ease-snappy);
-
-  &:active {
-    transform: scale(0.97);
   }
 }
 
@@ -187,7 +174,7 @@ body {
     --animate-fd-accordion-up: none;
   }
 
-  :where(.pressable, a.bg-fd-card):active {
+  :where(a.bg-fd-card):active {
     transform: none;
   }
 }

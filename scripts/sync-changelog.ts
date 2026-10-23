@@ -13,7 +13,8 @@ import {
   renderChangelogPage,
 } from "../src/modules/changelog/utils/render-changelog-page";
 import { repositoryFileUrl } from "../src/shared/config/repository";
-import { type ChangelogConfig, site } from "../src/shared/config/site";
+import type { ChangelogConfig } from "../src/modules/changelog/types";
+import { site } from "../src/shared/config/site";
 
 const githubPages = 5;
 

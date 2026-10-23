@@ -18,7 +18,7 @@ type Props = {
 
 const ease = [0.23, 1, 0.32, 1] as const;
 const actionClass =
-  "pressable inline-flex h-7 items-center gap-1.5 rounded-md border border-foreground/10 px-2.5 text-xs text-foreground/60 hover:border-foreground/20 hover:bg-foreground/4 hover:text-foreground focus-visible:bg-foreground/8 focus-visible:text-foreground";
+  "pressable inline-flex h-7 items-center gap-1.5 rounded-md border border-fd-foreground/10 px-2.5 text-xs text-fd-foreground/60 hover:border-fd-foreground/20 hover:bg-fd-foreground/4 hover:text-fd-foreground focus-visible:bg-fd-foreground/8 focus-visible:text-fd-foreground";
 
 let sharedChat: Chat<UIMessage> | undefined;
 let sharedOpen = false;
@@ -105,9 +105,9 @@ export function AskAI({ title, placeholder, suggestions }: Props) {
               transform: "translateY(4px) scale(0.98)",
               transition: { duration: 0.12, ease },
             }}
-            className="not-prose fixed inset-auto right-4 bottom-4 z-40 m-0 flex p-0 text-foreground h-[min(34rem,calc(100dvh-6rem))] w-[min(26rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-xl border border-foreground/10 bg-background text-sm shadow-xl"
+            className="not-prose fixed inset-auto right-4 bottom-4 z-40 m-0 flex p-0 text-fd-foreground h-[min(34rem,calc(100dvh-6rem))] w-[min(26rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-xl border border-fd-foreground/10 bg-fd-background text-sm shadow-xl"
           >
-            <div className="flex items-center justify-between border-b border-foreground/8 px-3 py-2">
+            <div className="flex items-center justify-between border-b border-fd-foreground/8 px-3 py-2">
               <span className="font-medium">{title}</span>
               <div className="flex items-center gap-1">
                 {messages.length > 0 ? (
@@ -117,7 +117,7 @@ export function AskAI({ title, placeholder, suggestions }: Props) {
                       stop();
                       setMessages([]);
                     }}
-                    className="pressable rounded-md px-2 py-1 text-xs text-foreground/50 hover:text-foreground"
+                    className="pressable rounded-md px-2 py-1 text-xs text-fd-foreground/50 hover:text-fd-foreground"
                   >
                     Clear
                   </button>
@@ -126,7 +126,7 @@ export function AskAI({ title, placeholder, suggestions }: Props) {
                   type="button"
                   aria-label="Close"
                   onClick={close}
-                  className="pressable inline-flex size-7 items-center justify-center rounded-md text-foreground/50 hover:text-foreground"
+                  className="pressable inline-flex size-7 items-center justify-center rounded-md text-fd-foreground/50 hover:text-fd-foreground"
                 >
                   <CloseIcon className="size-3.5" />
                 </button>
@@ -138,7 +138,7 @@ export function AskAI({ title, placeholder, suggestions }: Props) {
                 <div ref={contentRef} className="space-y-3 p-3">
                   {messages.length === 0 ? (
                     <div className="space-y-2">
-                      <p className="text-foreground/50">
+                      <p className="text-fd-foreground/50">
                         Answers come from this documentation and can be wrong.
                       </p>
                       {suggestions.map((suggestion) => (
@@ -146,7 +146,7 @@ export function AskAI({ title, placeholder, suggestions }: Props) {
                           key={suggestion}
                           type="button"
                           onClick={() => ask(suggestion)}
-                          className="pressable block w-full rounded-md border border-foreground/10 px-2.5 py-1.5 text-start text-foreground/70 hover:bg-foreground/4 hover:text-foreground"
+                          className="pressable block w-full rounded-md border border-fd-foreground/10 px-2.5 py-1.5 text-start text-fd-foreground/70 hover:bg-fd-foreground/4 hover:text-fd-foreground"
                         >
                           {suggestion}
                         </button>
@@ -161,7 +161,7 @@ export function AskAI({ title, placeholder, suggestions }: Props) {
                       return (
                         <p
                           key={message.id}
-                          className="ms-auto w-fit max-w-[85%] rounded-lg bg-foreground/6 px-2.5 py-1.5"
+                          className="ms-auto w-fit max-w-[85%] rounded-lg bg-fd-foreground/6 px-2.5 py-1.5"
                         >
                           {text}
                         </p>
@@ -181,7 +181,9 @@ export function AskAI({ title, placeholder, suggestions }: Props) {
                       </div>
                     );
                   })}
-                  {status === "submitted" ? <p className="text-foreground/40">Thinking…</p> : null}
+                  {status === "submitted" ? (
+                    <p className="text-fd-foreground/40">Thinking…</p>
+                  ) : null}
                   {error ? (
                     <p role="alert" className="text-red-600 dark:text-red-400">
                       {readError(error.message)}
@@ -194,7 +196,7 @@ export function AskAI({ title, placeholder, suggestions }: Props) {
                   type="button"
                   aria-label="Scroll to latest"
                   onClick={() => void scrollToBottom()}
-                  className="pressable absolute start-1/2 bottom-2 inline-flex h-7 -translate-x-1/2 items-center rounded-full border border-foreground/10 bg-background px-3 text-xs text-foreground/60 shadow-sm hover:text-foreground"
+                  className="pressable absolute start-1/2 bottom-2 inline-flex h-7 -translate-x-1/2 items-center rounded-full border border-fd-foreground/10 bg-fd-background px-3 text-xs text-fd-foreground/60 shadow-sm hover:text-fd-foreground"
                 >
                   Latest
                 </button>
@@ -206,7 +208,7 @@ export function AskAI({ title, placeholder, suggestions }: Props) {
                 event.preventDefault();
                 ask(input);
               }}
-              className="flex items-center gap-2 border-t border-foreground/8 p-2"
+              className="flex items-center gap-2 border-t border-fd-foreground/8 p-2"
             >
               <input
                 ref={field}
@@ -214,7 +216,7 @@ export function AskAI({ title, placeholder, suggestions }: Props) {
                 onChange={(event) => setInput(event.target.value)}
                 placeholder={placeholder}
                 maxLength={2000}
-                className="min-w-0 flex-1 rounded-md bg-transparent px-2 py-1.5 outline-none placeholder:text-foreground/35"
+                className="min-w-0 flex-1 rounded-md bg-transparent px-2 py-1.5 outline-none placeholder:text-fd-foreground/35"
               />
               {busy ? (
                 <button type="button" onClick={() => void stop()} className={actionClass}>

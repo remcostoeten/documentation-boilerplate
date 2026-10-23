@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import type { TemplateFile } from "./scaffold";
 
@@ -22,7 +22,7 @@ export function readRepositoryFiles(root: string): TemplateFile[] {
   );
   return output
     .split("\0")
-    .filter((path) => path && existsSync(join(root, path)))
+    .filter((path) => path && statSync(join(root, path), { throwIfNoEntry: false })?.isFile())
     .sort()
     .map((path) => ({ path, content: readFileSync(join(root, path), "utf8") }));
 }

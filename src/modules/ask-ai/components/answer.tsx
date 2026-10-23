@@ -18,7 +18,7 @@ function readCode(children: ComponentProps<"pre">["children"]) {
 
 function PlainCode({ children }: ComponentProps<"pre">) {
   return (
-    <pre className="my-2 overflow-x-auto rounded-md bg-foreground/5 p-2.5 text-xs leading-relaxed">
+    <pre className="my-2 overflow-x-auto rounded-md bg-fd-foreground/5 p-2.5 text-xs leading-relaxed">
       {children}
     </pre>
   );
@@ -40,7 +40,7 @@ const components: Components = {
   a({ href, children }) {
     if (href?.startsWith("/")) {
       return (
-        <Link href={href} className="underline underline-offset-2 hover:text-foreground">
+        <Link href={href} className="underline underline-offset-2 hover:text-fd-foreground">
           {children}
         </Link>
       );
@@ -50,7 +50,7 @@ const components: Components = {
         href={href}
         target="_blank"
         rel="noreferrer noopener"
-        className="underline underline-offset-2 hover:text-foreground"
+        className="underline underline-offset-2 hover:text-fd-foreground"
       >
         {children}
       </a>
@@ -60,7 +60,7 @@ const components: Components = {
     return className ? (
       <code className={className}>{children}</code>
     ) : (
-      <code className="rounded bg-foreground/8 px-1 py-0.5 font-mono text-[0.85em]">
+      <code className="rounded bg-fd-foreground/8 px-1 py-0.5 font-mono text-[0.85em]">
         {children}
       </code>
     );

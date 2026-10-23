@@ -1,5 +1,5 @@
 {
   "title": "Guides",
   "icon": "Compass",
-  "pages": ["theming", "icons", "feedback", "changelog", "ask-ai", "deployment"]
+  "pages": ["theming", "icons", "feedback", "changelog", "ask-ai", "ai-agents", "deployment"]
 }

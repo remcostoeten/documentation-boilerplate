@@ -7,6 +7,7 @@ import { PageMeta } from "@/modules/docs/components/page-meta";
 import { mdxComponents } from "@/modules/docs/mdx-components";
 import { SiteFooter } from "@/modules/footer";
 import { Feedback } from "@/modules/feedback/components/feedback";
+import { Logo } from "@/modules/navigation";
 import { pageImage, pageJsonLd } from "@/modules/docs/server/seo";
 import { source } from "@/modules/docs/server/source";
 import { repositoryFileUrl } from "@/shared/config/repository";
@@ -39,7 +40,7 @@ export default async function Page({ params }: Props) {
         <DocsTitle>{page.data.title}</DocsTitle>
         {page.data.description ? <DocsDescription>{page.data.description}</DocsDescription> : null}
         <PageActions markdownUrl={`${page.url}.mdx`}>
-          <AskAISlot url={page.url} enabled={page.data.askAI} />
+          <AskAISlot config={site.askAI} url={page.url} enabled={page.data.askAI} />
         </PageActions>
         <DocsBody>
           <MDX components={mdxComponents} />
@@ -53,7 +54,13 @@ export default async function Page({ params }: Props) {
           lastModified={site.pageFooter.lastUpdated ? page.data.lastModified : undefined}
         />
       </DocsPage>
-      <SiteFooter url={page.url} enabled={page.data.siteFooter} />
+      <SiteFooter
+        config={site.siteFooter}
+        siteName={site.name}
+        logo={<Logo />}
+        url={page.url}
+        enabled={page.data.siteFooter}
+      />
     </>
   );
 }

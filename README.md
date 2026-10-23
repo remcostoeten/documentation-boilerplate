@@ -12,10 +12,21 @@ Pages are MDX files in `content/docs`. The sidebar is built from the folder stru
 - Each page gets an Open Graph image, canonical and social metadata and TechArticle JSON-LD. `sitemap.xml` and `robots.txt` use `NEXT_PUBLIC_SITE_URL`.
 - Pages end with a feedback widget, an edit on GitHub link and the date of their last commit. The repository comes from the `origin` git remote, so no settings or tokens are needed. Feedback goes through a server action to `src/modules/feedback/server/feedback-handler.ts`, which only logs until you point it somewhere.
 - An optional Ask AI button answers questions from the docs with Anthropic, OpenAI, Google or OpenRouter. It is off until `askAI` is set in `site.ts`, and it has a rate limit and page level hiding.
+- `AGENTS.md`, a skill in `skills/docs-boilerplate` and `PROMPT_GUIDE.md` let a coding agent set up the site, migrate existing Markdown, configure Ask AI and feedback storage and deploy it. `llms.txt` in the repository root lists the files to read. See [Working with AI agents](content/docs/guides/ai-agents.mdx).
 - A changelog page is generated from `CHANGELOG.md` by `scripts/sync-changelog.ts`, or written by hand with the `Release` component. `changelogs` in `site.ts` lists the files, one page each, and can point outside the repository or at a URL such as GitHub Releases.
 - On small screens the sidebar becomes a full screen dialog behind the top bar menu button.
 
 The sidebar and top bar live in `src/modules/navigation`, layout sizes in `src/app/globals.css` (`--topbar-height`, `--sidebar-width`) and the site name, logo, accent color, URL and SEO metadata in `src/shared/config/site.ts`.
+
+## Agent skill
+
+Install the skill into your coding agent, then ask it to set up, restyle, migrate or deploy a site:
+
+```bash
+npx skills add remcostoeten/docs-boilerplate
+```
+
+It covers getting the project, configuring, styling, frontmatter, migrating Markdown, AI setup, databases and deployment. See [Working with AI agents](content/docs/guides/ai-agents.mdx).
 
 ## Development
 

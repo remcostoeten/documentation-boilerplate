@@ -1,8 +1,9 @@
-import { site } from "@/shared/config/site";
 import { isHiddenOn } from "@/shared/helpers/is-hidden-on";
+import type { AskAIConfig } from "../types";
 import { AskAI } from "./ask-ai";
 
 type Props = {
+  config: AskAIConfig | null;
   url: string;
   enabled?: boolean;
 };
@@ -10,16 +11,15 @@ type Props = {
 /**
  * @name AskAISlot
  * @description The Ask AI button for a docs page. Renders nothing unless
- * `site.askAI` is set, the page does not set `askAI: false` and its URL does not
+ * `config` is set, the page does not set `askAI: false` and its URL does not
  * match `hideOn`.
  *
  * @example
  * <PageActions markdownUrl={markdownUrl}>
- *   <AskAISlot url={page.url} enabled={page.data.askAI} />
+ *   <AskAISlot config={site.askAI} url={page.url} enabled={page.data.askAI} />
  * </PageActions>
  */
-export function AskAISlot({ url, enabled }: Props) {
-  const config = site.askAI;
+export function AskAISlot({ config, url, enabled }: Props) {
   if (!config || enabled === false || isHiddenOn(url, config.hideOn)) return null;
 
   return (

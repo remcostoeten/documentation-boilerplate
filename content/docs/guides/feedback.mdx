@@ -8,13 +8,13 @@ Four things sit under the content of each docs page: the feedback widget, the ed
 
 ## Feedback widget
 
-The widget asks "Was this page helpful?" with a Yes and a No button.
+The widget asks "Was this page helpful?" with a thumbs up and a thumbs down button. Each button shows how many votes it has.
 
-1. Clicking a button sends the rating at once.
-2. A text box then offers an optional note, up to 1000 characters. Sending it submits the same rating again with the note.
-3. After a note is sent the widget is replaced by a thank you.
+1. Clicking a button sends one vote through the server action `submitFeedback` in `src/modules/feedback/server/submit-feedback.ts`. It validates the input with Zod and passes it to `handleFeedback`, which saves it and returns the new totals.
+2. The counts are fetched when the page loads with `getFeedbackCounts`, and replaced by the totals the vote returns.
+3. The vote is remembered in the browser's `localStorage`, and both buttons are disabled for that page afterwards. This is a convenience, not protection: clearing storage allows another vote.
 
-Each submission goes through the server action `submitFeedback` in `src/modules/feedback/server/submit-feedback.ts`. It validates the input with Zod and passes it to `handleFeedback`. If that throws, the widget shows "Feedback could not be saved. Try again later." and logs the error on the server.
+If saving throws, the widget shows "Feedback could not be saved. Try again later." and logs the error on the server.
 
 The submitted data is:
 
@@ -26,36 +26,101 @@ The submitted data is:
       description: "The button that was clicked.",
       required: true,
     },
-    message: {
-      type: "string",
-      description: "The optional note, trimmed, at most 1000 characters.",
-    },
   }}
 />
 
 ### Where feedback goes
 
-By default `handleFeedback` only logs a line to the server console:
+`handleFeedback` passes each submission to the store exported from `src/modules/feedback/server/store.ts`. By default that is the console store. It logs a line to the server console and keeps the totals in memory, so the counts reset when the server restarts:
 
 ```txt
 [feedback] {"url":"/docs/guides/theming","rating":"helpful","at":"2026-10-18T09:12:44.000Z"}
 ```
 
-Replace the body of the function in `src/modules/feedback/server/feedback-handler.ts` to store it somewhere. The rest of the widget does not change.
+### Storing feedback in a database
 
-```ts title="src/modules/feedback/server/feedback-handler.ts"
-export async function handleFeedback(feedback: Feedback) {
-  await fetch(process.env.FEEDBACK_WEBHOOK_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...feedback, at: new Date().toISOString() }),
-  });
-}
+Three database stores are optional modules. `docs-boilerplate init` asks which one to use, and `add` installs one later:
+
+```bash
+npx docs-boilerplate add feedback-postgres
+```
+
+The store module adds its file to `src/modules/feedback/server/stores`, points `store.ts` at it, adds its package to `package.json` and its variables to `.env.local`, then installs. Each store saves to a `feedback` table that it creates on the first submission:
+
+| Module              | File          | Package                    | Environment variables                    |
+| ------------------- | ------------- | -------------------------- | ---------------------------------------- |
+| `feedback-postgres` | `postgres.ts` | `postgres`                 | `DATABASE_URL`                           |
+| `feedback-neon`     | `neon.ts`     | `@neondatabase/serverless` | `DATABASE_URL`                           |
+| `feedback-libsql`   | `libsql.ts`   | `@libsql/client`           | `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN` |
+
+Adding another store module switches to it, unless you changed `store.ts` yourself. `store.ts` is one line:
+
+```ts title="src/modules/feedback/server/store.ts"
+export { postgresStore as feedbackStore } from "./stores/postgres";
+```
+
+The table has the columns `id`, `url`, `rating` and `created_at`, one row per vote. Counts are a `group by rating` over the rows of a page. A table created by an earlier version also has a nullable `message` column, which is no longer written.
+
+<Tabs items={["Postgres in Docker", "Neon", "Turso or a local file"]}>
+<Tab value="Postgres in Docker">
+
+The module adds `compose.feedback.yml` to the project root. It starts Postgres 17 on port 5432 with a named volume:
+
+```bash
+docker compose -f compose.feedback.yml up -d
+```
+
+```bash title=".env.local"
+DATABASE_URL=postgres://docs:docs@localhost:5432/feedback
+```
+
+</Tab>
+<Tab value="Neon">
+
+Create a database in the Neon console and copy its connection string. The Neon store talks to it over HTTP, which also works in serverless and edge functions.
+
+```bash title=".env.local"
+DATABASE_URL=postgresql://user:password@ep-example.eu-central-1.aws.neon.tech/neondb?sslmode=require
+```
+
+</Tab>
+<Tab value="Turso or a local file">
+
+Set the URL and token of a Turso database:
+
+```bash title=".env.local"
+TURSO_DATABASE_URL=libsql://your-database.turso.io
+TURSO_AUTH_TOKEN=...
+```
+
+Without `TURSO_DATABASE_URL` the store writes to `feedback.db` in the project root, which is gitignored. A local file does not persist on serverless hosts such as Vercel.
+
+</Tab>
+</Tabs>
+
+For anything else, such as a webhook or an analytics tool, write a store with a `save` and a `counts` function and export it from `store.ts`:
+
+```ts title="src/modules/feedback/server/stores/webhook.ts"
+import type { FeedbackStore } from "../../types";
+
+export const webhookStore: FeedbackStore = {
+  async save(feedback) {
+    await fetch(process.env.FEEDBACK_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...feedback, at: new Date().toISOString() }),
+    });
+  },
+  async counts() {
+    return { helpful: 0, "not-helpful": 0 };
+  },
+};
 ```
 
 <Callout type="warn" title="No protection by default">
-  The action accepts any well formed submission and has no rate limit. Add one in `handleFeedback`
-  before connecting it to anything that costs money or notifies people.
+  The action accepts any well formed vote and has no rate limit, so the counts can be inflated. Add
+  one in `handleFeedback` before connecting it to a database or anything that costs money or
+  notifies people.
 </Callout>
 
 ### Turning it off
