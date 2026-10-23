@@ -26,3 +26,37 @@ icon: Compass
   <Accordion title="Development">Run `bun dev` and open the printed URL.</Accordion>
   <Accordion title="Production">Run `bun run build`, then `bun start`.</Accordion>
 </Accordions>
+
+## Accordions props
+
+<TypeTable
+  type={{
+    type: {
+      type: "'single' | 'multiple'",
+      description: "Whether one item or several can be open at once.",
+      required: true,
+    },
+    defaultValue: {
+      type: "string | string[]",
+      description: "Item or items open on first render. Items are matched by their `value`.",
+    },
+  }}
+/>
+
+## Accordion props
+
+<TypeTable
+  type={{
+    title: { type: "ReactNode", description: "The clickable heading.", required: true },
+    id: {
+      type: "string",
+      description:
+        "Anchor for linking to the item. A matching URL hash opens it, and a copy link button appears.",
+    },
+    value: {
+      type: "string",
+      description: "Matched against `defaultValue` on the parent. Defaults to the title text.",
+    },
+    children: { type: "ReactNode", description: "The content shown when open.", required: true },
+  }}
+/>

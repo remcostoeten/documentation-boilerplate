@@ -32,3 +32,29 @@ icon: BookOpen
     description="The documentation framework this boilerplate is built on."
   />
 </Cards>
+
+## Cards props
+
+`Cards` is a responsive grid and accepts the attributes of a `div`.
+
+## Card props
+
+<TypeTable
+  type={{
+    title: { type: "ReactNode", description: "Heading of the card.", required: true },
+    description: {
+      type: "ReactNode",
+      description: "Text under the title. Child content works too and takes the same place.",
+    },
+    href: {
+      type: "string",
+      description: "Where the card links to. Without it the card is not a link.",
+    },
+    icon: { type: "ReactNode", description: "Icon before the title, such as `<RocketIcon />`." },
+    external: {
+      type: "boolean",
+      description:
+        "Render a plain link instead of the router link. Detected automatically for absolute URLs.",
+    },
+  }}
+/>

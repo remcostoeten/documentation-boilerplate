@@ -57,3 +57,66 @@ Expand a row to see the full type. Types are highlighted as TypeScript, unions a
     },
   }}
 />
+
+## Props
+
+<TypeTable
+  type={{
+    type: {
+      type: "Record<string, Prop>",
+      description: "Rows written by hand. Use this or `path` with `name`.",
+    },
+    path: {
+      type: "string",
+      description: "TypeScript file to read the rows from, relative to the repository root.",
+    },
+    name: {
+      type: "string",
+      description: "Type alias or interface in `path`. Its properties become the rows.",
+    },
+    descriptions: {
+      type: "Record<string, string>",
+      description: "Description per property name. Overrides the JSDoc of the property.",
+    },
+    defaults: {
+      type: "Record<string, string>",
+      description: "Default value per property name, shown highlighted when the row is open.",
+    },
+  }}
+/>
+
+### Row fields
+
+<TypeTable
+  type={{
+    type: { type: "string", description: "Type shown in the row.", required: true },
+    description: { type: "string", description: "Text shown when the row is open." },
+    default: { type: "string", description: "Default value, highlighted as code." },
+    required: { type: "boolean", description: "Rows without it get a `?` after the name." },
+    deprecated: { type: "boolean", description: "Strikes the name through." },
+    typeDescription: {
+      type: "string",
+      description: "TypeScript shown instead of the declaration generated from `type`.",
+    },
+    typeDescriptionLink: { type: "string", description: "Makes the type in the row a link." },
+    parameters: {
+      type: "{ name: string; description: string }[]",
+      description: "Parameters of a function type.",
+    },
+    returns: { type: "string", description: "What a function type returns." },
+  }}
+/>
+
+## Read rows from a type
+
+With `path` and `name` the rows come from the source, so they cannot drift from the code. Types the props refer to are listed under the expanded row, and hovering a name shows its definition.
+
+```mdx
+<TypeTable
+  path="src/shared/config/site.ts"
+  name="SiteConfig"
+  descriptions={{ name: "Site name.", url: "Production URL." }}
+/>
+```
+
+The Bun process that reads the types runs `scripts/type-table.ts`, so `bun` must be on the path where the site is built.

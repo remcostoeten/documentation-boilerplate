@@ -61,3 +61,22 @@ An optional docs chat. Off while `site.askAI` is null. User docs are in `content
 - `components/ask-ai-slot.tsx`: server component that applies `hideOn` and the `askAI: false` frontmatter, then renders the client `ask-ai.tsx` inside `PageActions`. The chat is a module level `Chat` so it survives navigation.
 - Functions in `site.askAI` run on the server only. Never pass the config object to a client component, pass plain props as `AskAISlot` does.
 - API keys come from environment variables only. Never put a key in `site.ts`.
+
+## TypeScript hover types
+
+A `ts` or `tsx` fence with `twoslash` in its meta is type checked at build time and gets hover popups, type queries and completions. User docs are in `content/docs/components/code-blocks.mdx`.
+
+- `source.config.ts`: `transformerTwoslash` from `fumadocs-twoslash`, with results cached in `.next/cache/twoslash`. `@/*` maps to `src/*`, so snippets can import real project modules. Pin it to 3.x: 4.x needs Node because its TypeScript 7 API crashes under Bun, and this project builds with `bun --bun`.
+- A type error that is not listed in `// @errors: <code>` fails the build. Snippets for code that is not in this repo are mocked with a `.d.ts` block (`// @filename: x.d.ts` and `declare module`), see the last example on the code blocks page.
+- `Popup`, `PopupTrigger` and `PopupContent` from `fumadocs-twoslash/ui` are registered in `mdx-components.tsx`. `code-block.tsx` renders a `pre` without `data-language` bare, because Twoslash nests one inside its popups.
+- `copy-button.tsx` skips `.nd-copy-ignore`, which marks the popups, completion lists and error lines Twoslash inserts into the code.
+- Styles are in `src/modules/docs/components/twoslash.css`. `.twoslash` is git ignored, it is where Twoslash writes scratch files.
+
+## Instant navigation
+
+`next.config.ts` enables `cacheComponents` and `partialPrefetching`, so every `<Link>` prefetches the route's App Shell and `next dev` validates each page for blocking code. The guide is `node_modules/next/dist/docs/01-app/02-guides/instant-navigation.md`.
+
+- Do not export `dynamic`, `revalidate` or `fetchCache` from a route. They fail the build.
+- `/docs/[[...slug]]` is also prerendered once with an unknown slug, so a client component that calls `usePathname()` must sit inside `<Suspense>`. `DocsSidebar` does, with `DocsSidebarFallback` as the fallback, and it also records recent pages. Do not add a second component that reads the pathname outside it.
+- Shiki reads `Date.now()`, which cannot run while prerendering. Anything that calls `highlight` at render time must go through a `"use cache"` function that returns serializable data, as `highlightTree` in `type-table.tsx` does. A cached function cannot return elements with function components in them.
+- `bun --bun next build` must print no `Error:` lines. Add `--debug-prerender` for usable stack traces.

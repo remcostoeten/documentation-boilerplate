@@ -47,13 +47,13 @@ Every page can use the components registered in `src/modules/docs/mdx-components
 - `TypeTable`
 - `Release`, for [changelog pages written by hand](/docs/guides/changelog)
 - The icons `BookIcon`, `CloudIcon`, `CompassIcon`, `DownloadIcon`, `PageIcon`, `PaletteIcon`, `RocketIcon`, `RouteIcon` and `SearchIcon`, for use inside cards
-- Fenced code blocks, with titles, line highlighting, diffs, focus, line numbers and tabs
+- Fenced code blocks, with titles, line highlighting, diffs, focus, line numbers, tabs and TypeScript hover types
 
 The [Components](/docs/components) section shows each one. To add a component, import it in `mdx-components.tsx` and add it to the exported object.
 
 ## Code blocks
 
-Code is highlighted on the server with Shiki, using `github-light` and `github-dark-default`. Change the themes under `rehypeCodeOptions` in `source.config.ts`. The block itself, with its header, language label and copy button, is `src/modules/docs/components/code-block.tsx`.
+Code is highlighted on the server with Shiki, using `github-light` and `github-dark-default`. Change the themes under `rehypeCodeOptions` in `source.config.ts`. The block itself, with its header, language label and copy button, is `src/modules/docs/components/code-block.tsx`. A `ts` or `tsx` fence with `twoslash` after the language is type checked at build time and gets hover types, see [Code blocks](/docs/components/code-blocks#typescript-hover-types).
 
 ## Internal links
 

@@ -38,6 +38,119 @@ docker build -t docs . && docker run -p 3000:3000 docs
   <Tab value="Docker">The image runs the same build inside a container.</Tab>
 </Tabs>
 
+## Code in tabs
+
+A tab that contains only a code block shows the block flush against the tab bar, without a second frame. Leave a blank line after each `Tab` opening tag and before its closing tag so the fence is parsed as Markdown.
+
+````md title="page.mdx"
+<Tabs groupId="package-manager" persist items={["bun", "npm", "pnpm"]}>
+<Tab value="bun">
+
+```bash
+bun add fumadocs-ui
+```
+
+</Tab>
+<Tab value="npm">
+
+```bash
+npm install fumadocs-ui
+```
+
+</Tab>
+<Tab value="pnpm">
+
+```bash
+pnpm add fumadocs-ui
+```
+
+</Tab>
+</Tabs>
+````
+
+<Tabs groupId="package-manager" persist items={["bun", "npm", "pnpm"]}>
+<Tab value="bun">
+
+```bash
+bun add fumadocs-ui
+```
+
+</Tab>
+<Tab value="npm">
+
+```bash
+npm install fumadocs-ui
+```
+
+</Tab>
+<Tab value="pnpm">
+
+```bash
+pnpm add fumadocs-ui
+```
+
+</Tab>
+</Tabs>
+
+A block with a `title` keeps its file header below the tab bar, so use titles when the tabs are different files and leave them out when the tabs are variants of one command.
+
+## Result and usage
+
+Use two tabs to show a component and the MDX that produces it. The first tab holds the rendered result, the second holds the source in a four backtick `md` fence so the inner fence or tag is shown as text. Notation comments such as `// [!code highlight]` stay visible in `md` fences.
+
+````md title="page.mdx"
+<Tabs groupId="demo" persist items={["Result", "Usage"]}>
+<Tab value="Result">
+
+<Callout type="warn" title="Heads up">
+  Renaming a file changes its URL.
+</Callout>
+
+</Tab>
+<Tab value="Usage">
+
+```mdx
+<Callout type="warn" title="Heads up">
+  Renaming a file changes its URL.
+</Callout>
+```
+
+</Tab>
+</Tabs>
+````
+
+<Tabs groupId="demo" persist items={["Result", "Usage"]}>
+<Tab value="Result">
+
+<Callout type="warn" title="Heads up">
+  Renaming a file changes its URL.
+</Callout>
+
+</Tab>
+<Tab value="Usage">
+
+```mdx
+<Callout type="warn" title="Heads up">
+  Renaming a file changes its URL.
+</Callout>
+```
+
+</Tab>
+</Tabs>
+
+Give every Result and Usage pair on a page the same `groupId`. Picking Usage once then switches all of them, and `persist` keeps the choice for the next page.
+
+## Tabs or the tab option
+
+| Need                                         | Use                            |
+| -------------------------------------------- | ------------------------------ |
+| Only code blocks, one per tab                | `tab="Name"` on each fence     |
+| Prose, components or several blocks in a tab | `Tabs` and `Tab`               |
+| Tabs that switch together across the page    | `Tabs` with a shared `groupId` |
+| Remember the choice between visits           | `Tabs` with `persist`          |
+
+The `tab` option is described in [Code blocks](/docs/components/code-blocks#tabs).
+
 ## Steps
 
 <Steps>
@@ -63,3 +176,44 @@ Open `/docs/guides/my-guide` and search for its title with `⌘K`.
 
 </Step>
 </Steps>
+
+## Tabs props
+
+<TypeTable
+  type={{
+    items: {
+      type: "string[]",
+      description: "Tab labels. Each `Tab` is matched to a label by its `value`, or by position.",
+    },
+    groupId: {
+      type: "string",
+      description: "Tabs with the same id on a page switch together.",
+    },
+    persist: {
+      type: "boolean",
+      description: "Remember the chosen tab between visits. Use it with `groupId`.",
+      default: "false",
+    },
+    defaultIndex: {
+      type: "number",
+      description: "Index of the tab shown first.",
+      default: "0",
+    },
+    label: { type: "ReactNode", description: "Extra label before the tab list." },
+  }}
+/>
+
+## Tab props
+
+<TypeTable
+  type={{
+    value: {
+      type: "string",
+      description: "Label from `items` this content belongs to. Falls back to the tab position.",
+    },
+  }}
+/>
+
+## Steps props
+
+`Steps` and `Step` take only `children`. Put a heading inside each `Step`: the number and the connecting line are added for you, and the heading shows in the table of contents.

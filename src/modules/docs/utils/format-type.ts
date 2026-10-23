@@ -60,3 +60,21 @@ export function formatType(type: string, name: string) {
   if (/^\w+$/.test(type)) return null;
   return `${alias} = ${type}`;
 }
+
+/**
+ * @name describeType
+ * @description Builds the TypeScript snippet shown when a props row is
+ * expanded: the prop type as an alias, followed by the source of every local
+ * type it refers to. Returns null when the type is a single word with nothing
+ * to expand.
+ *
+ * @example
+ * describeType("logo", "LogoConfig | null", ["type LogoConfig = { src: string }"])
+ */
+export function describeType(name: string, type: string, declarations: string[]) {
+  const main = formatType(type, name);
+  if (!main && declarations.length === 0) return null;
+
+  const head = main ?? `type ${name.charAt(0).toUpperCase()}${name.slice(1)} = ${type}`;
+  return [head, ...declarations].join("\n\n");
+}

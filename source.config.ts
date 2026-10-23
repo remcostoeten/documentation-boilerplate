@@ -15,6 +15,18 @@ const transformerLanguage: Transformer = {
   },
 };
 
+const markdownLanguages = new Set(["md", "markdown", "mdx"]);
+
+function showNotationInMarkdown(transformer: Transformer): Transformer {
+  return {
+    ...transformer,
+    code(node) {
+      if (markdownLanguages.has(this.options.lang)) return;
+      return transformer.code?.call(this, node);
+    },
+  };
+}
+
 const twoslash = transformerTwoslash({
   typesCache: createFileSystemTypesCache(),
   twoslashOptions: {
@@ -47,7 +59,7 @@ export default defineConfig({
       ...rehypeCodeDefaultOptions,
       themes: { light: "github-light", dark: "github-dark-default" },
       transformers: [
-        ...(rehypeCodeDefaultOptions.transformers ?? []),
+        ...(rehypeCodeDefaultOptions.transformers ?? []).map(showNotationInMarkdown),
         transformerLanguage,
         twoslash,
       ],

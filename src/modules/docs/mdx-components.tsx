@@ -1,7 +1,6 @@
 import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
 import { File, Files, Folder } from "fumadocs-ui/components/files";
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { Popup, PopupContent, PopupTrigger } from "fumadocs-twoslash/ui";
 import type { MDXComponents } from "mdx/types";
@@ -17,14 +16,17 @@ import {
   SearchIcon,
 } from "@/shared/icons/icons";
 import { Release } from "@/modules/changelog/components/release";
+import { Callout } from "./components/callout";
 import { CodeBlock } from "./components/code-block";
+import { DocsTab, DocsTabs } from "./components/docs-tabs";
+import { FileTree } from "./components/file-tree";
 import { CodeTab, CodeTabs, CodeTabsList, CodeTabsTrigger } from "./components/code-tabs";
 import { TypeTable } from "./components/type-table";
 
 /**
  * @name mdxComponents
  * @description Components available in every MDX page: the Fumadocs defaults
- * plus tabs, steps, accordions, file trees, type tables, changelog releases,
+ * plus tabs, steps, accordions, file trees (JSX and data driven), type tables, changelog releases,
  * the site icons, the custom code block and the Twoslash hover popups.
  *
  * @example
@@ -39,7 +41,9 @@ export const mdxComponents: MDXComponents = {
   CodeBlockTabsTrigger: CodeTabsTrigger,
   Accordion,
   Accordions,
+  Callout,
   File,
+  FileTree,
   Files,
   Folder,
   Popup,
@@ -48,8 +52,8 @@ export const mdxComponents: MDXComponents = {
   Release,
   Step,
   Steps,
-  Tab,
-  Tabs,
+  Tab: DocsTab,
+  Tabs: DocsTabs,
   TypeTable,
   BookIcon,
   CloudIcon,

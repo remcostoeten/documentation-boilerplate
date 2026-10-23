@@ -31,3 +31,18 @@ icon: Lightbulb
 <Callout type="success" title="Success">
   Your docs are ready to deploy.
 </Callout>
+
+## Props
+
+<TypeTable
+  type={{
+    type: {
+      type: "'info' | 'warn' | 'warning' | 'error' | 'success' | 'idea'",
+      description: "Colour and default icon. `warn` and `warning` are the same.",
+      default: "'info'",
+    },
+    title: { type: "ReactNode", description: "Bold line above the content." },
+    icon: { type: "ReactNode", description: "Replaces the icon of the type." },
+    children: { type: "ReactNode", description: "The message.", required: true },
+  }}
+/>

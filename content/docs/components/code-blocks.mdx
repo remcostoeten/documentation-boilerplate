@@ -1,13 +1,37 @@
 ---
 title: Code blocks
-description: Server-highlighted code with a file header, language label, copy button, line notation and tabs.
+description: Server-highlighted code with a file header, language label, copy button, line notation, tabs and TypeScript hover types.
 icon: FileText
 sidebarBadge: new
 ---
 
+Every fenced code block in an `.mdx` file is highlighted on the server with Shiki, so no JavaScript is shipped for the highlighting. Write a normal Markdown fence, put the language after the opening backticks and add options after it. Each section below shows the Markdown you write, then the result.
+
+## Syntax
+
+````md title="Anatomy of a fence"
+```language option title="Header text"
+code
+```
+````
+
+- `language` picks the grammar, for example `ts`, `tsx`, `bash`, `json`, `css` or `txt`.
+- Options are single words such as `lineNumbers`, `noCopy` or `twoslash`.
+- `title="..."` is a quoted option that adds a file header.
+- Options go on the opening line only, in any order. Line level effects go in comments inside the code.
+
 ## File header
 
-A `title` adds a header with the language and a copy button.
+A `title` adds a header with the language label and a copy button.
+
+````md title="page.mdx"
+```ts title="src/shared/config/site.ts"
+export const site = {
+  name: "Docs",
+  url: "http://localhost:3000",
+};
+```
+````
 
 ```ts title="src/shared/config/site.ts"
 export const site = {
@@ -20,13 +44,42 @@ export const site = {
 
 Without a title the copy button floats in the corner and shows on hover or keyboard focus.
 
+````md title="page.mdx"
+```ts
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+````
+
 ```ts
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 ```
 
-## Highlighted lines
+## Line notation
+
+Notation is a comment at the end of a line. The comment is removed from the output and the effect applies to that line. Use the comment syntax of the language, so `//` for TypeScript and `#` for Bash.
+
+| Comment                  | Effect                                 |
+| ------------------------ | -------------------------------------- |
+| `// [!code highlight]`   | Tints the line                         |
+| `// [!code word:loader]` | Highlights every `loader` in the block |
+| `// [!code ++]`          | Marks the line as added                |
+| `// [!code --]`          | Marks the line as removed              |
+| `// [!code focus]`       | Dims every line that is not focused    |
+
+### Highlighted lines
+
+````md title="page.mdx"
+```tsx title="src/app/docs/layout.tsx"
+export default function Layout({ children }: { children: ReactNode }) {
+  const tree = source.getPageTree(); // [!code highlight]
+  return <DocsLayout tree={tree}>{children}</DocsLayout>;
+}
+```
+````
 
 ```tsx title="src/app/docs/layout.tsx"
 export default function Layout({ children }: { children: ReactNode }) {
@@ -35,7 +88,19 @@ export default function Layout({ children }: { children: ReactNode }) {
 }
 ```
 
-## Highlighted words
+### Highlighted words
+
+Put the comment on its own line. It applies to the lines that follow it.
+
+````md title="page.mdx"
+```ts title="src/modules/docs/server/source.ts"
+// [!code word:loader]
+export const source = loader({
+  baseUrl: "/docs",
+  source: docs.toFumadocsSource(),
+});
+```
+````
 
 ```ts title="src/modules/docs/server/source.ts"
 // [!code word:loader]
@@ -45,7 +110,16 @@ export const source = loader({
 });
 ```
 
-## Diff
+### Diff
+
+````md title="page.mdx"
+```ts title="next.config.ts"
+const config: NextConfig = {
+  reactStrictMode: false, // [!code --]
+  reactStrictMode: true, // [!code ++]
+};
+```
+````
 
 ```ts title="next.config.ts"
 const config: NextConfig = {
@@ -54,9 +128,19 @@ const config: NextConfig = {
 };
 ```
 
-## Focus
+### Focus
 
 Hover the block to bring the other lines back.
+
+````md title="page.mdx"
+```ts
+function getPage(slug: string[]) {
+  const page = source.getPage(slug); // [!code focus]
+  if (!page) notFound();
+  return page;
+}
+```
+````
 
 ```ts
 function getPage(slug: string[]) {
@@ -66,29 +150,74 @@ function getPage(slug: string[]) {
 }
 ```
 
-## Line numbers
+## Options
+
+| Option           | Effect                                                |
+| ---------------- | ----------------------------------------------------- |
+| `title="text"`   | Header with the language and a copy button            |
+| `lineNumbers`    | Number the lines from 1                               |
+| `lineNumbers=12` | Number the lines from 12                              |
+| `noCopy`         | Remove the copy button                                |
+| `tab="Name"`     | Group with the neighbouring blocks into tabs          |
+| `twoslash`       | Type check the snippet and add hover types, see below |
+
+### Line numbers
+
+````md title="page.mdx"
+```ts title="sidebar.ts" lineNumbers
+const sections = getNavigationSections(tree);
+const first = sections[0];
+```
+
+```ts lineNumbers=12
+const label = languageLabel(language);
+const copyable = allowCopy !== "false";
+```
+````
 
 ```ts title="sidebar.ts" lineNumbers
 const sections = getNavigationSections(tree);
-const open = getDefaultOpen(sections, pathname);
-const active = sections[open];
+const first = sections[0];
 ```
-
-Start counting from any line with `lineNumbers=12`:
 
 ```ts lineNumbers=12
 const label = languageLabel(language);
 const copyable = allowCopy !== "false";
 ```
 
-## Without copy
+### Without copy
+
+Use it for output the reader should not paste.
+
+````md title="page.mdx"
+```txt title="output" noCopy
+✓ Compiled successfully
+✓ Generating static pages (24/24)
+```
+````
 
 ```txt title="output" noCopy
 ✓ Compiled successfully
 ✓ Generating static pages (24/24)
 ```
 
-## Tabs
+### Tabs
+
+Consecutive blocks that each have a `tab` option become one tabbed block. The value is the tab label.
+
+````md title="page.mdx"
+```bash tab="Install"
+bun install
+```
+
+```bash tab="Develop"
+bun dev
+```
+
+```bash tab="Build"
+bun run build
+```
+````
 
 ```bash tab="Install"
 bun install
@@ -102,9 +231,49 @@ bun dev
 bun run build
 ```
 
+### Result and usage
+
+To show a block and the Markdown that produces it in one place, put both in `Tabs`. The first tab holds the rendered block, the second holds the fence in a four backtick `md` block so the inner fence is shown as text.
+
+<Tabs groupId="code-block-demo" persist items={["Result", "Usage"]}>
+<Tab value="Result">
+
+```ts title="src/shared/config/site.ts" lineNumbers
+export const site = {
+  name: "Docs",
+  url: "http://localhost:3000", // [!code highlight]
+};
+```
+
+</Tab>
+<Tab value="Usage">
+
+````md title="page.mdx"
+```ts title="src/shared/config/site.ts" lineNumbers
+export const site = {
+  name: "Docs",
+  url: "http://localhost:3000", // [!code highlight]
+};
+```
+````
+
+</Tab>
+</Tabs>
+
+Leave a blank line after each `Tab` opening tag and before its closing tag, or the content is parsed as inline text. Give related demos the same `groupId` and the reader's choice carries to every one of them. [Tabs and steps](/docs/components/tabs-and-steps#result-and-usage) shows the same pattern for components and covers when to use `Tabs` instead of the `tab` option.
+
 ## TypeScript hover types
 
-Add `twoslash` to the fence and the snippet is type checked with the TypeScript compiler at build time. Hover an identifier to see its type and JSDoc, as in an editor.
+Add the `twoslash` option to a `ts` or `tsx` fence and the snippet is type checked with the TypeScript compiler at build time. Hover an identifier to see its type and JSDoc, as in an editor.
+
+````md title="page.mdx"
+```ts twoslash title="src/shared/config/site.ts"
+import { site } from "@/shared/config/site";
+
+const accent = site.theme.accent;
+const pages = site.changelogs.map((changelog) => changelog.page);
+```
+````
 
 ```ts twoslash title="src/shared/config/site.ts"
 import { site } from "@/shared/config/site";
@@ -117,7 +286,16 @@ const pages = site.changelogs.map((changelog) => changelog.page);
 
 ## Type queries
 
-A `^?` marker prints the type of the token above it under the line.
+A `^?` marker prints the type of the token above it under the line. Put the caret under the first character of the token.
+
+````md title="page.mdx"
+```ts twoslash
+import { site } from "@/shared/config/site";
+
+const footer = site.pageFooter;
+//    ^?
+```
+````
 
 ```ts twoslash
 import { site } from "@/shared/config/site";
@@ -129,6 +307,16 @@ const footer = site.pageFooter;
 ## Completions
 
 A `^|` marker shows the completion list at that position. Incomplete code needs `@noErrors`.
+
+````md title="page.mdx"
+```ts twoslash
+// @noErrors
+import { site } from "@/shared/config/site";
+
+site.pageFooter.
+//              ^|
+```
+````
 
 ```ts twoslash
 // @noErrors
@@ -142,6 +330,15 @@ site.pageFooter.
 
 An error listed in `@errors` is shown under its line. Any other type error fails the build, so a snippet cannot drift from the types it documents.
 
+````md title="page.mdx"
+```ts twoslash
+// @errors: 2322
+import { site } from "@/shared/config/site";
+
+site.pageFooter.editLink = "yes";
+```
+````
+
 ```ts twoslash
 // @errors: 2322
 import { site } from "@/shared/config/site";
@@ -151,7 +348,15 @@ site.pageFooter.editLink = "yes";
 
 ## Hide setup code
 
-Everything above `// ---cut---` is type checked but not shown.
+Everything above `// ---cut---` is type checked but not shown. Use it for imports and fixtures that would distract from the point.
+
+````md title="page.mdx"
+```ts twoslash
+import { site } from "@/shared/config/site";
+// ---cut---
+const titles = site.changelogs.map((changelog) => changelog.title);
+```
+````
 
 ```ts twoslash
 import { site } from "@/shared/config/site";
@@ -162,6 +367,29 @@ const titles = site.changelogs.map((changelog) => changelog.title);
 ## Mock a module
 
 For a package that is not installed here, declare a stand-in in a `.d.ts` file with `// @filename:`. The mock is checked with the snippet and not shown.
+
+````md title="page.mdx"
+```ts twoslash
+// @filename: acme-docs.d.ts
+declare module "acme-docs" {
+  export type DocsConfig = {
+    /** Shown in the header and the browser tab. */
+    name: string;
+    url: string;
+  };
+  export function defineConfig(config: DocsConfig): DocsConfig;
+}
+
+// @filename: index.ts
+// ---cut---
+import { defineConfig } from "acme-docs";
+
+export default defineConfig({
+  name: "Acme",
+  url: "https://acme.dev",
+});
+```
+````
 
 ```ts twoslash
 // @filename: acme-docs.d.ts
@@ -185,3 +413,104 @@ export default defineConfig({
 ```
 
 Any `// @name: value` line that names a TypeScript compiler option, such as `// @strict: false`, applies to that block only. Results are cached in `.next/cache/twoslash`.
+
+## Tabs as components
+
+The `tab` option covers most cases. To control the layout yourself, for example to put prose between the tab list and the code, use the components the option compiles to. They are registered for MDX, so no import is needed.
+
+````mdx title="page.mdx"
+<CodeBlockTabs defaultValue="bun">
+  <CodeBlockTabsList>
+    <CodeBlockTabsTrigger value="bun">bun</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="npm">npm</CodeBlockTabsTrigger>
+  </CodeBlockTabsList>
+  <CodeBlockTab value="bun">
+
+```bash
+bun add fumadocs-ui
+```
+
+  </CodeBlockTab>
+  <CodeBlockTab value="npm">
+
+```bash
+npm install fumadocs-ui
+```
+
+  </CodeBlockTab>
+</CodeBlockTabs>
+````
+
+<CodeBlockTabs defaultValue="bun">
+  <CodeBlockTabsList>
+    <CodeBlockTabsTrigger value="bun">bun</CodeBlockTabsTrigger>
+    <CodeBlockTabsTrigger value="npm">npm</CodeBlockTabsTrigger>
+  </CodeBlockTabsList>
+  <CodeBlockTab value="bun">
+
+```bash
+bun add fumadocs-ui
+```
+
+  </CodeBlockTab>
+  <CodeBlockTab value="npm">
+
+```bash
+npm install fumadocs-ui
+```
+
+  </CodeBlockTab>
+</CodeBlockTabs>
+
+<TypeTable
+  type={{
+    defaultValue: {
+      type: "string",
+      description: "`value` of the tab shown first, on `CodeBlockTabs`.",
+    },
+    value: {
+      type: "string",
+      description: "Ties a `CodeBlockTabsTrigger` to its `CodeBlockTab`.",
+      required: true,
+    },
+  }}
+/>
+
+Keep a blank line after each `CodeBlockTab` opening tag and before its closing tag so the fence is parsed as a code block.
+
+## Popups
+
+`Popup`, `PopupTrigger` and `PopupContent` are the pieces Twoslash uses for its hover cards. They are registered for MDX, so you can use them for a hover or tap card around any text, without a code block.
+
+```mdx title="page.mdx"
+<Popup>
+  <PopupTrigger>`site.askAI`</PopupTrigger>
+  <PopupContent>Set to `null` to turn the chat off.</PopupContent>
+</Popup>
+```
+
+<Popup>
+  <PopupTrigger>`site.askAI`</PopupTrigger>
+  <PopupContent>Set to `null` to turn the chat off.</PopupContent>
+</Popup>
+
+<TypeTable
+  type={{
+    delay: {
+      type: "number",
+      description: "Milliseconds before the card opens on hover, on `Popup`.",
+    },
+    side: {
+      type: '"top" | "bottom" | "left" | "right"',
+      description: "Which side of the trigger the card opens on, on `PopupContent`.",
+    },
+    align: {
+      type: '"start" | "center" | "end"',
+      description: "Alignment against the trigger, on `PopupContent`.",
+    },
+    sideOffset: {
+      type: "number",
+      description: "Distance from the trigger in pixels, on `PopupContent`.",
+    },
+  }}
+/>

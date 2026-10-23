@@ -27,3 +27,76 @@ icon: Cloud
   <File name="source.config.ts" />
   <File name="package.json" />
 </Files>
+
+## From data
+
+`FileTree` takes the structure as a `tree` prop. Files get an icon and a colour by extension, and folders are indigo.
+
+<FileTree
+  tree={[
+    {
+      name: "content",
+      defaultOpen: true,
+      children: [
+        {
+          name: "docs",
+          defaultOpen: true,
+          children: [
+            { name: "index.mdx" },
+            { name: "meta.json" },
+            { name: "guides", children: [{ name: "theming.mdx" }, { name: "meta.json" }] },
+          ],
+        },
+      ],
+    },
+    {
+      name: "src",
+      defaultOpen: true,
+      children: [
+        { name: "app", children: [{ name: "layout.tsx" }, { name: "globals.css" }] },
+        { name: "shared", children: [{ name: "logo.svg" }] },
+      ],
+    },
+    { name: "source.config.ts" },
+    { name: ".env.local" },
+    { name: "package.json" },
+    { name: "bun.lock" },
+  ]}
+/>
+
+## Props
+
+`Files` is the wrapper and accepts the attributes of a `div`.
+
+<TypeTable
+  type={{
+    name: { type: "string", description: "Label of the file or folder.", required: true },
+    icon: { type: "ReactNode", description: "Replaces the default file icon. `File` only." },
+    defaultOpen: {
+      type: "boolean",
+      description: "Show the folder expanded on first render. `Folder` only.",
+      default: "false",
+    },
+    disabled: {
+      type: "boolean",
+      description: "Stops the folder from opening or closing. `Folder` only.",
+    },
+  }}
+/>
+
+### FileTree props
+
+<TypeTable
+  type={{
+    tree: {
+      type: "TreeNode[]",
+      description: "The top level files and folders.",
+      required: true,
+      typeDescription:
+        "type TreeNode = {\n  name: string;\n  children?: TreeNode[];\n  defaultOpen?: boolean;\n};",
+    },
+    className: { type: "string", description: "Class added to the wrapper." },
+  }}
+/>
+
+A node with `children` is a folder, even when the array is empty. `defaultOpen` expands a folder on first render. Extensions without a colour use the muted foreground colour.
