@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { isHiddenOn } from "./hidden";
+import { isHiddenOn } from "./is-hidden-on";
 
 test("matches exact pages with or without a trailing slash", () => {
   expect(isHiddenOn("/docs/changelog", ["/docs/changelog"])).toBe(true);

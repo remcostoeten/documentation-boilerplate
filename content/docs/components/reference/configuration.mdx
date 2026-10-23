@@ -21,8 +21,7 @@ export const site: SiteConfig = {
   logo: null,
   theme: { accent: null },
   pageFooter: { editLink: true, lastUpdated: true, feedback: true, prevNext: true },
-  footer: null,
-  landing: true,
+  siteFooter: null,
   askAI: null,
   changelogs: [],
 };
@@ -43,8 +42,7 @@ export const site: SiteConfig = {
     logo: "Image in the top bar.",
     theme: "Colors.",
     pageFooter: "What shows under each page.",
-    footer: "Column footer with links.",
-    landing: "Serve a landing page at `/`.",
+    siteFooter: "Column footer with links.",
     changelogs: "Changelog pages to generate.",
     askAI: "Ask AI chat.",
   }}
@@ -141,12 +139,13 @@ See [Theming](/docs/guides/theming#favicon).
 
 The edit link and the date are hidden on their own when they have nothing to show. See [Page footer and feedback](/docs/guides/feedback).
 
-### footer
+### siteFooter
 
-Off while it is `null`. Set it to show a footer with columns of links under every docs page and on the landing page, where it replaces the author link.
+A footer with columns of links under every docs page, below the previous and next links. It is not `pageFooter`, which switches the feedback widget, the edit link, the date and the previous and next links. Off while it is `null`.
 
 ```ts title="src/shared/config/site.ts"
-footer: {
+siteFooter: {
+  brand: { description: "Docs for the Acme API." },
   columns: [
     {
       title: "Docs",
@@ -157,29 +156,61 @@ footer: {
     },
     {
       title: "Community",
-      links: [{ label: "GitHub", href: "https://github.com/you/repo" }],
+      links: [{ label: "GitHub", href: "https://github.com/acme/api", icon: "GitHub" }],
     },
   ],
-  copyright: "© 2026 Your name",
+  bottom: {
+    copyright: "© {year} Acme",
+    links: [{ label: "Contact", href: "mailto:hello@acme.dev", icon: "Mail" }],
+  },
+  hideOn: ["/docs/changelog"],
 },
 ```
 
 <TypeTable
   type={{
     columns: {
-      type: "{ title: string; links: { label: string; href: string }[] }[]",
-      description: "One column per entry. Four fit on a row on wide screens, two on narrow ones.",
+      type: "{ title: string; links: FooterLink[] }[]",
+      description: "One column per entry. The columns share the row equally, so any number fits.",
       required: true,
     },
-    copyright: { type: "string", description: "A line under the columns." },
+    brand: {
+      type: "true | { name?: string; description?: string }",
+      description:
+        "Adds a block before the columns with the logo, the name and the description. `true` shows the logo and the site name.",
+    },
+    bottom: {
+      type: "{ copyright?: string; links?: FooterLink[] }",
+      description:
+        "A row under the columns with the copyright on the left and links on the right. `{year}` in the copyright becomes the current year.",
+    },
+    enabled: {
+      type: "boolean",
+      description: "Set to `false` to hide the footer and keep the config. Defaults to `true`.",
+    },
+    hideOn: {
+      type: "string[]",
+      description:
+        "Page URL patterns without the footer. `*` matches one segment and `**` any number.",
+    },
   }}
 />
 
-A link starting with `http` opens in a new tab. Any other link is a path inside the site.
+A `FooterLink` is `{ label, href, external?, icon? }`.
 
-### landing
+| `href`                  | Renders as                                    |
+| ----------------------- | --------------------------------------------- |
+| `/docs/...`             | A client side link                            |
+| `https://...`           | A link that opens in a new tab, with an arrow |
+| `mailto:...`, `tel:...` | A plain link                                  |
 
-Serves the landing page at `/`. When it is `false` or left out, `/` redirects to `/docs`, so the docs introduction is the first page visitors see. The sitemap and the top bar logo follow the same setting. See [Routing](/docs/concepts/routing).
+`external: true` opens any link in a new tab, and `external: false` keeps an `https` link in the same tab. `icon` is a name from [Icons](/docs/guides/icons), such as `GitHub`, `X` or `Mail`, or a React component that takes a `className`.
+
+Put the main navigation in `columns`. `bottom.links` is for legal and contact links such as Privacy, Terms and Contact.
+
+There are three levels for hiding the footer, from wide to narrow: `null` or `enabled: false` for the whole site, `hideOn` for a set of pages, and `siteFooter: false` in the frontmatter of one page. See [Frontmatter](/docs/components/reference/frontmatter).
+
+`bun run check:links` runs before every build. It fails on an empty `columns` list, a duplicate or empty column title, a column without links, an empty label or href, a path that does not start with `/`, and a link to a docs page or heading that does not exist.
 
 ### askAI
 

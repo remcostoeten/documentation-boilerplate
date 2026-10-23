@@ -1,48 +1,81 @@
-import Link from "next/link";
+import { isHiddenOn } from "@/shared/helpers/is-hidden-on";
 import { site } from "@/shared/config/site";
+import { Logo } from "@/modules/navigation";
+import { currentYear } from "../server/current-year";
+import { formatCopyright, hasYearToken } from "../utils/format-copyright";
+import { FooterLink } from "./footer-link";
 
-const linkClass =
-  "text-foreground/50 transition-colors duration-150 ease-hover hover:text-foreground focus-visible:text-foreground";
+type Props = {
+  url: string;
+  enabled?: boolean;
+};
 
-type Props = { inset?: boolean };
+/**
+ * @name SiteFooter
+ * @description The column footer of a docs page. Renders nothing unless
+ * `site.siteFooter` is set and enabled, the page does not set `siteFooter: false` and
+ * its URL does not match `hideOn`.
+ *
+ * @example
+ * <SiteFooter url={page.url} enabled={page.data.footer} />
+ */
+export async function SiteFooter({ url, enabled }: Props) {
+  const footer = site.siteFooter;
+  if (!footer || footer.enabled === false || enabled === false) return null;
+  if (isHiddenOn(url, footer.hideOn)) return null;
 
-export function SiteFooter({ inset = false }: Props) {
-  const footer = site.footer;
-  if (!footer) return null;
+  const { columns, bottom } = footer;
+  const brand = footer.brand === true ? {} : footer.brand;
+  const copyright =
+    bottom?.copyright && hasYearToken(bottom.copyright)
+      ? formatCopyright(bottom.copyright, await currentYear())
+      : bottom?.copyright;
+  const hasBottom = Boolean(copyright || bottom?.links?.length);
 
   return (
-    <footer className={`border-t border-foreground/5${inset ? " docs-footer" : ""}`}>
+    <footer className="col-span-full mt-16 border-t border-foreground/5">
       <div className="mx-auto w-full max-w-6xl px-4 py-10 text-sm">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-          {footer.columns.map((column) => (
-            <nav key={column.title} aria-label={column.title}>
-              <h2 className="mb-3 font-mono text-xs tracking-wider text-foreground uppercase">
-                {column.title}
-              </h2>
-              <ul className="flex flex-col gap-2">
-                {column.links.map((link) => (
-                  <li key={link.href}>
-                    {link.href.startsWith("http") ? (
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className={linkClass}
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link href={link.href} className={linkClass}>
-                        {link.label}
-                      </Link>
-                    )}
+        <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
+          {brand ? (
+            <div className="flex max-w-xs flex-col gap-3 lg:w-64 lg:shrink-0">
+              <p className="flex items-center gap-2 font-mono text-xs tracking-wider uppercase">
+                <Logo />
+                {brand.name ?? site.name}
+              </p>
+              {brand.description ? <p className="text-foreground/50">{brand.description}</p> : null}
+            </div>
+          ) : null}
+          <div className="grid flex-1 grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-8">
+            {columns.map((column) => (
+              <nav key={column.title} aria-label={column.title}>
+                <h2 className="mb-3 font-mono text-xs tracking-wider text-foreground uppercase">
+                  {column.title}
+                </h2>
+                <ul className="flex flex-col gap-2">
+                  {column.links.map((link) => (
+                    <li key={`${link.label}${link.href}`}>
+                      <FooterLink link={link} />
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+          </div>
+        </div>
+        {hasBottom ? (
+          <div className="mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-foreground/5 pt-6">
+            {copyright ? <p className="text-foreground/50">{copyright}</p> : <span />}
+            {bottom?.links?.length ? (
+              <ul className="flex flex-wrap gap-x-5 gap-y-2">
+                {bottom.links.map((link) => (
+                  <li key={`${link.label}${link.href}`}>
+                    <FooterLink link={link} />
                   </li>
                 ))}
               </ul>
-            </nav>
-          ))}
-        </div>
-        {footer.copyright ? <p className="mt-10 text-foreground/50">{footer.copyright}</p> : null}
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </footer>
   );

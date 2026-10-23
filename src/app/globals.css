@@ -118,12 +118,6 @@ body {
   }
 }
 
-@media (min-width: 64rem) {
-  .docs-footer {
-    padding-inline-start: var(--sidebar-width);
-  }
-}
-
 @media (min-width: 80rem) {
   .docs-layout {
     --fd-toc-width: 280px;

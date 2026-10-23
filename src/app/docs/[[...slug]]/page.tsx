@@ -5,6 +5,7 @@ import { AskAISlot } from "@/modules/ask-ai/components/ask-ai-slot";
 import { PageActions } from "@/modules/docs/components/page-actions";
 import { PageMeta } from "@/modules/docs/components/page-meta";
 import { mdxComponents } from "@/modules/docs/mdx-components";
+import { SiteFooter } from "@/modules/footer";
 import { Feedback } from "@/modules/feedback/components/feedback";
 import { pageImage, pageJsonLd } from "@/modules/docs/server/seo";
 import { source } from "@/modules/docs/server/source";
@@ -27,30 +28,33 @@ export default async function Page({ params }: Props) {
   const toc = tocDepth ? page.data.toc.filter((item) => item.depth <= tocDepth) : page.data.toc;
 
   return (
-    <DocsPage
-      toc={toc}
-      tableOfContent={{ style: "clerk" }}
-      breadcrumb={{ enabled: false }}
-      footer={{ enabled: site.pageFooter.prevNext }}
-    >
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: pageJsonLd(page) }} />
-      <DocsTitle>{page.data.title}</DocsTitle>
-      {page.data.description ? <DocsDescription>{page.data.description}</DocsDescription> : null}
-      <PageActions markdownUrl={`${page.url}.mdx`}>
-        <AskAISlot url={page.url} enabled={page.data.askAI} />
-      </PageActions>
-      <DocsBody>
-        <MDX components={mdxComponents} />
-      </DocsBody>
-      {site.pageFooter.feedback ? <Feedback url={page.url} /> : null}
-      <PageMeta
-        editUrl={
-          site.pageFooter.editLink &&
-          (page.data.editUrl ?? repositoryFileUrl(`${site.contentDir}/${page.path}`))
-        }
-        lastModified={site.pageFooter.lastUpdated ? page.data.lastModified : undefined}
-      />
-    </DocsPage>
+    <>
+      <DocsPage
+        toc={toc}
+        tableOfContent={{ style: "clerk" }}
+        breadcrumb={{ enabled: false }}
+        footer={{ enabled: site.pageFooter.prevNext }}
+      >
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: pageJsonLd(page) }} />
+        <DocsTitle>{page.data.title}</DocsTitle>
+        {page.data.description ? <DocsDescription>{page.data.description}</DocsDescription> : null}
+        <PageActions markdownUrl={`${page.url}.mdx`}>
+          <AskAISlot url={page.url} enabled={page.data.askAI} />
+        </PageActions>
+        <DocsBody>
+          <MDX components={mdxComponents} />
+        </DocsBody>
+        {site.pageFooter.feedback ? <Feedback url={page.url} /> : null}
+        <PageMeta
+          editUrl={
+            site.pageFooter.editLink &&
+            (page.data.editUrl ?? repositoryFileUrl(`${site.contentDir}/${page.path}`))
+          }
+          lastModified={site.pageFooter.lastUpdated ? page.data.lastModified : undefined}
+        />
+      </DocsPage>
+      <SiteFooter url={page.url} enabled={page.data.siteFooter} />
+    </>
   );
 }
 

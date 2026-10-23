@@ -1,5 +1,6 @@
 import type { ComponentType, SVGProps } from "react";
 import type { AskAIConfig } from "@/modules/ask-ai/types";
+import type { FooterConfig } from "@/modules/footer/types";
 
 type ChangelogSource = { file: string; url?: never } | { url: string; file?: never };
 
@@ -34,15 +35,6 @@ export type ThemeConfig = {
   radius?: string;
 };
 
-export type FooterLink = { label: string; href: string };
-
-export type FooterColumn = { title: string; links: FooterLink[] };
-
-export type FooterConfig = {
-  columns: FooterColumn[];
-  copyright?: string;
-};
-
 export type SiteConfig = {
   name: string;
   description: string;
@@ -56,8 +48,7 @@ export type SiteConfig = {
   favicon?: FaviconConfig;
   theme: ThemeConfig;
   pageFooter: { editLink: boolean; lastUpdated: boolean; feedback: boolean; prevNext: boolean };
-  footer: FooterConfig | null;
-  landing?: boolean;
+  siteFooter: FooterConfig | null;
   changelogs: ChangelogConfig[];
   askAI: AskAIConfig | null;
 };
@@ -73,8 +64,32 @@ export const site: SiteConfig = {
   logo: null,
   theme: { accent: null },
   pageFooter: { editLink: true, lastUpdated: true, feedback: true, prevNext: true },
-  footer: null,
-  landing: true,
+  siteFooter: {
+    brand: { description: "Documentation site boilerplate built on Next.js and Fumadocs." },
+    columns: [
+      {
+        title: "Docs",
+        links: [
+          { label: "Introduction", href: "/docs" },
+          { label: "Configuration", href: "/docs/components/reference/configuration" },
+        ],
+      },
+      {
+        title: "Community",
+        links: [
+          {
+            label: "GitHub",
+            href: "https://github.com/remcostoeten/docs-boilerplate",
+            icon: "GitHub",
+          },
+        ],
+      },
+    ],
+    bottom: {
+      copyright: "© {year} Remco Stoeten",
+      links: [{ label: "Contact", href: "mailto:hello@example.com", icon: "Mail" }],
+    },
+  },
   askAI: { provider: "openrouter", model: "anthropic/claude-haiku-5-5" },
   changelogs: [
     {

@@ -13,6 +13,7 @@ sidebarBadge: beta
 tocDepth: 2
 editUrl: false
 askAI: false
+siteFooter: false
 ---
 ```
 
@@ -32,6 +33,10 @@ askAI: false
       description: "Deepest heading level listed in the table of contents.",
     },
     askAI: { type: "boolean", description: "Set to false to hide the Ask AI button on this page." },
+    siteFooter: {
+      type: "boolean",
+      description: "Set to false to hide the site footer on this page.",
+    },
     editUrl: {
       type: "string | false",
       description:
@@ -73,6 +78,10 @@ An integer from 2 to 6. Headings deeper than this are left out of the table of c
 ## askAI
 
 `false` hides the Ask AI button on the page, for example on the changelog. `true` or no value follows `site.askAI` and `hideOn`. See [Ask AI](/docs/guides/ask-ai).
+
+## siteFooter
+
+`false` hides the site footer on the page. `true` or no value follows `site.siteFooter` and its `hideOn`. See [Configuration](/docs/components/reference/configuration#sitefooter).
 
 ## editUrl
 

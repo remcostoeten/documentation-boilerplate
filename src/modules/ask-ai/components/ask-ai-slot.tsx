@@ -1,5 +1,5 @@
 import { site } from "@/shared/config/site";
-import { isHiddenOn } from "../hidden";
+import { isHiddenOn } from "@/shared/helpers/is-hidden-on";
 import { AskAI } from "./ask-ai";
 
 type Props = {

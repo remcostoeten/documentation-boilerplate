@@ -1,5 +1,7 @@
 import { Glob } from "bun";
 import { join, relative } from "node:path";
+import { site } from "../src/shared/config/site";
+import { footerInternalLinks, validateFooter } from "../src/modules/footer/utils/validate-footer";
 
 const contentDir = "content/docs";
 const baseUrl = "/docs";
@@ -89,12 +91,30 @@ async function main() {
     }
   }
 
+  if (site.siteFooter) {
+    const footerPage: Page = {
+      file: "src/shared/config/site.ts",
+      url: "",
+      anchors: new Set(),
+      links: footerInternalLinks(site.siteFooter),
+    };
+    for (const link of footerPage.links) {
+      const reason = checkLink(footerPage, link, pages);
+      if (reason) broken.push({ file: footerPage.file, link, reason });
+    }
+    for (const problem of validateFooter(site.siteFooter)) {
+      broken.push({ file: "src/shared/config/site.ts", link: "", reason: problem });
+    }
+  }
+
   if (broken.length === 0) {
     console.log(`✓ checked links in ${pages.size} pages, none broken`);
     return;
   }
 
-  for (const { file, link, reason } of broken) console.error(`✗ ${file}: ${link} (${reason})`);
+  for (const { file, link, reason } of broken) {
+    console.error(link ? `✗ ${file}: ${link} (${reason})` : `✗ ${file}: ${reason}`);
+  }
   console.error(`\n${broken.length} broken link${broken.length === 1 ? "" : "s"}`);
   process.exit(1);
 }

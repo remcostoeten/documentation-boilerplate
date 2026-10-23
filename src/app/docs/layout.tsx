@@ -1,6 +1,5 @@
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import { Suspense, type ReactNode } from "react";
-import { SiteFooter } from "@/modules/footer";
 import { source } from "@/modules/docs/server/source";
 import { DocsSidebar, DocsSidebarFallback, Topbar } from "@/modules/navigation";
 import { getRepository } from "@/shared/config/repository";
@@ -25,7 +24,6 @@ export default function Layout({ children }: { children: ReactNode }) {
       >
         {children}
       </DocsLayout>
-      <SiteFooter inset />
     </>
   );
 }
