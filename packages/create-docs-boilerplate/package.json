@@ -1,0 +1,44 @@
+{
+  "name": "create-docs-boilerplate",
+  "version": "0.1.0",
+  "description": "Create a documentation site from docs-boilerplate, built on Next.js and Fumadocs.",
+  "keywords": [
+    "create",
+    "docs",
+    "documentation",
+    "fumadocs",
+    "nextjs",
+    "starter",
+    "template"
+  ],
+  "homepage": "https://github.com/remcostoeten/docs-boilerplate#readme",
+  "bugs": {
+    "url": "https://github.com/remcostoeten/docs-boilerplate/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Remco Stoeten",
+    "url": "https://remcostoeten.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remcostoeten/docs-boilerplate.git",
+    "directory": "packages/create-docs-boilerplate"
+  },
+  "bin": {
+    "create-docs-boilerplate": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "template.json"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "bun scripts/build-template.ts && bun build src/index.ts --target node --outfile dist/index.js",
+    "prepack": "bun run build",
+    "test": "bun test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

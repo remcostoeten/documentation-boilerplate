@@ -6,3 +6,6 @@ next-env.d.ts
 .env*
 content/docs/changelog.mdx
 .twoslash
+
+packages/create-docs-boilerplate/dist
+packages/create-docs-boilerplate/template.json
