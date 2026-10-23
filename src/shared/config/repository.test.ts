@@ -24,12 +24,14 @@ test("ignores remotes that are not on GitHub", () => {
 });
 
 test("builds accent rules for both color schemes", () => {
-  const css = themeCss({ light: "oklch(0.55 0.2 260)", dark: "oklch(0.75 0.15 260)" });
+  const css = themeCss({
+    accent: { light: "oklch(0.55 0.2 260)", dark: "oklch(0.75 0.15 260)" },
+  });
   expect(css).toContain(":root:root{--color-fd-primary:oklch(0.55 0.2 260);");
   expect(css).toContain(":root.dark{--color-fd-primary:oklch(0.75 0.15 260);");
 });
 
 test("builds nothing without an accent and rejects unsafe colors", () => {
-  expect(themeCss(null)).toBe("");
-  expect(() => themeCss({ light: "red;}</style>", dark: "blue" })).toThrow();
+  expect(themeCss({ accent: null })).toBe("");
+  expect(() => themeCss({ accent: { light: "red;}</style>", dark: "blue" } })).toThrow();
 });

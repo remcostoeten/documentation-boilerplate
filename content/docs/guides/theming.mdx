@@ -16,9 +16,29 @@ theme: {
 
 Leave it as `null` to keep the neutral black theme.
 
+## Radius
+
+Set `theme.radius` in `src/shared/config/site.ts` to change the corners of cards, callouts, code blocks, search, buttons and the rest of the site with one value. It is a CSS length: `px`, `rem`, `em` or `0`.
+
+```ts title="src/shared/config/site.ts"
+theme: {
+  accent: null,
+  radius: "1rem",
+},
+```
+
+The value is the size of the `xl` step, which cards, callouts and code blocks use. Every other step of the Tailwind radius scale keeps its proportion to it, so small elements such as buttons and keys scale down with it. `"0"` makes every corner square, and `rounded-full` elements such as pills stay round. Leave it out to keep the default of `0.75rem`.
+
+| `radius`    | Look                |
+| ----------- | ------------------- |
+| `"0"`       | Square corners      |
+| `"0.5rem"`  | Slightly rounded    |
+| `"0.75rem"` | The default         |
+| `"1.5rem"`  | Large, soft corners |
+
 ## Logo
 
-Put the image in `public` and point `logo` at it. `darkSrc` is shown in dark mode. `width` and `height` are the displayed size in pixels. The site name stays next to the logo unless `hideName` is set, and then `alt` describes the logo.
+`logo.src` takes a path in `public`, a URL, inline SVG markup or a React component. `darkSrc` is shown in dark mode and takes the same formats. `width` and `height` are the displayed size in pixels. The site name stays next to the logo unless `hideName` is set, and then `alt` describes the logo.
 
 ```ts title="src/shared/config/site.ts"
 logo: {
@@ -29,7 +49,25 @@ logo: {
 },
 ```
 
-For the browser tab icon, add `icon.svg` or `icon.png` to `src/app`.
+A component receives `width`, `height` and `className`, so SVGR output and icons from an icon library work. Inline SVG markup and components can use `currentColor` to follow the theme.
+
+```tsx title="src/shared/config/site.ts"
+import { Book } from "lucide-react";
+
+logo: { src: Book, width: 20, height: 20 },
+```
+
+## Favicon
+
+`favicon` takes a path in `public`, a URL or inline SVG markup. Use `{ light, dark }` for separate icons per color scheme.
+
+```ts title="src/shared/config/site.ts"
+favicon: "/favicon.svg",
+// or
+favicon: { light: "/favicon-light.svg", dark: "/favicon-dark.svg" },
+```
+
+Without `favicon`, an `icon.svg` or `icon.png` in `src/app` is used.
 
 ## Theme preset
 

@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { DocsSearchDialog } from "@/modules/search/components/search-dialog";
 import { searchTags } from "@/modules/search/server/sections";
+import { faviconIcons } from "@/shared/config/favicon";
 import { site } from "@/shared/config/site";
 import { themeCss } from "@/shared/config/theme-css";
 import { IconMotion } from "@/shared/icons/icon-motion";
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
   description: site.description,
   applicationName: site.name,
   keywords: site.keywords,
+  icons: faviconIcons(site.favicon),
   authors: [site.author],
   creator: site.author.name,
   openGraph: {
@@ -38,7 +40,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <head>
-        <style dangerouslySetInnerHTML={{ __html: themeCss(site.theme.accent) }} />
+        <style dangerouslySetInnerHTML={{ __html: themeCss(site.theme) }} />
       </head>
       <body className="font-sans">
         <RootProvider search={{ SearchDialog: DocsSearchDialog, options: { tags: searchTags() } }}>
