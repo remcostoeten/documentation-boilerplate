@@ -5,6 +5,9 @@ const config: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   transpilePackages: ["shiki"],
+  async redirects() {
+    return [{ source: "/", destination: "/docs", permanent: false }];
+  },
   async rewrites() {
     return [
       { source: "/docs.mdx", destination: "/llms.mdx/docs" },
