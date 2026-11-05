@@ -41,7 +41,7 @@ export async function SiteFooter({ config: footer, siteName, logo, url, enabled 
   const hasBottom = Boolean(copyright || bottom?.links?.length);
 
   return (
-    <footer className="col-span-full mt-16 border-t border-fd-foreground/5">
+    <footer className="col-span-full row-start-5 mt-16 [contain:inline-size] border-t border-fd-foreground/5">
       <div className="mx-auto w-full max-w-6xl px-4 py-10 text-sm">
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
           {brand ? (

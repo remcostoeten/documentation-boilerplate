@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-05
+
 ### Added
 
 - Changelog page generated from `CHANGELOG.md`, and a `Release` component for writing entries by hand.
@@ -20,6 +22,10 @@ All notable changes to this project are documented in this file.
 
 - The repository and branch behind the GitHub button, edit links and last updated dates are detected from the `origin` git remote, then from the Vercel and GitHub Actions environment, instead of being set in `site.ts`. `site.repository` and `site.branch` override them, and `site.repository: false` hides every link.
 - The GitHub button and the edit links are hidden when the site has no repository, and the page footer is not rendered when it has nothing to show.
+
+### Fixed
+
+- The site footer no longer renders above the page on narrow screens, and no longer squeezes the page content into a narrow column on mobile.
 
 ## [0.1.0] - 2026-10-18
 
@@ -40,5 +46,6 @@ All notable changes to this project are documented in this file.
 
 - Everything runs on Bun.
 
-[Unreleased]: https://github.com/remcostoeten/docs-boilerplate/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/remcostoeten/docs-boilerplate/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/remcostoeten/docs-boilerplate/releases/tag/v0.1.1
 [0.1.0]: https://github.com/remcostoeten/docs-boilerplate/releases/tag/v0.1.0

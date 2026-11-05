@@ -1,6 +1,6 @@
 {
   "name": "create-docs-boilerplate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create a documentation site from docs-boilerplate. Runs docs-boilerplate init.",
   "keywords": [
     "create",
