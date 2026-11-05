@@ -1,6 +1,6 @@
 {
   "name": "docs-boilerplate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Documentation site boilerplate built on Next.js and Fumadocs, with an animated accordion sidebar, MDX content and built-in search.",
   "keywords": [

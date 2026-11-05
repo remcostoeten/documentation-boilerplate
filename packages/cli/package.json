@@ -1,6 +1,6 @@
 {
   "name": "docs-boilerplate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create a documentation site from docs-boilerplate, or copy its modules into an existing Next.js and Fumadocs project.",
   "keywords": [
     "cli",
